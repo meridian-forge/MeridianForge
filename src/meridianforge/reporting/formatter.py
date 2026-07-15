@@ -24,6 +24,12 @@ class ReportFormatter:
         analysis = report.analysis
         property_data = report.property
 
+        location = (
+            f"{property_data.address.city}, "
+            f"{property_data.address.state} "
+            f"{property_data.address.zip_code}"
+        )
+
         return f"""
 ====================================================
 Meridian Forge Property Analyzer
@@ -32,7 +38,7 @@ Meridian Forge Property Analyzer
 PROPERTY
 ----------------------------------------------------
 {property_data.address.street}
-{property_data.address.city}, {property_data.address.state} {property_data.address.zip_code}
+{location}
 
 FINANCIAL SUMMARY
 ----------------------------------------------------
