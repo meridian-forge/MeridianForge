@@ -1,0 +1,25 @@
+{
+  "provider": "Manual Import",
+
+  "street": "123 Main Street",
+  "city": "Jacksonville",
+  "state": "FL",
+  "zip_code": "32206",
+
+  "purchase_price": 200000,
+  "closing_costs": 5000,
+  "rehab_cost": 0,
+
+  "monthly_rent": 2000,
+  "other_monthly_income": 0,
+
+  "taxes": 1968,
+  "insurance": 1500,
+  "hoa": 0,
+  "maintenance": 100,
+  "management": 160,
+
+  "down_payment": 40000,
+  "interest_rate": 6.5,
+  "loan_term_years": 30
+}
