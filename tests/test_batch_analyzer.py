@@ -39,6 +39,6 @@ def test_batch_analysis_returns_ranked_deals() -> None:
         profile,
     )
 
-    assert len(ranked) == 3
-    assert ranked[0].rank == 1
-    assert ranked[-1].rank == 3
+    assert len(ranked.ranked_deals) == 3
+    assert ranked.ranked_deals[0].rank == 1
+    assert ranked.ranked_deals[-1].rank == 3
