@@ -2,6 +2,23 @@
 
 set -e
 
+echo "======================================"
+echo "Meridian Forge D000.2"
+echo "Update Deployment Engine"
+echo "======================================"
+
+mkdir -p updates/backups
+mkdir -p updates/packages
+
+
+echo
+echo "Updating apply_update.sh..."
+
+cat > scripts/apply_update.sh <<'EOF'
+#!/bin/bash
+
+set -e
+
 PACKAGE="$1"
 MODE="${2:-apply}"
 
@@ -113,5 +130,77 @@ echo "======================================"
 echo "Update completed successfully"
 echo "Backup:"
 echo "$BACKUP_DIR"
+echo "======================================"
+
+EOF
+
+
+chmod +x scripts/apply_update.sh
+
+
+echo
+echo "Updating package creator..."
+
+cat > scripts/create_update_package.sh <<'EOF'
+#!/bin/bash
+
+set -e
+
+PACKAGE_NAME="$1"
+
+if [ -z "$PACKAGE_NAME" ]; then
+    echo "Usage:"
+    echo "./scripts/create_update_package.sh <package>"
+    exit 1
+fi
+
+
+PACKAGE="updates/packages/$PACKAGE_NAME"
+
+mkdir -p "$PACKAGE/files"
+
+
+cat > "$PACKAGE/manifest.txt" <<MANIFEST
+Meridian Forge Update Package
+
+Name:
+$PACKAGE_NAME
+
+Created:
+$(date)
+
+MANIFEST
+
+
+cat > "$PACKAGE/apply.sh" <<EOF2
+#!/bin/bash
+
+echo "Package: $PACKAGE_NAME"
+echo "Deployment handled by apply_update.sh"
+EOF2
+
+
+chmod +x "$PACKAGE/apply.sh"
+
+
+echo
+echo "Created:"
+echo "$PACKAGE"
+
+EOF
+
+
+chmod +x scripts/create_update_package.sh
+
+
+echo
+echo "Running quality gate..."
+
+./scripts/quality_gate.sh
+
+
+echo
+echo "======================================"
+echo "D000.2 completed successfully"
 echo "======================================"
 

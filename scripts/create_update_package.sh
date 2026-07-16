@@ -6,13 +6,17 @@ PACKAGE_NAME="$1"
 
 if [ -z "$PACKAGE_NAME" ]; then
     echo "Usage:"
-    echo "./scripts/create_update_package.sh <package_name>"
+    echo "./scripts/create_update_package.sh <package>"
     exit 1
 fi
 
-mkdir -p "updates/packages/$PACKAGE_NAME/files"
 
-cat > "updates/packages/$PACKAGE_NAME/manifest.txt" <<MANIFEST
+PACKAGE="updates/packages/$PACKAGE_NAME"
+
+mkdir -p "$PACKAGE/files"
+
+
+cat > "$PACKAGE/manifest.txt" <<MANIFEST
 Meridian Forge Update Package
 
 Name:
@@ -21,18 +25,21 @@ $PACKAGE_NAME
 Created:
 $(date)
 
-Files:
 MANIFEST
 
-cat > "updates/packages/$PACKAGE_NAME/apply.sh" <<'APPLY'
+
+cat > "$PACKAGE/apply.sh" <<EOF2
 #!/bin/bash
 
-echo "Applying Meridian Forge update..."
-echo "Package execution placeholder."
-APPLY
+echo "Package: $PACKAGE_NAME"
+echo "Deployment handled by apply_update.sh"
+EOF2
 
-chmod +x "updates/packages/$PACKAGE_NAME/apply.sh"
+
+chmod +x "$PACKAGE/apply.sh"
+
 
 echo
-echo "Created update package:"
-echo "updates/packages/$PACKAGE_NAME"
+echo "Created:"
+echo "$PACKAGE"
+
