@@ -2,17 +2,21 @@
 Intelligent import pipeline.
 
 Coordinates field detection, normalization,
-mapping memory, confidence scoring, and result generation.
+mapping memory, unknown field learning,
+and mapping suggestions.
 """
 
-from meridianforge.intelligence.confidence_engine import (
-    ConfidenceEngine,
-)
 from meridianforge.intelligence.field_detector import (
     FieldDetector,
 )
 from meridianforge.intelligence.mapping_memory import (
     MappingMemory,
+)
+from meridianforge.intelligence.mapping_suggester import (
+    MappingSuggester,
+)
+from meridianforge.intelligence.unknown_field_memory import (
+    UnknownFieldMemory,
 )
 from meridianforge.models.domain.normalized_asset import (
     NormalizedAsset,
@@ -36,8 +40,12 @@ class ImportPipeline:
     def __init__(
         self,
         mapping_memory: MappingMemory | None = None,
+        unknown_memory: UnknownFieldMemory | None = None,
     ) -> None:
+
         self.mapping_memory = mapping_memory or MappingMemory()
+
+        self.unknown_memory = unknown_memory or UnknownFieldMemory()
 
     def process(
         self,
@@ -52,20 +60,41 @@ class ImportPipeline:
 
         warnings: list[ImportWarning] = []
 
-        confidence_inputs = []
+        confidence_scores: list[float] = []
 
         for record in records:
 
-            mappings = FieldDetector.detect(list(record.keys()))
+            fields = list(record.keys())
+
+            mappings = FieldDetector.detect(fields)
 
             if not mappings:
-                warnings.append(
-                    ImportWarning(
-                        field_name="unknown",
-                        message="No recognized fields found.",
-                        confidence=0.0,
+
+                for field in fields:
+
+                    self.unknown_memory.record(
+                        field,
+                        fields,
                     )
-                )
+
+                    suggestion = MappingSuggester.suggest(
+                        field,
+                        fields,
+                    )
+
+                    warnings.append(
+                        ImportWarning(
+                            field_name=field,
+                            message=("Field not recognized."),
+                            confidence=(suggestion.confidence if suggestion else 0.0),
+                            suggested_mapping=(
+                                suggestion.target_field if suggestion else None
+                            ),
+                            suggestion_reason=(
+                                suggestion.reason if suggestion else None
+                            ),
+                        )
+                    )
 
                 continue
 
@@ -77,18 +106,20 @@ class ImportPipeline:
 
             assets.append(normalized_asset.attributes)
 
-            confidence_inputs = mappings
-
             for mapping in mappings:
+
+                confidence_scores.append(mapping.confidence)
+
                 self.mapping_memory.record_success(
                     mapping.source_field,
                     mapping.target_field,
                 )
 
-        confidence = ConfidenceEngine.calculate(
-            confidence_inputs,
-            self.mapping_memory,
-        )
+        confidence = 0.0
+
+        if confidence_scores:
+
+            confidence = sum(confidence_scores) / len(confidence_scores)
 
         return PipelineResult(
             assets=assets,

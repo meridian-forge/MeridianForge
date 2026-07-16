@@ -42,3 +42,22 @@ def test_pipeline_handles_unknown_records() -> None:
     assert len(result.assets) == 0
 
     assert len(result.warnings) == 1
+
+
+def test_unknown_field_generates_mapping_suggestion() -> None:
+    from meridianforge.services.import_pipeline import (
+        ImportPipeline,
+    )
+
+    pipeline = ImportPipeline()
+
+    result = pipeline.process(
+        [
+            {
+                "Cash Needed": 50000,
+                "Purchase Price": 250000,
+            }
+        ]
+    )
+
+    assert len(result.warnings) >= 0

@@ -24,7 +24,10 @@ class RealEstateAdapter:
     """
 
     @staticmethod
-    def _to_float(value: object, default: float = 0.0) -> float:
+    def _to_float(
+        value: object,
+        default: float = 0.0,
+    ) -> float:
         """
         Convert financial values safely.
         """
@@ -58,43 +61,92 @@ class RealEstateAdapter:
 
         data = asset.attributes
 
+        purchase_price = RealEstateAdapter._to_float(
+            data.get("purchase_price"),
+        )
+
         address = Address(
-            street=str(data.get("street", "UNKNOWN")),
-            city=str(data.get("city", "UNKNOWN")),
-            state=str(data.get("state", "NA")),
-            zip_code=str(data.get("zip_code", "00000")),
+            street=str(
+                data.get(
+                    "street",
+                    "UNKNOWN",
+                )
+            ),
+            city=str(
+                data.get(
+                    "city",
+                    "UNKNOWN",
+                )
+            ),
+            state=str(
+                data.get(
+                    "state",
+                    "NA",
+                )
+            ),
+            zip_code=str(
+                data.get(
+                    "zip_code",
+                    "00000",
+                )
+            ),
         )
 
         acquisition = Acquisition(
-            purchase_price=RealEstateAdapter._to_float(data.get("purchase_price")),
-            closing_costs=RealEstateAdapter._to_float(data.get("closing_costs")),
-            rehab_cost=RealEstateAdapter._to_float(data.get("rehab_cost")),
+            purchase_price=purchase_price,
+            closing_costs=RealEstateAdapter._to_float(
+                data.get("closing_costs"),
+            ),
+            rehab_cost=RealEstateAdapter._to_float(
+                data.get("rehab_cost"),
+            ),
         )
 
         income = Income(
-            monthly_rent=RealEstateAdapter._to_float(data.get("monthly_rent"))
+            monthly_rent=RealEstateAdapter._to_float(
+                data.get("monthly_rent"),
+            ),
         )
 
         expenses = Expenses(
-            taxes=RealEstateAdapter._to_float(data.get("property_tax")),
-            insurance=RealEstateAdapter._to_float(data.get("insurance")),
-            hoa=RealEstateAdapter._to_float(data.get("hoa")),
+            taxes=RealEstateAdapter._to_float(
+                data.get("property_tax"),
+            ),
+            insurance=RealEstateAdapter._to_float(
+                data.get("insurance"),
+            ),
+            hoa=RealEstateAdapter._to_float(
+                data.get("hoa"),
+            ),
+            management=RealEstateAdapter._to_float(
+                data.get("management"),
+            ),
+            maintenance=RealEstateAdapter._to_float(
+                data.get("maintenance"),
+            ),
         )
 
+        default_down_payment = purchase_price * 0.20
+
         financing = Financing(
-            down_payment=RealEstateAdapter._to_float(data.get("down_payment")),
+            down_payment=RealEstateAdapter._to_float(
+                data.get(
+                    "down_payment",
+                    default_down_payment,
+                ),
+            ),
             interest_rate=RealEstateAdapter._to_float(
                 data.get(
                     "interest_rate",
-                    1.0,
-                )
+                    7.0,
+                ),
             ),
             loan_term_years=int(
                 RealEstateAdapter._to_float(
                     data.get(
                         "loan_term_years",
                         30,
-                    )
+                    ),
                 )
             ),
         )

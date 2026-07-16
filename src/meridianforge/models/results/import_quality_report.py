@@ -1,7 +1,8 @@
 """
-Pipeline result model.
+Import quality report model.
 
-Represents the output of intelligent import processing.
+Summarizes import accuracy, confidence,
+warnings, and processing results.
 """
 
 from dataclasses import dataclass, field
@@ -12,16 +13,24 @@ from meridianforge.models.results.import_warning import (
 
 
 @dataclass(slots=True)
-class PipelineResult:
+class ImportQualityReport:
     """
-    Result from the import pipeline.
+    Quality assessment of imported data.
     """
 
-    assets: list[dict[str, object]] = field(
+    records_received: int
+
+    records_processed: int
+
+    confidence: float
+
+    recognized_fields: list[str] = field(
         default_factory=list,
     )
 
-    confidence: float = 0.0
+    unknown_fields: list[str] = field(
+        default_factory=list,
+    )
 
     warnings: list[ImportWarning] = field(
         default_factory=list,
@@ -29,7 +38,7 @@ class PipelineResult:
 
     def __post_init__(self) -> None:
         """
-        Validate confidence score.
+        Validate report confidence.
         """
 
         if not 0.0 <= self.confidence <= 1.0:
