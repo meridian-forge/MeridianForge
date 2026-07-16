@@ -2,11 +2,14 @@
 Import quality report model.
 
 Summarizes import accuracy, confidence,
-warnings, and processing results.
+field mappings, warnings, and processing results.
 """
 
 from dataclasses import dataclass, field
 
+from meridianforge.models.results.import_mapping_result import (
+    ImportMappingResult,
+)
 from meridianforge.models.results.import_warning import (
     ImportWarning,
 )
@@ -32,9 +35,23 @@ class ImportQualityReport:
         default_factory=list,
     )
 
+    mapping_results: list[ImportMappingResult] = field(
+        default_factory=list,
+    )
+
     warnings: list[ImportWarning] = field(
         default_factory=list,
     )
+
+    @property
+    def mapped_fields_count(self) -> int:
+        """
+        Count successfully mapped fields.
+        """
+
+        return sum(
+            1 for result in self.mapping_results if result.mapped_field is not None
+        )
 
     def __post_init__(self) -> None:
         """

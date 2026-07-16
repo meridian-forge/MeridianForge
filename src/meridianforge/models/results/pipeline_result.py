@@ -6,6 +6,9 @@ Represents the output of intelligent import processing.
 
 from dataclasses import dataclass, field
 
+from meridianforge.models.results.import_mapping_result import (
+    ImportMappingResult,
+)
 from meridianforge.models.results.import_warning import (
     ImportWarning,
 )
@@ -22,6 +25,10 @@ class PipelineResult:
     )
 
     confidence: float = 0.0
+
+    mapping_results: list[ImportMappingResult] = field(
+        default_factory=list,
+    )
 
     warnings: list[ImportWarning] = field(
         default_factory=list,

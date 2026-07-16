@@ -1,8 +1,7 @@
 """
 Unified file reader.
 
-Supports multiple external file formats and
-returns raw investment records.
+Supports CSV and XLSX sources.
 """
 
 import csv
@@ -13,13 +12,16 @@ from openpyxl import load_workbook
 
 class FileReader:
     """
-    Reads supported investment files.
+    Reads supported investment data files.
     """
 
     @staticmethod
     def read(
         file_path: str,
     ) -> list[dict[str, object]]:
+        """
+        Read supported file formats.
+        """
 
         path = Path(file_path)
 
@@ -28,7 +30,7 @@ class FileReader:
         if suffix == ".csv":
             return FileReader._read_csv(path)
 
-        if suffix in {".xlsx", ".xlsm"}:
+        if suffix in (".xlsx", ".xlsm"):
             return FileReader._read_excel(path)
 
         raise ValueError(f"Unsupported file format: {suffix}")
@@ -37,10 +39,14 @@ class FileReader:
     def _read_csv(
         path: Path,
     ) -> list[dict[str, object]]:
+        """
+        Read CSV file.
+        """
 
         with path.open(
-            newline="",
+            mode="r",
             encoding="utf-8",
+            newline="",
         ) as file:
 
             reader = csv.DictReader(file)
@@ -51,6 +57,11 @@ class FileReader:
     def _read_excel(
         path: Path,
     ) -> list[dict[str, object]]:
+        """
+        Read Excel worksheet.
+
+        First row is treated as headers.
+        """
 
         workbook = load_workbook(
             path,
@@ -58,16 +69,25 @@ class FileReader:
             data_only=True,
         )
 
-        sheet = workbook.active
+        worksheet = workbook.active
 
-        rows = list(sheet.values)
+        rows = list(worksheet.values)
 
         if not rows:
             return []
 
-        headers = rows[0]
+        headers = [str(header) if header is not None else "" for header in rows[0]]
 
-        return [
-            {str(headers[index]): value for index, value in enumerate(row)}
-            for row in rows[1:]
-        ]
+        records: list[dict[str, object]] = []
+
+        for row in rows[1:]:
+
+            record = {
+                headers[index]: value
+                for index, value in enumerate(row)
+                if index < len(headers)
+            }
+
+            records.append(record)
+
+        return records
