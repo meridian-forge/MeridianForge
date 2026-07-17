@@ -4,11 +4,12 @@ Acquisition report generator.
 Creates investor-readable investment summaries.
 """
 
-from meridianforge.models.results.acquisition_assessment import (
-    AcquisitionAssessment,
-)
 from meridianforge.models.results.acquisition_result import (
     AcquisitionResult,
+)
+
+from meridianforge.models.results.acquisition_assessment import (
+    AcquisitionAssessment,
 )
 
 
@@ -54,10 +55,22 @@ class AcquisitionReport:
                 [
                     "FINANCIAL PERFORMANCE",
                     "---------------------",
-                    ("Purchase Price: " f"${assessment.purchase_price:,.0f}"),
-                    ("Monthly Cash Flow: " f"${assessment.monthly_cash_flow:,.0f}"),
-                    ("DSCR: " f"{assessment.dscr:.2f}"),
-                    ("Cap Rate: " f"{assessment.cap_rate:.2%}"),
+                    (
+                        "Purchase Price: "
+                        f"${assessment.purchase_price:,.0f}"
+                    ),
+                    (
+                        "Monthly Cash Flow: "
+                        f"${assessment.monthly_cash_flow:,.0f}"
+                    ),
+                    (
+                        "DSCR: "
+                        f"{assessment.dscr:.2f}"
+                    ),
+                    (
+                        "Cap Rate: "
+                        f"{assessment.cap_rate:.2%}"
+                    ),
                     "",
                 ]
             )

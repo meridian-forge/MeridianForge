@@ -1,7 +1,7 @@
 """
 Acquisition report generator.
 
-Creates investor-readable investment summaries.
+Creates human-readable investment summaries.
 """
 
 from meridianforge.models.results.acquisition_assessment import (
@@ -22,7 +22,7 @@ class AcquisitionReport:
         result: AcquisitionResult,
     ) -> str:
         """
-        Generate investment report.
+        Generate text report.
         """
 
         assessment = result.metadata.get(
@@ -36,15 +36,13 @@ class AcquisitionReport:
             assessment = None
 
         lines = [
-            "================================",
-            "MERIDIAN FORGE",
-            "INVESTMENT ANALYSIS REPORT",
-            "================================",
+            "MERIDIAN FORGE ANALYSIS REPORT",
             "",
-            "INVESTMENT DECISION",
-            "-------------------",
             f"Recommendation: {result.recommendation}",
             f"Confidence: {result.confidence:.0%}",
+            "",
+            "Assets Analyzed:",
+            str(result.assets_analyzed),
             "",
         ]
 
@@ -52,12 +50,12 @@ class AcquisitionReport:
 
             lines.extend(
                 [
-                    "FINANCIAL PERFORMANCE",
-                    "---------------------",
-                    ("Purchase Price: " f"${assessment.purchase_price:,.0f}"),
+                    "Financial Summary",
+                    "-----------------",
+                    f"Purchase Price: ${assessment.purchase_price:,.0f}",
+                    f"DSCR: {assessment.dscr:.2f}",
+                    f"Cap Rate: {assessment.cap_rate:.2%}",
                     ("Monthly Cash Flow: " f"${assessment.monthly_cash_flow:,.0f}"),
-                    ("DSCR: " f"{assessment.dscr:.2f}"),
-                    ("Cap Rate: " f"{assessment.cap_rate:.2%}"),
                     "",
                 ]
             )
@@ -66,29 +64,11 @@ class AcquisitionReport:
 
             lines.extend(
                 [
-                    "RISK REVIEW",
-                    "-----------",
+                    "Warnings",
+                    "--------",
                     *result.warnings,
                     "",
                 ]
             )
-        else:
-
-            lines.extend(
-                [
-                    "RISK REVIEW",
-                    "-----------",
-                    "No warnings identified.",
-                    "",
-                ]
-            )
-
-        lines.extend(
-            [
-                "NEXT ACTION",
-                "-----------",
-                "Proceed with detailed due diligence.",
-            ]
-        )
 
         return "\n".join(lines)
