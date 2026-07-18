@@ -1,0 +1,8 @@
+MF-110.0
+Meridian Forge MVP Release
+
+Adds:
+- Release documentation
+- Startup workflow
+- Version management
+- Demo package

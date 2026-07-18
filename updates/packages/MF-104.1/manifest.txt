@@ -1,0 +1,7 @@
+MF-104.1
+Deal Ranking Engine
+
+Adds:
+- Opportunity filtering
+- Ranking engine
+- Pipeline selection

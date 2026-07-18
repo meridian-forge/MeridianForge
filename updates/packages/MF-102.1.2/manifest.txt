@@ -1,0 +1,8 @@
+MF-102.1.2
+File Intake Adapters
+
+Adds:
+- PDF adapter
+- CSV adapter
+- XLSX adapter
+- Email adapter foundation

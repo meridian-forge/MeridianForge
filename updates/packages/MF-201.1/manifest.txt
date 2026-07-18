@@ -1,0 +1,10 @@
+MF-201.1
+
+Extraction Engine Foundation
+
+Adds:
+- Extracted data model
+- Extractor abstraction
+- Excel extractor
+- Extractor registry
+- Extraction tests

@@ -1,0 +1,8 @@
+MF-103.1
+Financial Assumption Model
+
+Adds:
+- Financing assumptions
+- Mortgage calculation
+- Expense model
+- Cash flow model

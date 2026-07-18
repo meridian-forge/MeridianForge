@@ -1,0 +1,9 @@
+MF-202.3
+
+CLI Runner
+
+Adds:
+- Command line interface
+- Analyze command
+- Folder processing
+- CLI tests

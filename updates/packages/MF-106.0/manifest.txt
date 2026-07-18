@@ -1,0 +1,7 @@
+MF-106.0
+MVP Application Layer
+
+Adds:
+- Application workflow
+- Service layer
+- Unified property analysis entry point

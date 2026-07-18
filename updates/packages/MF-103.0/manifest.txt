@@ -1,0 +1,8 @@
+MF-103.0
+Underwriting Pipeline Integration
+
+Adds:
+- Analysis Result model
+- Investment metrics
+- Underwriting engine
+- Analyzer workflow

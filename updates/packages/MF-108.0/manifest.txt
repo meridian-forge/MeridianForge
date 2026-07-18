@@ -1,0 +1,7 @@
+MF-108.0
+Investor Reporting Engine
+
+Adds:
+- Report generation
+- Export models
+- Investment summaries

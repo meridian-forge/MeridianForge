@@ -1,0 +1,7 @@
+MF-104.0
+Property Acquisition Intelligence
+
+Adds:
+- Acquisition scoring
+- Decision engine
+- Ranking foundation

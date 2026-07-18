@@ -1,0 +1,5 @@
+MF-202.1-fix
+
+Fix pytest namespace collisions
+
+Adds package markers to test directories.

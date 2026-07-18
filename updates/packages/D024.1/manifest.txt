@@ -1,0 +1,8 @@
+Package: D024.1
+
+Purpose:
+Investor Profile Engine Foundation
+
+Created:
+Fri Jul 17 09:30:06 EDT 2026
+

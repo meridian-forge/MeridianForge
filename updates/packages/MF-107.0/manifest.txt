@@ -1,0 +1,7 @@
+MF-107.0
+Streamlit MVP User Interface
+
+Adds:
+- Browser application
+- Property input screen
+- Analysis dashboard

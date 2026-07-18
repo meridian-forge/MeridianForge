@@ -1,0 +1,9 @@
+MF-201.0
+
+Source Detection Engine
+
+Adds:
+- File scanner
+- Source classifier
+- Intake models
+- Detection tests

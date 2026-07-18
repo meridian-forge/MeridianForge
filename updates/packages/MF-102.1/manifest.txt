@@ -1,0 +1,9 @@
+MF-102.1
+Intake Engine
+
+Adds:
+- Source adapter framework
+- Manual intake adapter
+- URL intake adapter foundation
+- File intake foundations
+- Intake tests

@@ -1,0 +1,8 @@
+MF-109.0
+User Experience Enhancement
+
+Adds:
+- Decision dashboard components
+- Scenario display
+- Analysis history foundation
+- Demo dataset

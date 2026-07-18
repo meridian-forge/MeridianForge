@@ -1,0 +1,9 @@
+MF-203.0
+
+Real Deal Validation Framework
+
+Adds:
+- Validation models
+- Deal review workflow
+- Missing field detection
+- Validation tests

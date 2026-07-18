@@ -1,28 +1,86 @@
+# ======================================
+# Meridian Forge Git Ignore
+# ======================================
+
+
 # Python
 __pycache__/
 *.py[cod]
 *$py.class
 
-# Virtual environment
+
+# Virtual environments
 venv/
 .venv/
 
-# Build files
+
+# Build artifacts
 build/
 dist/
 *.egg-info/
 
-# Test / coverage
+
+# Testing
 .pytest_cache/
 .coverage
 htmlcov/
+
 
 # IDE
 .vscode/
 .idea/
 
+
 # OS
 .DS_Store
 
+
 # Environment
 .env
+
+
+# ======================================
+# Meridian Forge Generated Artifacts
+# ======================================
+
+# Update backups
+# updates/backups/
+
+# Temporary packages
+updates/tmp/
+
+# Local generated reports
+reports/output/
+reports/generated/
+
+# Generated Excel exports
+*.xlsx
+
+
+# ======================================
+# Package history
+# ======================================
+
+# Keep manifests and release packages
+# but ignore generated backup copies
+
+updates/packages/*/files/__pycache__/
+
+
+# ======================================
+# Runtime
+# ======================================
+
+*.log
+*.tmp
+*.cache
+
+# ======================================
+# Meridian Forge Update System
+# ======================================
+
+# Keep release packages tracked
+# updates/packages/
+
+# Ignore local deployment backups
+updates/backups/

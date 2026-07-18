@@ -1,0 +1,10 @@
+MF-201.2
+
+Opportunity Normalization Engine
+
+Adds:
+- Opportunity domain model
+- Asset classification
+- Field mapping
+- Normalization service
+- Tests

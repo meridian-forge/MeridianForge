@@ -1,0 +1,8 @@
+MF-105.0
+Data Acquisition Layer
+
+Adds:
+- Property data loader
+- Data normalization
+- Validation engine
+- Import pipeline

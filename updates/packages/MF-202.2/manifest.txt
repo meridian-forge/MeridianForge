@@ -1,0 +1,9 @@
+MF-202.2
+
+Report Generator
+
+Adds:
+- Report models
+- Text reporting
+- Ranking summaries
+- Report tests

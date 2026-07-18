@@ -1,48 +1,53 @@
-"""
-Meridian Forge CLI entry point.
-"""
-
 import argparse
 
-from meridianforge.cli.commands import (
-    analyze_command,
+from meridianforge.analysis.analyzer import analyze
+from meridianforge.intake.pipeline import process_folder
+from meridianforge.ranking.engine import rank
+from meridianforge.reporting.text_report import (
+    generate_text_report,
 )
 
 
+def run_analyze(
+    folder: str,
+) -> None:
+
+    opportunities = process_folder(folder)
+
+    results = [analyze(item) for item in opportunities]
+
+    rankings = rank(results)
+
+    report = generate_text_report(rankings)
+
+    print(report.content)
+
+
 def main() -> None:
-    """
-    Execute CLI application.
-    """
 
     parser = argparse.ArgumentParser(
         prog="meridianforge",
-        description="AI-assisted real estate underwriting platform",
     )
 
     subparsers = parser.add_subparsers(
         dest="command",
-        required=True,
     )
 
     analyze_parser = subparsers.add_parser(
         "analyze",
-        help="Analyze a property JSON file",
     )
 
     analyze_parser.add_argument(
-        "file",
-        help="Path to property JSON file",
+        "folder",
     )
 
     args = parser.parse_args()
 
     if args.command == "analyze":
-        print(
-            analyze_command(
-                args.file,
-            )
-        )
+
+        run_analyze(args.folder)
 
 
 if __name__ == "__main__":
+
     main()
