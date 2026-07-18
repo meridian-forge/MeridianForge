@@ -1,0 +1,10 @@
+MF-205.0
+
+Investment Recommendation Engine Foundation
+
+Adds:
+- Investor profile model
+- Recommendation engine foundation
+- Decision rules framework
+- Recommendation explanations
+- Intelligence layer tests

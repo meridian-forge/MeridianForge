@@ -1,0 +1,3 @@
+"""
+Investor profile models.
+"""
