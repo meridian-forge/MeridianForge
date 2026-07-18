@@ -1,0 +1,9 @@
+MF-206.0
+Intelligence Scoring Engine Foundation
+
+Files:
+- intelligence/scoring/__init__.py
+- intelligence/scoring/engine.py
+- intelligence/scoring/factors.py
+- intelligence/scoring/weights.py
+- tests/intelligence/test_scoring.py
