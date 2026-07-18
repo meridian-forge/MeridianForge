@@ -3,84 +3,123 @@
 # ======================================
 
 
+# ======================================
 # Python
+# ======================================
+
 __pycache__/
 *.py[cod]
 *$py.class
-
 
 # Virtual environments
 venv/
 .venv/
 
-
-# Build artifacts
+# Python build artifacts
 build/
 dist/
 *.egg-info/
 
 
+# ======================================
 # Testing
+# ======================================
+
 .pytest_cache/
 .coverage
 htmlcov/
 
 
-# IDE
+# ======================================
+# IDE / Editor
+# ======================================
+
 .vscode/
 .idea/
 
 
-# OS
+# ======================================
+# Operating System
+# ======================================
+
 .DS_Store
 
 
-# Environment
+# ======================================
+# Environment / Secrets
+# ======================================
+
 .env
+.env.*
+!.env.example
 
 
 # ======================================
 # Meridian Forge Generated Artifacts
 # ======================================
 
-# Update backups
-# updates/backups/
-
-# Temporary packages
-updates/tmp/
-
-# Local generated reports
-reports/output/
-reports/generated/
-
-# Generated Excel exports
-*.xlsx
-
-
-# ======================================
-# Package history
-# ======================================
-
-# Keep manifests and release packages
-# but ignore generated backup copies
-
-updates/packages/*/files/__pycache__/
-
-
-# ======================================
-# Runtime
-# ======================================
-
+# Runtime logs
 *.log
+
+# Temporary files
 *.tmp
 *.cache
 
+
 # ======================================
-# Meridian Forge Update System
+# Reports
 # ======================================
 
-# Release packages are intentionally tracked:
+# Generated reports only
+reports/output/
+reports/generated/
+
+
+# Generated exports
+reports/output/*.xlsx
+reports/generated/*.xlsx
+
+
+# ======================================
+# Update System
+# ======================================
+
+# Deployment backups
+updates/backups/
+
+# Temporary update workspace
+updates/tmp/
+
+
+# Keep release packages tracked:
 # updates/packages/
 
-# Deployment backups are local only:
-updates/backups/
+
+# Ignore Python cache inside packages
+updates/packages/*/files/**/__pycache__/
+
+
+# ======================================
+# Local Runtime Data
+# ======================================
+
+# Local databases
+*.sqlite
+*.db
+
+
+# ======================================
+# Coverage / Analysis Output
+# ======================================
+
+.mypy_cache/
+.ruff_cache/
+
+
+# ======================================
+# OS Metadata
+# ======================================
+
+.Trashes
+.AppleDouble
+.LSOverride
