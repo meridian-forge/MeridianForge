@@ -1,0 +1,9 @@
+MF-204.0
+
+Investment Intelligence Foundation
+
+Adds:
+- Investor intelligence domain models
+- Scoring framework foundation
+- Recommendation layer foundation
+- Intelligence module tests
