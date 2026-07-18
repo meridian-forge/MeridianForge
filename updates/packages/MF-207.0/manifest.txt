@@ -1,0 +1,21 @@
+Meridian Forge Update Package
+
+Version:
+MF-207.0
+
+Feature:
+Investment Decision Intelligence Layer
+
+Purpose:
+Convert recommendation and scoring outputs
+into investor decision guidance.
+
+Files:
+updates/packages/MF-207.0/files/src/meridianforge/intelligence/decision/__init__.py
+updates/packages/MF-207.0/files/src/meridianforge/intelligence/decision/actions.py
+updates/packages/MF-207.0/files/src/meridianforge/intelligence/decision/confidence.py
+updates/packages/MF-207.0/files/src/meridianforge/intelligence/decision/engine.py
+updates/packages/MF-207.0/files/src/meridianforge/intelligence/decision/models.py
+updates/packages/MF-207.0/files/src/meridianforge/intelligence/decision/rationale.py
+updates/packages/MF-207.0/files/tests/intelligence/test_decision.py
+
