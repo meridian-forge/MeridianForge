@@ -79,8 +79,8 @@ updates/packages/*/files/__pycache__/
 # Meridian Forge Update System
 # ======================================
 
-# Keep release packages tracked
+# Release packages are intentionally tracked:
 # updates/packages/
 
-# Ignore local deployment backups
+# Deployment backups are local only:
 updates/backups/
