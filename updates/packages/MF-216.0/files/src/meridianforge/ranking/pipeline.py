@@ -1,34 +1,11 @@
 from typing import Any
 
-from meridianforge.ranking.ranking_engine import RankingEngine
-
-
-class AcquisitionPipeline:
-    """
-    Existing acquisition ranking workflow.
-
-    Preserves compatibility with
-    existing Meridian Forge ranking engine.
-    """
-
-    def __init__(
-        self,
-        ranking_engine: RankingEngine,
-    ) -> None:
-        self.ranking_engine = ranking_engine
-
-    def execute(
-        self,
-        decisions: list[Any],
-    ) -> list[Any]:
-        return [decision for decision in decisions if decision.status == "BUY"]
-
 
 class RankingPipeline:
     """
-    Monday analyzer ranking workflow.
+    Ranks analyzed opportunities.
 
-    Ranks analyzed opportunities by score.
+    Initial ranking uses a configurable score field.
     """
 
     def __init__(
@@ -44,7 +21,7 @@ class RankingPipeline:
 
         return sorted(
             opportunities,
-            key=self._score,
+            key=lambda item: self._score(item),
             reverse=True,
         )
 

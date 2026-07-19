@@ -1,0 +1,7 @@
+MF-216.0
+Ranking Pipeline
+
+Files:
+src/meridianforge/ranking/__init__.py
+src/meridianforge/ranking/pipeline.py
+tests/ranking/test_pipeline.py
