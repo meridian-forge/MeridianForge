@@ -1,0 +1,7 @@
+MF-222.1
+Runtime Output Management
+
+Files:
+src/meridianforge/cli/monday_command.py
+tests/cli/test_monday_output_location.py
+.gitignore

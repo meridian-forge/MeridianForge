@@ -123,3 +123,17 @@ updates/packages/*/files/**/__pycache__/
 .Trashes
 .AppleDouble
 .LSOverride
+# Meridian Forge runtime outputs
+runtime/outputs/*.md
+runtime/outputs/*.xlsx
+runtime/outputs/*.csv
+
+# Meridian Forge runtime outputs
+runtime/outputs/*.md
+runtime/outputs/*.xlsx
+runtime/outputs/*.csv
+
+# Meridian Forge runtime outputs
+runtime/outputs/*.md
+runtime/outputs/*.xlsx
+runtime/outputs/*.csv
