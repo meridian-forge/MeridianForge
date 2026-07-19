@@ -1,0 +1,6 @@
+MF-219.0
+Monday Workflow Integration
+
+Files:
+src/meridianforge/workflow/monday_pipeline.py
+tests/workflow/test_monday_pipeline.py
