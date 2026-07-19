@@ -1,3 +1,6 @@
+from meridianforge.reporting.exporter import (
+    ReportExporter,
+)
 from meridianforge.reporting.investor_report import (
     InvestorReport,
     InvestorReportBuilder,
@@ -6,4 +9,5 @@ from meridianforge.reporting.investor_report import (
 __all__ = [
     "InvestorReport",
     "InvestorReportBuilder",
+    "ReportExporter",
 ]
