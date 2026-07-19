@@ -1,0 +1,23 @@
+MF-229.0 Release Packaging + Developer Workflow Stabilization
+
+Purpose:
+Establish release governance and prevent engineering drift before MF-300 productization.
+
+Files:
+
+Documentation/RELEASE_PROCESS.md
+Documentation/ARCHITECTURE_FREEZE.md
+Documentation/DEVELOPMENT_WORKFLOW.md
+
+Scripts:
+
+scripts/populate_mf229_governance.sh
+
+Scope:
+
+- Release process documentation
+- Architecture freeze rules
+- Developer workflow standards
+- Sprint packaging standards
+
+No production code changes.
