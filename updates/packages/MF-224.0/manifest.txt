@@ -1,0 +1,6 @@
+MF-224.0
+Excel Property Intake Adapter Foundation
+
+Files:
+- src/meridianforge/intake/excel_property_adapter.py
+- tests/intake/test_excel_property_adapter.py
