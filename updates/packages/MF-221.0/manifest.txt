@@ -1,0 +1,8 @@
+MF-221.0
+CSV Property Intake Adapter
+
+Files:
+
+src/meridianforge/intake/csv_property_adapter.py
+src/meridianforge/intake/property_import_service.py
+tests/intake/test_csv_property_adapter.py
