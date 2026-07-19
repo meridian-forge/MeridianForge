@@ -1,0 +1,7 @@
+MF-214.0
+Opportunity Repository
+
+Files:
+src/meridianforge/repositories/__init__.py
+src/meridianforge/repositories/opportunity_repository.py
+tests/repositories/test_opportunity_repository.py

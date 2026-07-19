@@ -13,16 +13,24 @@ class OpportunityRepository:
         self,
         opportunities: list[Any] | None = None,
     ) -> None:
-        self._opportunities: list[Any] = opportunities or []
+        self._opportunities: list[Any] = (
+            opportunities or []
+        )
 
     def add(
         self,
         opportunity: Any,
     ) -> None:
-        self._opportunities.append(opportunity)
+        self._opportunities.append(
+            opportunity
+        )
 
     def get_all(self) -> list[Any]:
-        return list(self._opportunities)
+        return list(
+            self._opportunities
+        )
 
     def count(self) -> int:
-        return len(self._opportunities)
+        return len(
+            self._opportunities
+        )
