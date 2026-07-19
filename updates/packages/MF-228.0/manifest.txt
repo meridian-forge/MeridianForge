@@ -1,17 +1,20 @@
-MF-228.0 Intake Architecture Consolidation
+MF-228.0 MVP Stabilization Documentation Control Center
+
+Deliverables:
+
+Documentation:
+- MASTER_ROADMAP.md
+- CURRENT_STATUS.md
+- ARCHITECTURE_DECISIONS.md
+- MeridianForge_Control_Center.md
+
+Automation:
+- populate_mf228_documentation.sh
 
 Purpose:
 
-Consolidate Meridian Forge intake, reader, and normalization architecture.
+Establish MeridianForge single source of truth documentation and prevent roadmap drift.
 
-Scope:
+Production code changes:
 
-- Inventory duplicate intake modules
-- Define target ownership boundaries
-- Document migration strategy
-- Preserve backward compatibility
-- Prepare safe consolidation
-
-Files:
-
-Documentation/Architecture/MF-228-Intake-Consolidation-Plan.md
+None

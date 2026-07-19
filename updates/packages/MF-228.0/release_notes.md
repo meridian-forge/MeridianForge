@@ -1,22 +1,27 @@
 # MF-228.0 Release Notes
 
-## Intake Architecture Consolidation
+## MVP Stabilization Documentation Control Center
 
-Status:
+Delivered:
 
-Planning and architecture stabilization.
+- Master roadmap covering MF-100 through MF-700
+- Current project status tracker
+- Architecture decision records
+- MeridianForge control center
+- Reproducible documentation generation script
 
-Changes:
+Impact:
 
-- Identified duplicate FileReader implementations
-- Identified duplicate normalization modules
-- Defined consolidation strategy
-- No production behavior changes
+Creates a single source of truth for future development phases.
 
-Regression Risk:
+Production code:
 
-Low
+No changes.
 
-Tests:
+Risk:
 
-179 passing
+Low.
+
+Validation:
+
+179 tests passing.
