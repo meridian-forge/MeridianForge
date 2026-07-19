@@ -1,0 +1,7 @@
+MF-220.0
+MVP Usable Analyzer Release
+
+Files:
+src/meridianforge/workspace/sample_opportunities.py
+src/meridianforge/cli/monday_command.py
+tests/cli/test_monday_command.py
