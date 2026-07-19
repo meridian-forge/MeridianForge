@@ -1,0 +1,7 @@
+MF-213.0
+Monday Analyzer Foundation
+
+Files:
+src/meridianforge/services/__init__.py
+src/meridianforge/services/monday_analyzer.py
+tests/services/test_monday_analyzer.py
