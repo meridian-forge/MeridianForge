@@ -1,0 +1,6 @@
+MF-218.0
+Monday Dashboard Generator
+
+Files:
+src/meridianforge/reporting/monday_dashboard.py
+tests/reporting/test_monday_dashboard.py
