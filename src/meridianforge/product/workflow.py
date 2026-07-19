@@ -5,6 +5,9 @@ Transforms internal analysis outputs
 into investor-facing review artifacts.
 """
 
+from meridianforge.product.decision_card import (
+    InvestorDecisionCard,
+)
 from meridianforge.models.results.deal_evaluation import (
     DealEvaluation,
 )
@@ -46,4 +49,21 @@ class InvestorWorkflowService:
             confidence=confidence,
             strengths=strengths,
             risks=risks,
+        )
+
+    def create_decision_card(
+        self,
+        review: InvestorReview,
+    ) -> InvestorDecisionCard:
+        """
+        Convert investor review into decision card.
+        """
+
+        return InvestorDecisionCard(
+            rank=review.rank,
+            property_address=review.property_address,
+            recommendation=review.recommendation,
+            confidence=review.confidence,
+            reasons=review.strengths,
+            risks=review.risks,
         )
