@@ -1,0 +1,17 @@
+MF-228.0 Intake Architecture Consolidation
+
+Purpose:
+
+Consolidate Meridian Forge intake, reader, and normalization architecture.
+
+Scope:
+
+- Inventory duplicate intake modules
+- Define target ownership boundaries
+- Document migration strategy
+- Preserve backward compatibility
+- Prepare safe consolidation
+
+Files:
+
+Documentation/Architecture/MF-228-Intake-Consolidation-Plan.md
