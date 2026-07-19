@@ -1,10 +1,7 @@
 import sys
 
-from meridianforge.cli.monday import (
-    MondayWorkflow,
-)
-from meridianforge.reporting.exporter import (
-    ReportExporter,
+from meridianforge.cli.monday_command import (
+    run_monday,
 )
 
 
@@ -25,13 +22,15 @@ def main() -> None:
         print("Meridian Forge Monday Workflow")
         print("====================================")
 
-        print("Generating investment brief...")
+        print("Running opportunity analysis...")
 
-        MondayWorkflow(ReportExporter())
+        output = run_monday()
 
-        print("Workflow engine initialized.")
+        print(f"Dashboard generated: {output}")
 
         print("Status: READY")
+
+        print("Status: COMPLETE")
 
     else:
         print(f"Unknown command: {command}")
