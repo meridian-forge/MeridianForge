@@ -65,3 +65,12 @@ def test_workflow_creates_investor_review():
     assert review.recommendation == "BUY"
     assert review.confidence == 0.90
     assert review.is_actionable()
+    card = InvestorWorkflowService().create_decision_card(review)
+
+    assert card.rank == 1
+    assert card.property_address == review.property_address
+    assert card.recommendation == "BUY"
+    assert card.confidence == 0.90
+    assert card.strengths == ["Strong cash flow"]
+    assert card.risks == []
+    assert card.is_buy_candidate()

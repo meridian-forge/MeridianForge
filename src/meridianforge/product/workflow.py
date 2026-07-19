@@ -5,14 +5,14 @@ Transforms internal analysis outputs
 into investor-facing review artifacts.
 """
 
-from meridianforge.product.decision_card import (
-    InvestorDecisionCard,
-)
 from meridianforge.models.results.deal_evaluation import (
     DealEvaluation,
 )
 from meridianforge.models.results.ranked_deal import (
     RankedDeal,
+)
+from meridianforge.product.decision_card import (
+    InvestorDecisionCard,
 )
 from meridianforge.product.investor_review import (
     InvestorReview,
@@ -64,6 +64,6 @@ class InvestorWorkflowService:
             property_address=review.property_address,
             recommendation=review.recommendation,
             confidence=review.confidence,
-            reasons=review.strengths,
+            strengths=review.strengths,
             risks=review.risks,
         )
