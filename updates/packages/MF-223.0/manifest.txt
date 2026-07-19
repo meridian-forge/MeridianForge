@@ -1,0 +1,12 @@
+Meridian Forge Update Package
+
+Release:
+MF-223.0
+
+Purpose:
+CLI property file intake
+
+Files:
+- src/meridianforge/__main__.py
+- src/meridianforge/cli/monday_command.py
+- tests/cli/test_monday_file_input.py
