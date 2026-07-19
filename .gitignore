@@ -100,40 +100,12 @@ updates/packages/*/files/**/__pycache__/
 
 
 # ======================================
-# Local Runtime Data
+# Meridian Forge Runtime Workspace
 # ======================================
 
-# Local databases
-*.sqlite
-*.db
-
-
-# ======================================
-# Coverage / Analysis Output
-# ======================================
-
-.mypy_cache/
-.ruff_cache/
-
-
-# ======================================
-# OS Metadata
-# ======================================
-
-.Trashes
-.AppleDouble
-.LSOverride
-# Meridian Forge runtime outputs
-runtime/outputs/*.md
-runtime/outputs/*.xlsx
-runtime/outputs/*.csv
-
-# Meridian Forge runtime outputs
-runtime/outputs/*.md
-runtime/outputs/*.xlsx
-runtime/outputs/*.csv
-
-# Meridian Forge runtime outputs
-runtime/outputs/*.md
-runtime/outputs/*.xlsx
-runtime/outputs/*.csv
+runtime/*
+!runtime/
+!runtime/outputs/
+runtime/outputs/*
+!runtime/outputs/.gitkeep
+!runtime/outputs/.gitkeep
