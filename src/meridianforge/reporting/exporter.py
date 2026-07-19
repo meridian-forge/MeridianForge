@@ -1,8 +1,13 @@
 from pathlib import Path
+from typing import Protocol
 
-from meridianforge.reporting.investor_report import (
-    InvestorReport,
-)
+
+class RenderableReport(Protocol):
+    """
+    Interface required for report export.
+    """
+
+    def render(self) -> str: ...
 
 
 class ReportExporter:
@@ -12,7 +17,7 @@ class ReportExporter:
 
     def export_markdown(
         self,
-        report: InvestorReport,
+        report: RenderableReport,
         output_path: Path,
     ) -> Path:
         """
@@ -33,7 +38,7 @@ class ReportExporter:
 
     def export_text(
         self,
-        report: InvestorReport,
+        report: RenderableReport,
         output_path: Path,
     ) -> Path:
         """
