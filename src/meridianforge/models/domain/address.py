@@ -24,3 +24,9 @@ class Address:
 
         if len(self.state) != 2:
             raise ValueError("State must be a two-letter abbreviation.")
+
+    def display(self) -> str:
+        """
+        Human-readable property address.
+        """
+        return f"{self.street}, " f"{self.city}, " f"{self.state} " f"{self.zip_code}"
