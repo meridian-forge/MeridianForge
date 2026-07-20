@@ -1,6 +1,6 @@
-from pathlib import Path
-
-from meridianforge.opportunity.models import Opportunity
+from meridianforge.services.acquisition_file_service import (
+    AcquisitionFileService,
+)
 from meridianforge.services.acquisition_execution_service import (
     AcquisitionExecutionService,
 )
@@ -17,10 +17,8 @@ def run_acquisition(args) -> None:
     Execute acquisition analysis from CLI.
     """
 
-    opportunity = Opportunity(
-        source_file=str(Path(args.file)),
-        fields={},
-        confidence=0.0,
+    opportunity = AcquisitionFileService().load(
+    args.file,
     )
 
     investor = InvestorProfile(
