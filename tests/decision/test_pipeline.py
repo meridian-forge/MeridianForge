@@ -1,5 +1,3 @@
-import pytest
-
 from meridianforge.decision.pipeline import (
     DecisionPipeline,
 )
@@ -17,8 +15,17 @@ def test_decision_pipeline_contract():
         source="Zillow",
     )
 
-    with pytest.raises(NotImplementedError):
+    review = DecisionPipeline().evaluate(
+        opportunity,
+    )
 
-        DecisionPipeline().evaluate(
-            opportunity,
-        )
+    assert review.cards
+
+    card = review.cards[0]
+
+    assert card.property_address
+    assert card.recommendation in [
+        "BUY",
+        "REVIEW",
+    ]
+    assert 0 <= card.confidence <= 1
