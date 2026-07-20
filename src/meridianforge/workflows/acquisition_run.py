@@ -6,7 +6,9 @@ Coordinates analysis and investor package creation.
 
 from dataclasses import dataclass
 from pathlib import Path
-
+from meridianforge.workflows.acquisition_context import (
+    AcquisitionRunContext,
+)
 
 @dataclass(slots=True)
 class AcquisitionRunResult:
@@ -32,7 +34,7 @@ class AcquisitionRunService:
 
     def execute(
         self,
-        review,
+        context: AcquisitionRunContext,
         output_directory: Path,
         archive_root: Path,
     ) -> AcquisitionRunResult:
@@ -41,12 +43,12 @@ class AcquisitionRunService:
         """
 
         package_location = self.package_service.create_package(
-            review,
+           context.review,
             output_directory,
             archive_root,
         )
 
-        primary_card = review.cards[0]
+        primary_card = context.review.cards[0]
 
         return AcquisitionRunResult(
             recommendation=primary_card.recommendation,

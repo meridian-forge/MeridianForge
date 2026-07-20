@@ -3,8 +3,18 @@ from pathlib import Path
 from meridianforge.operations.investor_package_service import (
     InvestorPackageService,
 )
-from meridianforge.product.decision_card import InvestorDecisionCard
-from meridianforge.product.weekly_review import WeeklyInvestorReview
+from meridianforge.product.decision_card import (
+    InvestorDecisionCard,
+)
+from meridianforge.product.weekly_review import (
+    WeeklyInvestorReview,
+)
+from meridianforge.workflows.acquisition_context import (
+    AcquisitionRunContext,
+)
+from meridianforge.workflows.acquisition_input import (
+    AcquisitionInput,
+)
 from meridianforge.workflows.acquisition_run import (
     AcquisitionRunService,
 )
@@ -29,10 +39,20 @@ def test_acquisition_run_creates_investor_package(tmp_path: Path):
         ]
     )
 
+    context = AcquisitionRunContext(
+        opportunity=AcquisitionInput(
+            property_address="123 Main St",
+            purchase_price=250000,
+            market="Jacksonville",
+            source="Zillow",
+        ),
+        review=review,
+    )
+
     result = AcquisitionRunService(
         InvestorPackageService(),
     ).execute(
-        review,
+        context,
         tmp_path / "exports",
         tmp_path / "archive",
     )
