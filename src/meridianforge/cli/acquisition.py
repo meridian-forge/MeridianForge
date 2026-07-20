@@ -1,3 +1,6 @@
+from meridianforge.reporting.acquisition_report import (
+    AcquisitionReportFormatter,
+)
 from meridianforge.services.acquisition_file_service import (
     AcquisitionFileService,
 )
@@ -18,7 +21,7 @@ def run_acquisition(args) -> None:
     """
 
     opportunity = AcquisitionFileService().load(
-    args.file,
+        args.file,
     )
 
     investor = InvestorProfile(
@@ -31,6 +34,8 @@ def run_acquisition(args) -> None:
         investor,
     )
 
-    print(
-        result.review.cards[0]
+    report = AcquisitionReportFormatter.format(
+        result.review,
     )
+
+    print(report)
