@@ -7,7 +7,7 @@ import argparse
 
 def build_parser() -> argparse.ArgumentParser:
     """
-    Build command line parser.
+    Build command parser.
     """
 
     parser = argparse.ArgumentParser(
@@ -29,6 +29,7 @@ def build_parser() -> argparse.ArgumentParser:
         "--file",
         help="Property input CSV/XLSX file",
     )
+
     acquisition = subparsers.add_parser(
         "acquisition",
         help="Run acquisition intelligence workflow",
@@ -49,6 +50,38 @@ def build_parser() -> argparse.ArgumentParser:
         required=True,
         help="Opportunity input file",
     )
+
+    investor_package = subparsers.add_parser(
+        "investor-package",
+        help="Generate investor package",
+    )
+
+    investor_package.add_argument(
+        "--package-id",
+        required=True,
+    )
+
+    investor_package.add_argument(
+        "--property-name",
+        required=True,
+    )
+
+    investor_package.add_argument(
+        "--recommendation",
+        required=True,
+    )
+
+    investor_package.add_argument(
+        "--confidence",
+        type=float,
+        required=True,
+    )
+
+    investor_package.add_argument(
+        "--output",
+        required=True,
+    )
+
     subparsers.add_parser(
         "version",
         help="Show Meridian Forge version",
