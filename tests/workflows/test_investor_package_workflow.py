@@ -29,6 +29,10 @@ def test_investor_package_workflow_generates_package(
     assert package.package_id == "TEST001"
     assert package.property_name == "123 Main Street"
 
+    assert package.investment_thesis is not None
+
     assert (tmp_path / "Decision_Brief.md").exists()
+
+    assert (tmp_path / "Investment_Thesis.md").exists()
 
     assert (tmp_path / "Archive_Metadata.json").exists()

@@ -8,6 +8,10 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
 
+from meridianforge.intelligence.investment_thesis import (
+    InvestmentThesis,
+)
+
 
 @dataclass(slots=True)
 class InvestorPackageArtifact:
@@ -32,6 +36,7 @@ class InvestorPackage:
     confidence: float
     created_at: datetime
     executive_summary: str = ""
+    investment_thesis: InvestmentThesis | None = None
     artifacts: list[InvestorPackageArtifact] = field(
         default_factory=list,
     )
