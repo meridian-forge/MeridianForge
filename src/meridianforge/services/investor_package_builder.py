@@ -31,8 +31,7 @@ class InvestorPackageBuilder:
         """
 
         package_directory = (
-            output_directory
-            / f"MeridianForge_Deal_Package_{package_id}"
+            output_directory / f"MeridianForge_Deal_Package_{package_id}"
         )
 
         package_directory.mkdir(

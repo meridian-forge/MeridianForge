@@ -3,23 +3,23 @@
 set -e
 
 echo "======================================"
-echo "Meridian Forge Quality Gate"
+echo "MeridianForge Quality Gate"
 echo "======================================"
 
 echo ""
 echo "Running Ruff..."
-ruff check src tests --fix
+ruff check src tests
 
 echo ""
 echo "Running Black..."
-black src tests
+black --check src tests
 
 echo ""
 echo "Running MyPy..."
 mypy src
 
 echo ""
-echo "Running PyTest..."
+echo "Running Pytest..."
 pytest
 
 echo ""

@@ -33,9 +33,7 @@ class PackageExporter:
 
         files: list[Path] = []
 
-        decision_brief = (
-            output_directory / "Decision_Brief.md"
-        )
+        decision_brief = output_directory / "Decision_Brief.md"
 
         decision_brief.write_text(
             (
@@ -51,9 +49,7 @@ class PackageExporter:
             decision_brief,
         )
 
-        metadata = (
-            output_directory / "Archive_Metadata.json"
-        )
+        metadata = output_directory / "Archive_Metadata.json"
 
         metadata.write_text(
             json.dumps(
