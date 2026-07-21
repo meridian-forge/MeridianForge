@@ -1,46 +1,45 @@
 """
 Acquisition intake service.
 
-Transforms generic opportunities
-into acquisition workflow inputs.
+Transforms raw acquisition data into Opportunity objects.
 """
 
-from meridianforge.opportunity.models import Opportunity
-from meridianforge.workflows.acquisition_input import (
-    AcquisitionInput,
+from datetime import datetime
+from typing import Any
+
+from meridianforge.acquisition.opportunity import (
+    Opportunity,
 )
 
 
 class AcquisitionIntakeService:
     """
-    Converts normalized opportunities
-    into acquisition inputs.
+    Converts incoming acquisition records into domain models.
     """
 
-    def convert(
+    def create_opportunity(
         self,
-        opportunity: Opportunity,
-    ) -> AcquisitionInput:
+        data: dict[str, Any],
+    ) -> Opportunity:
         """
-        Build acquisition workflow input.
+        Create opportunity from input record.
         """
 
-        fields = opportunity.fields
-
-        return AcquisitionInput(
-            property_address=fields.get(
-                "property_address",
-                opportunity.source_file,
-            ),
+        return Opportunity(
+            address=str(data["address"]),
+            city=str(data["city"]),
+            state=str(data["state"]),
+            zip_code=str(data["zip_code"]),
             purchase_price=float(
-                fields.get(
-                    "purchase_price",
-                    0,
-                )
+                data["purchase_price"],
             ),
-            market=fields.get(
-                "market",
-                "UNKNOWN",
+            monthly_rent=float(
+                data["monthly_rent"],
             ),
-            source=opportunity.source_file,
+            monthly_expenses=float(
+                data["monthly_expenses"],
+            ),
+            market=str(data["market"]),
+            source=str(data["source"]),
+            created_at=datetime.now(),
         )
