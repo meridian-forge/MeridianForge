@@ -6,7 +6,15 @@ Orchestrates creation of investor-ready decision packages.
 
 from pathlib import Path
 
-from meridianforge.product.investor_package import InvestorPackage
+from meridianforge.intelligence.investor_fit_engine import (
+    InvestorFitEngine,
+)
+from meridianforge.intelligence.investor_profile import (
+    InvestorProfile,
+)
+from meridianforge.product.investor_package import (
+    InvestorPackage,
+)
 from meridianforge.reporting.executive_summary import (
     ExecutiveSummaryBuilder,
 )
@@ -21,6 +29,9 @@ from meridianforge.services.investment_thesis_builder import (
 )
 from meridianforge.services.investor_package_builder import (
     InvestorPackageBuilder,
+)
+from meridianforge.services.personalized_thesis_builder import (
+    PersonalizedThesisBuilder,
 )
 
 
@@ -38,9 +49,17 @@ class InvestorPackageWorkflow:
     ) -> None:
         self.builder = builder or InvestorPackageBuilder()
         self.exporter = exporter or PackageExporter()
-        self.thesis_builder = thesis_builder or InvestmentThesisBuilder()
-        self.thesis_exporter = thesis_exporter or InvestmentThesisExporter()
+        self.thesis_builder = (
+            thesis_builder
+            or InvestmentThesisBuilder()
+        )
+        self.thesis_exporter = (
+            thesis_exporter
+            or InvestmentThesisExporter()
+        )
         self.summary_builder = ExecutiveSummaryBuilder()
+        self.fit_engine = InvestorFitEngine()
+        self.personalized_builder = PersonalizedThesisBuilder()
 
     def generate(
         self,
@@ -49,6 +68,11 @@ class InvestorPackageWorkflow:
         recommendation: str,
         confidence: float,
         output_directory: Path,
+        investor_profile: InvestorProfile | None = None,
+        cash_flow_score: float = 0.0,
+        appreciation_score: float = 0.0,
+        tax_score: float = 0.0,
+        risk_score: float = 0.0,
     ) -> InvestorPackage:
         """
         Generate a complete investor package.
@@ -62,17 +86,40 @@ class InvestorPackageWorkflow:
             output_directory=output_directory,
         )
 
-        package.investment_thesis = self.thesis_builder.build(
-            package,
+        package.investment_thesis = (
+            self.thesis_builder.build(
+                package,
+            )
         )
+
+        if investor_profile:
+
+            fit_score = self.fit_engine.evaluate(
+                profile=investor_profile,
+                cash_flow_score=cash_flow_score,
+                appreciation_score=appreciation_score,
+                tax_score=tax_score,
+                risk_score=risk_score,
+            )
+
+            package.personalized_thesis = (
+                self.personalized_builder.build(
+                    profile=investor_profile,
+                    fit_score=fit_score,
+                    property_name=property_name,
+                    recommendation=recommendation,
+                )
+            )
 
         self.thesis_exporter.export(
             package.investment_thesis,
             output_directory,
         )
 
-        package.executive_summary = self.summary_builder.build(
-            package,
+        package.executive_summary = (
+            self.summary_builder.build(
+                package,
+            )
         )
 
         self.exporter.export(

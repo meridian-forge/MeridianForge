@@ -37,6 +37,7 @@ class InvestorPackage:
     created_at: datetime
     executive_summary: str = ""
     investment_thesis: InvestmentThesis | None = None
+    personalized_thesis: InvestmentThesis | None = None
     artifacts: list[InvestorPackageArtifact] = field(
         default_factory=list,
     )
@@ -46,7 +47,7 @@ class InvestorPackage:
         artifact: InvestorPackageArtifact,
     ) -> None:
         """
-        Add an artifact to the package.
+        Add an investment package artifact.
         """
 
         self.artifacts.append(
