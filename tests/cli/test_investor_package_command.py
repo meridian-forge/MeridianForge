@@ -27,10 +27,6 @@ def test_investor_package_cli_generates_package(
 
     run_investor_package(args)
 
-    assert (
-        tmp_path / "Decision_Brief.md"
-    ).exists()
+    assert (tmp_path / "Decision_Brief.md").exists()
 
-    assert (
-        tmp_path / "Archive_Metadata.json"
-    ).exists()
+    assert (tmp_path / "Archive_Metadata.json").exists()
