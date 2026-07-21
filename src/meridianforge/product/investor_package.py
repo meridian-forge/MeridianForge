@@ -31,6 +31,7 @@ class InvestorPackage:
     recommendation: str
     confidence: float
     created_at: datetime
+    executive_summary: str = ""
     artifacts: list[InvestorPackageArtifact] = field(
         default_factory=list,
     )
