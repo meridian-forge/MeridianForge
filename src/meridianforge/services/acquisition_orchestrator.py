@@ -8,20 +8,20 @@ and investor packaging.
 
 from pathlib import Path
 
+from meridianforge.models.domain.investor_profile import (
+    InvestorProfile,
+)
 from meridianforge.models.results.acquisition_orchestration_result import (
     AcquisitionOrchestrationResult,
+)
+from meridianforge.operations.investor_package_service import (
+    InvestorPackageService,
 )
 from meridianforge.services.acquisition_intelligence import (
     AcquisitionIntelligenceService,
 )
 from meridianforge.services.investment_pipeline import (
     InvestmentPipeline,
-)
-from meridianforge.workflows.acquisition_input import (
-    AcquisitionInput,
-)
-from meridianforge.operations.investor_package_service import (
-    InvestorPackageService,
 )
 
 
@@ -37,25 +37,16 @@ class AcquisitionOrchestrator:
         package_service: InvestorPackageService | None = None,
     ) -> None:
 
-        self.pipeline = (
-            pipeline
-            or InvestmentPipeline()
-        )
+        self.pipeline = pipeline or InvestmentPipeline()
 
-        self.intelligence = (
-            intelligence
-            or AcquisitionIntelligenceService()
-        )
+        self.intelligence = intelligence or AcquisitionIntelligenceService()
 
-        self.package_service = (
-            package_service
-            or InvestorPackageService()
-        )
+        self.package_service = package_service or InvestorPackageService()
 
     def analyze(
         self,
         records: list[dict[str, object]],
-        investor_profile,
+        investor_profile: InvestorProfile,
         export_path: Path | None = None,
         archive_path: Path | None = None,
     ) -> AcquisitionOrchestrationResult:
@@ -75,12 +66,10 @@ class AcquisitionOrchestrator:
         package_location = None
 
         if export_path and archive_path:
-            package_location = (
-                self.package_service.create_package(
-                    review,
-                    export_path,
-                    archive_path,
-                )
+            package_location = self.package_service.create_package(
+                review,
+                export_path,
+                archive_path,
             )
 
         return AcquisitionOrchestrationResult(

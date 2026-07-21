@@ -38,18 +38,10 @@ def test_investor_package_service_creates_archive(tmp_path: Path):
 
     assert result.exists()
 
-    assert (
-        result / "investor_review.txt"
-    ).exists()
+    assert (result / "investor_review.txt").exists()
 
-    assert (
-        result / "investor_review.md"
-    ).exists()
+    assert (result / "investor_review.md").exists()
 
-    assert (
-        result / "investor_review.xlsx"
-    ).exists()
+    assert (result / "investor_review.xlsx").exists()
 
-    assert (
-        result / "metadata.json"
-    ).exists()
+    assert (result / "metadata.json").exists()

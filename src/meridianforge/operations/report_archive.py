@@ -29,10 +29,7 @@ class ReportArchiveService:
         today = date.today()
 
         archive_directory = (
-            archive_root
-            / str(today.year)
-            / f"{today.month:02d}"
-            / f"{today.day:02d}"
+            archive_root / str(today.year) / f"{today.month:02d}" / f"{today.day:02d}"
         )
 
         archive_directory.mkdir(

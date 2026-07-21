@@ -29,10 +29,6 @@ def test_report_archive_creates_archive(tmp_path: Path):
 
     assert result.exists()
 
-    assert (
-        result / "investor_review.md"
-    ).exists()
+    assert (result / "investor_review.md").exists()
 
-    assert (
-        result / "metadata.json"
-    ).exists()
+    assert (result / "metadata.json").exists()

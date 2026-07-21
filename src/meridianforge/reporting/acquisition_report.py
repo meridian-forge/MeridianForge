@@ -25,18 +25,12 @@ class AcquisitionReportFormatter:
 
         lines: list[str] = []
 
-        lines.append(
-            "MERIDIAN FORGE ACQUISITION REVIEW"
-        )
+        lines.append("MERIDIAN FORGE ACQUISITION REVIEW")
 
-        lines.append(
-            "================================="
-        )
+        lines.append("=================================")
 
         if not review.cards:
-            lines.append(
-                "No acquisition opportunities found."
-            )
+            lines.append("No acquisition opportunities found.")
 
             return "\n".join(lines)
 
@@ -45,23 +39,17 @@ class AcquisitionReportFormatter:
             lines.append("")
             lines.append("PROPERTY")
             lines.append("----------------")
-            lines.append(
-                card.property_address
-            )
+            lines.append(card.property_address)
 
             lines.append("")
             lines.append("DECISION")
             lines.append("----------------")
-            lines.append(
-                card.recommendation
-            )
+            lines.append(card.recommendation)
 
             lines.append("")
             lines.append("CONFIDENCE")
             lines.append("----------------")
-            lines.append(
-                f"{card.confidence:.0%}"
-            )
+            lines.append(f"{card.confidence:.0%}")
 
             lines.append("")
             lines.append("STRENGTHS")
@@ -69,13 +57,9 @@ class AcquisitionReportFormatter:
 
             if card.strengths:
                 for item in card.strengths:
-                    lines.append(
-                        f"- {item}"
-                    )
+                    lines.append(f"- {item}")
             else:
-                lines.append(
-                    "- None"
-                )
+                lines.append("- None")
 
             lines.append("")
             lines.append("RISKS")
@@ -83,12 +67,8 @@ class AcquisitionReportFormatter:
 
             if card.risks:
                 for item in card.risks:
-                    lines.append(
-                        f"- {item}"
-                    )
+                    lines.append(f"- {item}")
             else:
-                lines.append(
-                    "- None"
-                )
+                lines.append("- None")
 
         return "\n".join(lines)

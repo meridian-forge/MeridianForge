@@ -61,9 +61,7 @@ class AcquisitionPropertyAdapter:
                 closing_costs=0.0,
             ),
             financing=Financing(
-                down_payment=(
-                    opportunity.purchase_price * 0.20
-                ),
+                down_payment=(opportunity.purchase_price * 0.20),
                 interest_rate=7.0,
                 loan_term_years=30,
             ),

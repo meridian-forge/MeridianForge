@@ -5,8 +5,8 @@ Bridges normalized opportunities
 into complete acquisition intelligence workflow.
 """
 
-from pathlib import Path
 from dataclasses import asdict
+from pathlib import Path
 
 from meridianforge.models.domain.investor_profile import (
     InvestorProfile,
@@ -35,15 +35,9 @@ class AcquisitionExecutionService:
         orchestrator: AcquisitionOrchestrator | None = None,
     ) -> None:
 
-        self.intake_service = (
-            intake_service
-            or AcquisitionIntakeService()
-        )
+        self.intake_service = intake_service or AcquisitionIntakeService()
 
-        self.orchestrator = (
-            orchestrator
-            or AcquisitionOrchestrator()
-        )
+        self.orchestrator = orchestrator or AcquisitionOrchestrator()
 
     def execute(
         self,
@@ -56,15 +50,11 @@ class AcquisitionExecutionService:
         Execute complete acquisition workflow.
         """
 
-        acquisition_input = (
-            self.intake_service.convert(
-                opportunity,
-            )
+        acquisition_input = self.intake_service.convert(
+            opportunity,
         )
 
-        records = [
-        asdict(acquisition_input)
-        ]
+        records = [asdict(acquisition_input)]
 
         return self.orchestrator.analyze(
             records,

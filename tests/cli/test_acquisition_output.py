@@ -18,7 +18,6 @@ def test_acquisition_cli_outputs_report(
 
         review = Review()
 
-
     class FakeExecution:
 
         def execute(
@@ -28,12 +27,10 @@ def test_acquisition_cli_outputs_report(
         ):
             return FakeResult()
 
-
     monkeypatch.setattr(
         "meridianforge.cli.acquisition.AcquisitionExecutionService",
         lambda: FakeExecution(),
     )
-
 
     class FakeFileService:
 
@@ -43,12 +40,10 @@ def test_acquisition_cli_outputs_report(
         ):
             return object()
 
-
     monkeypatch.setattr(
         "meridianforge.cli.acquisition.AcquisitionFileService",
         lambda: FakeFileService(),
     )
-
 
     run_acquisition(
         Namespace(
@@ -56,10 +51,6 @@ def test_acquisition_cli_outputs_report(
         )
     )
 
-
     output = capsys.readouterr().out
 
-    assert (
-        "MERIDIAN FORGE ACQUISITION REVIEW"
-        in output
-    )
+    assert "MERIDIAN FORGE ACQUISITION REVIEW" in output

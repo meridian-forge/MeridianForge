@@ -22,20 +22,16 @@ class DecisionPipeline:
     """
     Generate investor review decisions.
     """
-    
+
     def __init__(
         self,
-        property_adapter=None,
-        underwriting_engine=None,
-    ):
-        self.property_adapter = (
-        property_adapter
-        or AcquisitionPropertyAdapter()
-        )
-        self.underwriting_engine = (
-        underwriting_engine
-        or UnderwritingEngine
-        )
+        property_adapter: AcquisitionPropertyAdapter | None = None,
+        underwriting_engine: UnderwritingEngine | None = None,
+    ) -> None:
+
+        self.property_adapter = property_adapter or AcquisitionPropertyAdapter()
+
+        self.underwriting_engine = underwriting_engine or UnderwritingEngine()
 
     def evaluate(
         self,
@@ -82,11 +78,7 @@ class DecisionPipeline:
             analysis.warnings,
         )
 
-        recommendation = (
-            "BUY"
-            if analysis.passed
-            else "REVIEW"
-        )
+        recommendation = "BUY" if analysis.passed else "REVIEW"
 
         confidence = min(
             max(
@@ -98,9 +90,7 @@ class DecisionPipeline:
 
         card = InvestorDecisionCard(
             rank=1,
-            property_address=(
-                property_data.address.display()
-            ),
+            property_address=property_data.address.display(),
             recommendation=recommendation,
             confidence=confidence,
             strengths=strengths,
@@ -112,5 +102,3 @@ class DecisionPipeline:
                 card,
             ],
         )
-
-        raise NotImplementedError

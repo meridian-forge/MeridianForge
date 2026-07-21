@@ -1,7 +1,6 @@
 from meridianforge.opportunity.models import (
     Opportunity,
 )
-
 from meridianforge.services.acquisition_intake_service import (
     AcquisitionIntakeService,
 )

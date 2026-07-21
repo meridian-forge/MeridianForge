@@ -6,9 +6,25 @@ Coordinates analysis and investor package creation.
 
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Protocol
+
 from meridianforge.workflows.acquisition_context import (
     AcquisitionRunContext,
 )
+
+
+class PackageServiceProtocol(Protocol):
+    """
+    Interface required for investor package creation.
+    """
+
+    def create_package(
+        self,
+        review: object,
+        output_directory: Path,
+        archive_root: Path,
+    ) -> Path: ...
+
 
 @dataclass(slots=True)
 class AcquisitionRunResult:
@@ -20,6 +36,7 @@ class AcquisitionRunResult:
     confidence: float
     package_location: Path
 
+
 class AcquisitionRunService:
     """
     Execute a complete acquisition workflow.
@@ -27,9 +44,8 @@ class AcquisitionRunService:
 
     def __init__(
         self,
-        package_service,
+        package_service: PackageServiceProtocol,
     ) -> None:
-
         self.package_service = package_service
 
     def execute(
@@ -43,7 +59,7 @@ class AcquisitionRunService:
         """
 
         package_location = self.package_service.create_package(
-           context.review,
+            context.review,
             output_directory,
             archive_root,
         )

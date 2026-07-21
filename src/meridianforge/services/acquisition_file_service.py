@@ -10,7 +10,6 @@ from pathlib import Path
 from meridianforge.intake.pipeline import (
     process_file,
 )
-
 from meridianforge.opportunity.models import (
     Opportunity,
 )

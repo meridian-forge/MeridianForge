@@ -34,11 +34,7 @@ class AcquisitionIntelligenceService:
 
         for deal in result.ranked_deals:
 
-            recommendation = (
-                "BUY"
-                if deal.evaluation.qualified
-                else "WATCH"
-            )
+            recommendation = "BUY" if deal.evaluation.qualified else "WATCH"
 
             confidence = min(
                 deal.evaluation.score / 100,
@@ -48,17 +44,11 @@ class AcquisitionIntelligenceService:
             cards.append(
                 InvestorDecisionCard(
                     rank=deal.rank,
-                    property_address=(
-                        deal.property.address.display()
-                    ),
+                    property_address=(deal.property.address.display()),
                     recommendation=recommendation,
                     confidence=confidence,
-                    strengths=list(
-                        deal.evaluation.reasons
-                    ),
-                    risks=list(
-                        deal.evaluation.failed_criteria
-                    ),
+                    strengths=list(deal.evaluation.reasons),
+                    risks=list(deal.evaluation.failed_criteria),
                 )
             )
 

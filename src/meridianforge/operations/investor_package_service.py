@@ -42,14 +42,8 @@ class InvestorPackageService:
 
         metadata = {
             "report_count": len(files),
-            "recommendations": [
-                card.recommendation
-                for card in review.cards
-            ],
-            "confidence_scores": [
-                card.confidence
-                for card in review.cards
-            ],
+            "recommendations": [card.recommendation for card in review.cards],
+            "confidence_scores": [card.confidence for card in review.cards],
         }
 
         return self.archive_service.archive(

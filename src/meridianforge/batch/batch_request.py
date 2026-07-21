@@ -26,11 +26,7 @@ class BatchRequest:
 
     def __post_init__(self) -> None:
         if self.max_results <= 0:
-            raise ValueError(
-                "max_results must be greater than zero."
-            )
+            raise ValueError("max_results must be greater than zero.")
 
         if not self.opportunities:
-            raise ValueError(
-                "Batch request requires at least one opportunity."
-            )
+            raise ValueError("Batch request requires at least one opportunity.")

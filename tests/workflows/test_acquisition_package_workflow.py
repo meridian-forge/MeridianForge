@@ -19,12 +19,10 @@ def test_acquisition_package_workflow_creates_package(
         source="Zillow",
     )
 
-    package_location = (
-        AcquisitionPackageWorkflow().execute(
-            opportunity,
-            tmp_path / "exports",
-            tmp_path / "archive",
-        )
+    package_location = AcquisitionPackageWorkflow().execute(
+        opportunity,
+        tmp_path / "exports",
+        tmp_path / "archive",
     )
 
     assert package_location.exists()

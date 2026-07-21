@@ -74,6 +74,4 @@ def test_acquisition_intelligence_creates_buy_review_card():
 
     assert card.recommendation == "BUY"
     assert card.confidence == 0.90
-    assert card.property_address.startswith(
-        "123 Main St"
-    )
+    assert card.property_address.startswith("123 Main St")

@@ -56,4 +56,3 @@ class ExcelInvestorReportRenderer:
         workbook.save(output_path)
 
         return output_path
-

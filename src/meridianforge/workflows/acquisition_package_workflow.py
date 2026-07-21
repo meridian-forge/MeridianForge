@@ -31,30 +31,22 @@ class AcquisitionPackageWorkflow:
         package_service: InvestorPackageService | None = None,
     ) -> None:
 
-        self.decision_workflow = (
-            decision_workflow
-            or AcquisitionDecisionWorkflow()
-        )
+        self.decision_workflow = decision_workflow or AcquisitionDecisionWorkflow()
 
-        self.package_service = (
-            package_service
-            or InvestorPackageService()
-        )
+        self.package_service = package_service or InvestorPackageService()
 
     def execute(
         self,
         opportunity: AcquisitionInput,
         export_path: Path,
         archive_path: Path,
-    ):
+    ) -> Path:
         """
         Generate investor package.
         """
 
-        review: WeeklyInvestorReview = (
-            self.decision_workflow.execute(
-                opportunity,
-            )
+        review: WeeklyInvestorReview = self.decision_workflow.execute(
+            opportunity,
         )
 
         return self.package_service.create_package(

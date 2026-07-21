@@ -26,10 +26,7 @@ class AcquisitionDecisionWorkflow:
         decision_pipeline: DecisionPipeline | None = None,
     ) -> None:
 
-        self.decision_pipeline = (
-            decision_pipeline
-            or DecisionPipeline()
-        )
+        self.decision_pipeline = decision_pipeline or DecisionPipeline()
 
     def execute(
         self,

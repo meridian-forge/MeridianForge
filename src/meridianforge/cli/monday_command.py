@@ -31,15 +31,23 @@ def run_monday(
     opportunities: list[dict[str, Any]]
 
     if file_path:
-        opportunities = PropertyImportService().import_csv(file_path)
+        opportunities = PropertyImportService().import_csv(
+            file_path,
+        )
     else:
         opportunities = load_sample_opportunities()
 
-    ranked = RankingPipeline().rank(opportunities)
+    ranked = RankingPipeline().rank(
+        opportunities,
+    )
 
-    summary = PortfolioSummary().summarize(ranked)
+    summary = PortfolioSummary().summarize(
+        ranked,
+    )
 
-    dashboard = MondayDashboardGenerator().generate(summary)
+    dashboard = MondayDashboardGenerator().generate(
+        summary,
+    )
 
     output_dir = Path("runtime/outputs")
 

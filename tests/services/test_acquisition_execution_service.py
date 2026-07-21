@@ -1,15 +1,12 @@
-from meridianforge.models.domain.investor_profile import (
-    InvestorProfile,
-)
-
 from meridianforge.models.domain.investment_strategy import (
     InvestmentStrategy,
 )
-
+from meridianforge.models.domain.investor_profile import (
+    InvestorProfile,
+)
 from meridianforge.opportunity.models import (
     Opportunity,
 )
-
 from meridianforge.services.acquisition_execution_service import (
     AcquisitionExecutionService,
 )

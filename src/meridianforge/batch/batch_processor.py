@@ -26,10 +26,7 @@ class BatchProcessor:
         decision_workflow: AcquisitionDecisionWorkflow | None = None,
     ) -> None:
 
-        self.decision_workflow = (
-            decision_workflow
-            or AcquisitionDecisionWorkflow()
-        )
+        self.decision_workflow = decision_workflow or AcquisitionDecisionWorkflow()
 
     def process(
         self,
