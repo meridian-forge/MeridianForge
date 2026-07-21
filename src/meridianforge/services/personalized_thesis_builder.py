@@ -39,18 +39,9 @@ class PersonalizedThesisBuilder:
         )
 
         strengths = [
-            (
-                f"Investor alignment score: "
-                f"{fit_score.overall_score:.0%}"
-            ),
-            (
-                f"Cash flow fit: "
-                f"{fit_score.cash_flow_fit:.0%}"
-            ),
-            (
-                f"Tax fit: "
-                f"{fit_score.tax_fit:.0%}"
-            ),
+            (f"Investor alignment score: " f"{fit_score.overall_score:.0%}"),
+            (f"Cash flow fit: " f"{fit_score.cash_flow_fit:.0%}"),
+            (f"Tax fit: " f"{fit_score.tax_fit:.0%}"),
         ]
 
         risks = [
@@ -66,8 +57,5 @@ class PersonalizedThesisBuilder:
             rationale=rationale,
             strengths=strengths,
             risks=risks,
-            investor_fit=(
-                f"{profile.name}: "
-                f"{fit_score.overall_score:.0%}"
-            ),
+            investor_fit=(f"{profile.name}: " f"{fit_score.overall_score:.0%}"),
         )

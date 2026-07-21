@@ -46,12 +46,7 @@ class InvestorFitEngine:
         appreciation_weight = profile.appreciation_priority
         tax_weight = profile.tax_focus
 
-        remaining_weight = (
-            1.0
-            - cash_flow_weight
-            - appreciation_weight
-            - tax_weight
-        )
+        remaining_weight = 1.0 - cash_flow_weight - appreciation_weight - tax_weight
 
         risk_weight = max(
             remaining_weight,

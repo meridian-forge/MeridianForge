@@ -49,14 +49,8 @@ class InvestorPackageWorkflow:
     ) -> None:
         self.builder = builder or InvestorPackageBuilder()
         self.exporter = exporter or PackageExporter()
-        self.thesis_builder = (
-            thesis_builder
-            or InvestmentThesisBuilder()
-        )
-        self.thesis_exporter = (
-            thesis_exporter
-            or InvestmentThesisExporter()
-        )
+        self.thesis_builder = thesis_builder or InvestmentThesisBuilder()
+        self.thesis_exporter = thesis_exporter or InvestmentThesisExporter()
         self.summary_builder = ExecutiveSummaryBuilder()
         self.fit_engine = InvestorFitEngine()
         self.personalized_builder = PersonalizedThesisBuilder()
@@ -86,10 +80,8 @@ class InvestorPackageWorkflow:
             output_directory=output_directory,
         )
 
-        package.investment_thesis = (
-            self.thesis_builder.build(
-                package,
-            )
+        package.investment_thesis = self.thesis_builder.build(
+            package,
         )
 
         if investor_profile:
@@ -102,13 +94,11 @@ class InvestorPackageWorkflow:
                 risk_score=risk_score,
             )
 
-            package.personalized_thesis = (
-                self.personalized_builder.build(
-                    profile=investor_profile,
-                    fit_score=fit_score,
-                    property_name=property_name,
-                    recommendation=recommendation,
-                )
+            package.personalized_thesis = self.personalized_builder.build(
+                profile=investor_profile,
+                fit_score=fit_score,
+                property_name=property_name,
+                recommendation=recommendation,
             )
 
         self.thesis_exporter.export(
@@ -116,10 +106,8 @@ class InvestorPackageWorkflow:
             output_directory,
         )
 
-        package.executive_summary = (
-            self.summary_builder.build(
-                package,
-            )
+        package.executive_summary = self.summary_builder.build(
+            package,
         )
 
         self.exporter.export(

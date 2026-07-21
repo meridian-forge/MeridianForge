@@ -40,10 +40,32 @@ class PackageExporter:
             package,
         )
 
+        content = "# Decision Brief\n\n" f"{summary}\n"
+
+        if package.personalized_thesis:
+
+            thesis = package.personalized_thesis
+
+            content += (
+                "\n## Personalized Investor Thesis\n\n"
+                f"Investor Fit: {thesis.investor_fit}\n\n"
+                "### Rationale\n\n"
+                f"{thesis.rationale}\n\n"
+                "### Strengths\n\n"
+            )
+
+            for strength in thesis.strengths:
+                content += f"- {strength}\n"
+
+            content += "\n### Risks\n\n"
+
+            for risk in thesis.risks:
+                content += f"- {risk}\n"
+
         decision_brief = output_directory / "Decision_Brief.md"
 
         decision_brief.write_text(
-            ("# Decision Brief\n\n" f"{summary}\n"),
+            content,
             encoding="utf-8",
         )
 
@@ -60,6 +82,9 @@ class PackageExporter:
                     "property_name": package.property_name,
                     "artifact_count": len(
                         package.artifacts,
+                    ),
+                    "has_personalized_thesis": (
+                        package.personalized_thesis is not None
                     ),
                 },
                 indent=2,
