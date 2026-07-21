@@ -43,10 +43,7 @@ class PackageExporter:
         decision_brief = output_directory / "Decision_Brief.md"
 
         decision_brief.write_text(
-            (
-                "# Decision Brief\n\n"
-                f"{summary}\n"
-            ),
+            ("# Decision Brief\n\n" f"{summary}\n"),
             encoding="utf-8",
         )
 
