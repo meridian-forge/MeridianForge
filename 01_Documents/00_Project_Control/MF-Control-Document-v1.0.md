@@ -360,3 +360,171 @@ Theme:
 Primary outcome:
 
 A working Real Estate Investment Analyzer MVP.
+
+---
+
+# MeridianForge MVP Execution Roadmap v1.1
+
+## Current Phase
+
+Phase 1 - Real Estate MVP
+
+## Current Sprint
+
+MF-325 - Integration Stabilization
+
+Objective:
+Create one reliable end-to-end acquisition workflow.
+
+Canonical Flow:
+
+Excel / CSV / Manual Input
+        |
+        v
+Acquisition File Service
+        |
+        v
+Opportunity
+        |
+        v
+Acquisition Input
+        |
+        v
+Normalized Asset
+        |
+        v
+Property Model
+        |
+        v
+Underwriting Engine
+        |
+        v
+Decision Intelligence
+        |
+        v
+Investor Report
+
+---
+
+# MF-325 Integration Stabilization
+
+Goals:
+
+- Eliminate duplicate representations of investment data
+- Stabilize service contracts
+- Fix field mapping inconsistencies
+- Ensure complete property analysis workflow
+
+Exit Criteria:
+
+- pytest suite passes
+- One property file produces one complete investor output
+
+---
+
+# MF-326 Investor Workflow
+
+Goal:
+
+Enable a non-technical investor to analyze a property.
+
+Deliverables:
+
+- Command-line analysis workflow
+- Standard input handling
+- Strategy selection
+- Automated report generation
+
+Example:
+
+mf analyze property.xlsx --strategy cash_flow
+
+Output:
+
+- Recommendation
+- Score
+- Reasons
+- Risks
+- Assumptions
+
+---
+
+# MF-327 Investor Report Package
+
+Goal:
+
+Convert analysis into a usable investment artifact.
+
+Deliverables:
+
+Investor Package:
+
+- Executive Summary
+- Property Analysis
+- Risk Report
+- Scenario Analysis
+- Assumptions Record
+
+Supported Outputs:
+
+- Markdown report
+- Excel analysis
+- JSON data export
+
+---
+
+# MF-328 MVP Release Candidate
+
+Goal:
+
+Freeze first usable MeridianForge product.
+
+Release:
+
+v0.1.0-MVP
+
+MVP Capabilities:
+
+Input:
+- Excel
+- CSV
+- Manual property entry
+
+Analysis:
+- Purchase analysis
+- Rental income
+- Expenses
+- Financing assumptions
+- DSCR
+- Cap rate
+- Cash-on-cash return
+- Investor criteria evaluation
+
+Output:
+- Decision card
+- Investor review
+- Export package
+
+Quality Gates:
+
+- pytest passing
+- ruff passing
+- black formatting complete
+- mypy validation complete
+
+---
+
+# Post MVP
+
+MF-330+ Intelligence Expansion
+
+Future capabilities:
+
+- Advanced investor profiles
+- Scenario modeling
+- Market intelligence
+- Automated acquisition monitoring
+- AI analyst layer
+
+Expansion into additional asset classes occurs only after the real estate MVP is proven.
+
