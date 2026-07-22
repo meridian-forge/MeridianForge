@@ -1,46 +1,44 @@
-from meridianforge.analysis.models import AnalysisResult
-from meridianforge.ranking.models import RankingResult
+"""
+Ranking engine.
+
+MF-332.1
+
+Consumes RankingInput and produces RankingResult.
+"""
+
+from meridianforge.ranking.models import (
+    RankingInput,
+    RankingResult,
+)
 
 
 def calculate_score(
-    analysis: AnalysisResult,
+    analysis: RankingInput,
 ) -> float:
-
     score = 50.0
 
     if "cash_on_cash" in analysis.metrics:
-
         coc = analysis.metrics["cash_on_cash"]
-
-        score += min(
-            coc * 100,
-            20,
-        )
+        score += min(coc * 100, 20)
 
     if "dscr" in analysis.metrics:
-
         dscr = analysis.metrics["dscr"]
 
         if dscr >= 1.25:
             score += 15
 
     if analysis.warnings:
-
         score -= len(analysis.warnings) * 5
 
     return max(
         0,
-        min(
-            score,
-            100,
-        ),
+        min(score, 100),
     )
 
 
 def rank(
-    analyses: list[AnalysisResult],
+    analyses: list[RankingInput],
 ) -> list[RankingResult]:
-
     ranked = [
         RankingResult(
             opportunity_file=result.opportunity_file,
@@ -58,7 +56,6 @@ def rank(
         ranked,
         start=1,
     ):
-
         item.rank = index
 
     return ranked

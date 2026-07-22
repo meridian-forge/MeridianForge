@@ -1,10 +1,9 @@
-from meridianforge.analysis.models import AnalysisResult
 from meridianforge.ranking.engine import calculate_score
+from meridianforge.ranking.models import RankingInput
 
 
 def test_score_calculation() -> None:
-
-    result = AnalysisResult(
+    result = RankingInput(
         opportunity_file="property.xlsx",
         metrics={
             "cash_on_cash": 0.12,
