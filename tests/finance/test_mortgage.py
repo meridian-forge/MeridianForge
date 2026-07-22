@@ -5,7 +5,7 @@ def test_mortgage():
 
     payment = monthly_payment(
         200000,
-        0.06,
+        6.0,
         30,
     )
 

@@ -1,21 +1,31 @@
+"""
+Finance mortgage compatibility wrapper.
+
+Canonical mortgage implementation:
+meridianforge.engine.mortgage
+"""
+
+from meridianforge.engine.mortgage import Mortgage
+
+
 def monthly_payment(
     loan_amount: float,
     annual_rate: float,
     years: int,
 ) -> float:
+    """
+    Calculate monthly mortgage payment.
 
-    if loan_amount <= 0:
-        raise ValueError("Loan amount must be positive")
+    annual_rate accepts decimal format.
 
-    monthly_rate = annual_rate / 12
-    payments = years * 12
+    Example:
+        0.065 = 6.5%
+    """
 
-    if monthly_rate == 0:
-        return loan_amount / payments
-
-    return (
-        loan_amount
-        * monthly_rate
-        * (1 + monthly_rate) ** payments
-        / ((1 + monthly_rate) ** payments - 1)
+    mortgage = Mortgage(
+        loan_amount=loan_amount,
+        interest_rate=annual_rate,
+        term_years=years,
     )
+
+    return mortgage.monthly_payment
