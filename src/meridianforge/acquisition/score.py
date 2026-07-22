@@ -1,13 +1,33 @@
+"""
+Acquisition scoring engine.
+
+MF-332.3
+
+Consumes canonical underwriting AnalysisResult
+and evaluates acquisition criteria.
+"""
+
 from meridianforge.acquisition.criteria import (
     AcquisitionCriteria,
 )
-from meridianforge.analysis.result import AnalysisResult
+
+from meridianforge.models.results.analysis_result import (
+    AnalysisResult,
+)
 
 
 def calculate_score(
     result: AnalysisResult,
     criteria: AcquisitionCriteria,
 ) -> float:
+    """
+    Calculate acquisition qualification score.
+
+    Scoring:
+    - DSCR: 35 points
+    - Cap Rate: 35 points
+    - Cash-on-Cash Return: 30 points
+    """
 
     score = 0.0
 
