@@ -5,7 +5,6 @@ Bridges normalized opportunities
 into complete acquisition intelligence workflow.
 """
 
-from dataclasses import asdict
 from pathlib import Path
 
 from meridianforge.models.domain.investor_profile import (
@@ -54,7 +53,7 @@ class AcquisitionExecutionService:
             opportunity,
         )
 
-        records = [asdict(acquisition_input)]
+        records = [acquisition_input]
 
         return self.orchestrator.analyze(
             records,

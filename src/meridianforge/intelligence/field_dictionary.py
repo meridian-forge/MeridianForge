@@ -6,6 +6,7 @@ FIELD_ALIASES: dict[str, list[str]] = {
     "purchase_price": [
         "price",
         "purchase price",
+        "purchase_price",
         "property price",
         "cost",
         "asking price",
@@ -15,10 +16,27 @@ FIELD_ALIASES: dict[str, list[str]] = {
     "monthly_rent": [
         "rent",
         "monthly rent",
+        "monthly_rent",
         "expected rent",
         "monthly income",
         "rental income",
         "rent zestimate",
+    ],
+    "address": [
+        "address",
+        "property address",
+        "property_address",
+        "street",
+    ],
+    "market": [
+        "market",
+        "city market",
+        "location",
+    ],
+    "noi": [
+        "noi",
+        "net operating income",
+        "net income",
     ],
     "property_tax": [
         "tax",

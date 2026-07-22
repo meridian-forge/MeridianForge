@@ -58,11 +58,7 @@ class AcquisitionPackageWorkflow:
             investor=investor,
         )
 
-        recommendation = (
-            "BUY"
-            if deal_score.overall_score >= 0.75
-            else "WATCH"
-        )
+        recommendation = "BUY" if deal_score.overall_score >= 0.75 else "WATCH"
 
         return self.package_workflow.generate(
             package_id="AUTO-001",

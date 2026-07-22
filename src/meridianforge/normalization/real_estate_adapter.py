@@ -69,7 +69,13 @@ class RealEstateAdapter:
             street=str(
                 data.get(
                     "street",
-                    "UNKNOWN",
+                    data.get(
+                        "address",
+                        data.get(
+                            "property_address",
+                            "UNKNOWN",
+                        ),
+                    ),
                 )
             ),
             city=str(
@@ -104,7 +110,12 @@ class RealEstateAdapter:
 
         income = Income(
             monthly_rent=RealEstateAdapter._to_float(
-                data.get("monthly_rent"),
+                data.get(
+                    "monthly_rent",
+                    data.get(
+                        "rent",
+                    ),
+                ),
             ),
         )
 

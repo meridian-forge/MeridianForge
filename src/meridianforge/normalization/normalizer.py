@@ -25,14 +25,22 @@ class Normalizer:
         asset_type: str = "UNKNOWN",
     ) -> NormalizedAsset:
         """
-        Normalize a raw record.
+        Normalize raw records.
+
+        Preserve source fields only when the record
+        contains recognized investment fields.
         """
 
         attributes: dict[str, object] = {}
 
-        for mapping in mappings:
-            if mapping.source_field in record:
-                attributes[mapping.target_field] = record[mapping.source_field]
+        if mappings:
+            attributes.update(record)
+
+            for mapping in mappings:
+                if mapping.source_field in record:
+                    attributes[mapping.target_field] = (
+                        record[mapping.source_field]
+                    )
 
         return NormalizedAsset(
             asset_type=asset_type,

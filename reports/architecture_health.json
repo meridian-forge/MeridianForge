@@ -1,0 +1,267 @@
+{
+    "production_modules": 297,
+    "test_modules": 198,
+    "test_functions": 230,
+    "duplicate_test_names": {
+        "test_version.py": [
+            "tests/test_version.py",
+            "tests/release/test_version.py"
+        ],
+        "test_normalizer.py": [
+            "tests/test_normalizer.py",
+            "tests/opportunity/test_normalizer.py"
+        ],
+        "test_mortgage.py": [
+            "tests/test_mortgage.py",
+            "tests/finance/test_mortgage.py"
+        ],
+        "test_metrics.py": [
+            "tests/test_metrics.py",
+            "tests/analysis/test_metrics.py"
+        ],
+        "__init__.py": [
+            "tests/__init__.py",
+            "tests/opportunity/__init__.py",
+            "tests/ranking/__init__.py",
+            "tests/analysis/__init__.py",
+            "tests/acquisition/__init__.py",
+            "tests/intake/__init__.py",
+            "tests/domain/__init__.py"
+        ],
+        "test_import_pipeline.py": [
+            "tests/test_import_pipeline.py",
+            "tests/data/test_import_pipeline.py"
+        ],
+        "test_acquisition_report.py": [
+            "tests/test_acquisition_report.py",
+            "tests/reporting/test_acquisition_report.py"
+        ],
+        "test_investor_profile.py": [
+            "tests/test_investor_profile.py",
+            "tests/intelligence/test_investor_profile.py"
+        ],
+        "test_cli.py": [
+            "tests/test_cli.py",
+            "tests/cli/test_cli.py"
+        ],
+        "test_engine.py": [
+            "tests/ranking/test_engine.py",
+            "tests/analysis/test_engine.py"
+        ],
+        "test_pipeline.py": [
+            "tests/ranking/test_pipeline.py",
+            "tests/intake/test_pipeline.py",
+            "tests/decision/test_pipeline.py"
+        ],
+        "test_opportunity.py": [
+            "tests/acquisition/test_opportunity.py",
+            "tests/domain/test_opportunity.py"
+        ],
+        "test_workflow.py": [
+            "tests/product/test_workflow.py",
+            "tests/intake/test_workflow.py"
+        ]
+    },
+    "duplicate_production_names": {
+        "__init__.py": [
+            "src/meridianforge/__init__.py",
+            "src/meridianforge/matching/__init__.py",
+            "src/meridianforge/ui/__init__.py",
+            "src/meridianforge/reporting/__init__.py",
+            "src/meridianforge/ranking/__init__.py",
+            "src/meridianforge/analysis/__init__.py",
+            "src/meridianforge/importers/__init__.py",
+            "src/meridianforge/intelligence/__init__.py",
+            "src/meridianforge/intelligence/recommendation/__init__.py",
+            "src/meridianforge/intelligence/scoring/__init__.py",
+            "src/meridianforge/intelligence/decision/__init__.py",
+            "src/meridianforge/intelligence/profiles/__init__.py",
+            "src/meridianforge/acquisition/__init__.py",
+            "src/meridianforge/workspace/__init__.py",
+            "src/meridianforge/workflows/__init__.py",
+            "src/meridianforge/utils/__init__.py",
+            "src/meridianforge/repositories/__init__.py",
+            "src/meridianforge/models/__init__.py",
+            "src/meridianforge/models/results/__init__.py",
+            "src/meridianforge/models/domain/__init__.py",
+            "src/meridianforge/imports/__init__.py",
+            "src/meridianforge/cli/__init__.py",
+            "src/meridianforge/product/__init__.py",
+            "src/meridianforge/operations/__init__.py",
+            "src/meridianforge/intake/__init__.py",
+            "src/meridianforge/scenario/__init__.py",
+            "src/meridianforge/knowledge/__init__.py",
+            "src/meridianforge/batch/__init__.py",
+            "src/meridianforge/workflow/__init__.py",
+            "src/meridianforge/scoring/__init__.py",
+            "src/meridianforge/finance/__init__.py",
+            "src/meridianforge/decision/__init__.py",
+            "src/meridianforge/application/__init__.py",
+            "src/meridianforge/data/__init__.py",
+            "src/meridianforge/engine/__init__.py",
+            "src/meridianforge/domain/__init__.py",
+            "src/meridianforge/presentation/__init__.py",
+            "src/meridianforge/services/__init__.py",
+            "src/meridianforge/reports/__init__.py"
+        ],
+        "models.py": [
+            "src/meridianforge/opportunity/models.py",
+            "src/meridianforge/reporting/models.py",
+            "src/meridianforge/ranking/models.py",
+            "src/meridianforge/analysis/models.py",
+            "src/meridianforge/intelligence/models.py",
+            "src/meridianforge/intelligence/decision/models.py",
+            "src/meridianforge/workspace/models.py",
+            "src/meridianforge/intake/models.py",
+            "src/meridianforge/application/models.py",
+            "src/meridianforge/validation/models.py",
+            "src/meridianforge/reports/models.py"
+        ],
+        "normalizer.py": [
+            "src/meridianforge/opportunity/normalizer.py",
+            "src/meridianforge/normalization/normalizer.py",
+            "src/meridianforge/data/normalizer.py"
+        ],
+        "acquisition_report.py": [
+            "src/meridianforge/reporting/acquisition_report.py",
+            "src/meridianforge/reports/acquisition_report.py"
+        ],
+        "engine.py": [
+            "src/meridianforge/ranking/engine.py",
+            "src/meridianforge/intelligence/recommendation/engine.py",
+            "src/meridianforge/intelligence/scoring/engine.py",
+            "src/meridianforge/intelligence/decision/engine.py"
+        ],
+        "pipeline.py": [
+            "src/meridianforge/ranking/pipeline.py",
+            "src/meridianforge/intake/pipeline.py",
+            "src/meridianforge/decision/pipeline.py"
+        ],
+        "metrics.py": [
+            "src/meridianforge/analysis/metrics.py",
+            "src/meridianforge/engine/metrics.py"
+        ],
+        "underwriting_engine.py": [
+            "src/meridianforge/analysis/underwriting_engine.py",
+            "src/meridianforge/engine/underwriting_engine.py"
+        ],
+        "analyzer.py": [
+            "src/meridianforge/analysis/analyzer.py",
+            "src/meridianforge/cli/analyzer.py"
+        ],
+        "result.py": [
+            "src/meridianforge/analysis/result.py",
+            "src/meridianforge/workflow/result.py"
+        ],
+        "file_reader.py": [
+            "src/meridianforge/importers/file_reader.py",
+            "src/meridianforge/imports/file_reader.py"
+        ],
+        "investor_profile.py": [
+            "src/meridianforge/intelligence/investor_profile.py",
+            "src/meridianforge/models/domain/investor_profile.py",
+            "src/meridianforge/domain/investor_profile.py"
+        ],
+        "opportunity.py": [
+            "src/meridianforge/acquisition/opportunity.py",
+            "src/meridianforge/domain/opportunity.py"
+        ],
+        "expenses.py": [
+            "src/meridianforge/models/domain/expenses.py",
+            "src/meridianforge/finance/expenses.py"
+        ],
+        "scenario.py": [
+            "src/meridianforge/models/domain/scenario.py",
+            "src/meridianforge/scenario/scenario.py"
+        ],
+        "acquisition.py": [
+            "src/meridianforge/models/domain/acquisition.py",
+            "src/meridianforge/cli/acquisition.py"
+        ],
+        "assumptions.py": [
+            "src/meridianforge/models/domain/assumptions.py",
+            "src/meridianforge/finance/assumptions.py"
+        ],
+        "investor_package.py": [
+            "src/meridianforge/cli/investor_package.py",
+            "src/meridianforge/product/investor_package.py"
+        ],
+        "workflow.py": [
+            "src/meridianforge/product/workflow.py",
+            "src/meridianforge/intake/workflow.py",
+            "src/meridianforge/application/workflow.py"
+        ],
+        "mortgage.py": [
+            "src/meridianforge/finance/mortgage.py",
+            "src/meridianforge/engine/mortgage.py"
+        ],
+        "import_pipeline.py": [
+            "src/meridianforge/data/import_pipeline.py",
+            "src/meridianforge/services/import_pipeline.py"
+        ]
+    },
+    "test_distribution": {
+        "intake": 11,
+        "analysis": 2,
+        "ranking": 5,
+        "scoring": 1,
+        "reporting": 14,
+        "services": 11,
+        "workflows": 6,
+        "e2e": 4,
+        "cli": 8
+    },
+    "core_targets": {
+        "InvestmentPipeline": {
+            "references": [
+                "src/meridianforge/models/results/investment_pipeline_result.py",
+                "src/meridianforge/models/results/investment_workflow_result.py",
+                "src/meridianforge/services/investment_pipeline.py",
+                "src/meridianforge/services/acquisition_orchestrator.py",
+                "src/meridianforge/services/investment_workflow.py",
+                "src/meridianforge/services/acquisition_intelligence.py"
+            ]
+        },
+        "AcquisitionOrchestrator": {
+            "references": [
+                "src/meridianforge/services/acquisition_orchestrator.py",
+                "src/meridianforge/services/acquisition_execution_service.py"
+            ]
+        },
+        "RealEstateAdapter": {
+            "references": [
+                "src/meridianforge/normalization/real_estate_adapter.py",
+                "src/meridianforge/services/investment_pipeline.py"
+            ]
+        },
+        "UnderwritingEngine": {
+            "references": [
+                "src/meridianforge/reporting/builder.py",
+                "src/meridianforge/analysis/underwriting_engine.py",
+                "src/meridianforge/decision/pipeline.py",
+                "src/meridianforge/application/workflow.py",
+                "src/meridianforge/engine/underwriting_engine.py",
+                "src/meridianforge/engine/__init__.py",
+                "src/meridianforge/engine/investment_assessment.py",
+                "src/meridianforge/engine/stress_test.py",
+                "src/meridianforge/services/investment_pipeline.py",
+                "src/meridianforge/services/batch_analyzer.py"
+            ]
+        },
+        "DealRankingEngine": {
+            "references": [
+                "src/meridianforge/engine/deal_ranking.py",
+                "src/meridianforge/services/investment_pipeline.py",
+                "src/meridianforge/services/batch_analyzer.py"
+            ]
+        },
+        "DealScoringEngine": {
+            "references": [
+                "src/meridianforge/engine/investment_assessment.py",
+                "src/meridianforge/engine/deal_scoring.py",
+                "src/meridianforge/services/investment_pipeline.py",
+                "src/meridianforge/services/batch_analyzer.py"
+            ]
+        }
+    }
+}

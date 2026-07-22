@@ -34,10 +34,7 @@ class Opportunity:
         Calculate monthly cash flow.
         """
 
-        return (
-            self.monthly_rent
-            - self.monthly_expenses
-        )
+        return self.monthly_rent - self.monthly_expenses
 
     @property
     def annual_cash_flow(self) -> float:
@@ -56,7 +53,4 @@ class Opportunity:
         if self.purchase_price == 0:
             return 0.0
 
-        return (
-            self.annual_cash_flow
-            / self.purchase_price
-        )
+        return self.annual_cash_flow / self.purchase_price
