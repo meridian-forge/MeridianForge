@@ -1,56 +1,73 @@
 """
 Acquisition package workflow.
 
-Creates investor-ready acquisition packages.
+Coordinates the complete acquisition intelligence pipeline.
 """
 
 from pathlib import Path
 
-from meridianforge.operations.investor_package_service import (
-    InvestorPackageService,
+from meridianforge.acquisition.opportunity import Opportunity
+from meridianforge.intelligence.investor_profile import InvestorProfile
+from meridianforge.matching.investor_match_engine import (
+    InvestorMatchEngine,
 )
-from meridianforge.product.weekly_review import (
-    WeeklyInvestorReview,
+from meridianforge.product.investor_package import InvestorPackage
+from meridianforge.scoring.deal_score_engine import (
+    DealScoreEngine,
 )
-from meridianforge.workflows.acquisition_decision_workflow import (
-    AcquisitionDecisionWorkflow,
-)
-from meridianforge.workflows.acquisition_input import (
-    AcquisitionInput,
+from meridianforge.workflows.investor_package_workflow import (
+    InvestorPackageWorkflow,
 )
 
 
 class AcquisitionPackageWorkflow:
     """
-    Coordinates decision generation and package creation.
+    End-to-end acquisition workflow.
     """
 
-    def __init__(
+    def __init__(self) -> None:
+        self.deal_score_engine = DealScoreEngine()
+        self.match_engine = InvestorMatchEngine()
+        self.package_workflow = InvestorPackageWorkflow()
+
+    def generate(
         self,
-        decision_workflow: AcquisitionDecisionWorkflow | None = None,
-        package_service: InvestorPackageService | None = None,
-    ) -> None:
-
-        self.decision_workflow = decision_workflow or AcquisitionDecisionWorkflow()
-
-        self.package_service = package_service or InvestorPackageService()
-
-    def execute(
-        self,
-        opportunity: AcquisitionInput,
-        export_path: Path,
-        archive_path: Path,
-    ) -> Path:
+        opportunity: Opportunity,
+        investor: InvestorProfile,
+        output_directory: Path,
+    ) -> InvestorPackage:
         """
-        Generate investor package.
+        Generate a complete investor package from an opportunity.
         """
 
-        review: WeeklyInvestorReview = self.decision_workflow.execute(
-            opportunity,
+        deal_score = self.deal_score_engine.evaluate(
+            cash_flow_score=min(
+                opportunity.monthly_cash_flow / 1500.0,
+                1.0,
+            ),
+            cap_rate_score=min(
+                opportunity.cap_rate / 0.08,
+                1.0,
+            ),
+            risk_score=0.80,
+            market_score=0.75,
         )
 
-        return self.package_service.create_package(
-            review,
-            export_path,
-            archive_path,
+        match = self.match_engine.match(
+            opportunity=opportunity,
+            investor=investor,
+        )
+
+        recommendation = (
+            "BUY"
+            if deal_score.overall_score >= 0.75
+            else "WATCH"
+        )
+
+        return self.package_workflow.generate(
+            package_id="AUTO-001",
+            property_name=opportunity.address,
+            recommendation=recommendation,
+            confidence=match.fit_score.overall_score,
+            output_directory=output_directory,
         )
