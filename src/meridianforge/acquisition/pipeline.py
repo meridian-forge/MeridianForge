@@ -1,17 +1,29 @@
 """
 Acquisition intelligence pipeline.
 
-MF-333.3
+MF-334.2
 
-Coordinates acquisition analysis.
+Coordinates:
+
+Opportunity
+    ->
+Property Adapter
+    ->
+Underwriting Engine
+    ->
+Score Engine
+    ->
+Decision Engine
+    ->
+Acquisition Result
 """
 
 from meridianforge.acquisition.criteria import (
     AcquisitionCriteria,
 )
 
-from meridianforge.acquisition.decision import (
-    AcquisitionDecision,
+from meridianforge.acquisition.decision_engine import (
+    AcquisitionDecisionEngine,
 )
 
 from meridianforge.acquisition.opportunity import (
@@ -52,7 +64,12 @@ class AcquisitionPipeline:
         )
 
         self.engine = UnderwritingEngine()
+
         self.adapter = AcquisitionPropertyAdapter()
+
+        self.decision_engine = (
+            AcquisitionDecisionEngine()
+        )
 
     def run(
         self,
@@ -75,14 +92,10 @@ class AcquisitionPipeline:
             self.criteria,
         )
 
-        decision = AcquisitionDecision(
-            status=(
-                "BUY"
-                if score >= 70
-                else "REVIEW"
-            ),
-            score=score,
-            reasons=[],
+        decision = self.decision_engine.evaluate(
+            analysis,
+            score,
+            self.criteria,
         )
 
         return AcquisitionResult(
@@ -92,4 +105,8 @@ class AcquisitionPipeline:
             ranking=0,
             recommendation=decision.status,
             confidence=score / 100,
+            warnings=[
+                risk.message
+                for risk in decision.risks
+            ],
         )
