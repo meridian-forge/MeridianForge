@@ -1,7 +1,7 @@
 {
     "production_modules": 297,
-    "test_modules": 198,
-    "test_functions": 230,
+    "test_modules": 201,
+    "test_functions": 235,
     "duplicate_test_names": {
         "test_version.py": [
             "tests/test_version.py",
@@ -26,6 +26,7 @@
             "tests/analysis/__init__.py",
             "tests/acquisition/__init__.py",
             "tests/intake/__init__.py",
+            "tests/architecture/__init__.py",
             "tests/domain/__init__.py"
         ],
         "test_import_pipeline.py": [

@@ -1,12 +1,31 @@
+"""
+Legacy underwriting compatibility adapter.
+
+MF-331 consolidation:
+
+The canonical underwriting engine is:
+
+meridianforge.engine.underwriting_engine.UnderwritingEngine
+
+This module preserves the historical analysis API while
+the remaining callers migrate.
+"""
+
 from meridianforge.analysis.metrics import (
     calculate_cap_rate,
     calculate_cash_on_cash,
     calculate_dscr,
 )
+
 from meridianforge.analysis.result import AnalysisResult
 
 
 class UnderwritingEngine:
+    """
+    Compatibility layer for the legacy analysis workflow.
+
+    This class intentionally preserves the original API.
+    """
 
     def analyze(
         self,
@@ -16,6 +35,12 @@ class UnderwritingEngine:
         cash_invested: float,
         annual_debt: float,
     ) -> AnalysisResult:
+        """
+        Perform legacy underwriting calculations.
+
+        Migration target:
+        meridianforge.engine.underwriting_engine
+        """
 
         cap_rate = calculate_cap_rate(
             noi,
@@ -32,7 +57,11 @@ class UnderwritingEngine:
             annual_debt,
         )
 
-        score = cap_rate + cash_return + dscr
+        score = (
+            cap_rate
+            + cash_return
+            + dscr
+        )
 
         return AnalysisResult(
             cash_flow_monthly=annual_cash_flow / 12,
