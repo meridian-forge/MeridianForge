@@ -1,8 +1,8 @@
-from meridianforge.workflow import AnalysisResult
+from meridianforge.workflow import WorkflowResult
 
 
-def test_analysis_result_creation():
-    result = AnalysisResult(
+def test_analysis_result_creation() -> None:
+    result = WorkflowResult(
         property="property",
         underwriting_result="underwriting",
         score=85,

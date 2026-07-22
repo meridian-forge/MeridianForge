@@ -1,9 +1,9 @@
 from meridianforge.workflow.analysis_pipeline import (
     InvestmentAnalysisPipeline,
 )
-from meridianforge.workflow.result import AnalysisResult
+from meridianforge.workflow.result import WorkflowResult
 
 __all__ = [
     "InvestmentAnalysisPipeline",
-    "AnalysisResult",
+    "WorkflowResult",
 ]

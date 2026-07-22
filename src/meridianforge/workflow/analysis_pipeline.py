@@ -1,6 +1,6 @@
 from typing import Any
 
-from meridianforge.workflow.result import AnalysisResult
+from meridianforge.workflow.result import WorkflowResult
 
 
 class InvestmentAnalysisPipeline:
@@ -9,22 +9,22 @@ class InvestmentAnalysisPipeline:
 
     Flow:
 
-    Property
-        |
-        v
-    Underwriting
-        |
-        v
-    Scoring
-        |
-        v
-    Recommendation
-        |
-        v
-    Decision
-        |
-        v
-    AnalysisResult
+        Property
+            |
+            v
+        Underwriting
+            |
+            v
+        Scoring
+            |
+            v
+        Recommendation
+            |
+            v
+        Decision
+            |
+            v
+        WorkflowResult
     """
 
     def __init__(
@@ -39,8 +39,13 @@ class InvestmentAnalysisPipeline:
         self.recommendation_engine = recommendation_engine
         self.decision_engine = decision_engine
 
-    def analyze(self, property_opportunity: Any) -> AnalysisResult:
-        underwriting_result = self.underwriting_engine.analyze(property_opportunity)
+    def analyze(
+        self,
+        property_opportunity: Any,
+    ) -> WorkflowResult:
+        underwriting_result = self.underwriting_engine.analyze(
+            property_opportunity,
+        )
 
         score = self.scoring_engine.score(
             property_opportunity,
@@ -58,7 +63,7 @@ class InvestmentAnalysisPipeline:
             recommendation,
         )
 
-        return AnalysisResult(
+        return WorkflowResult(
             property=property_opportunity,
             underwriting_result=underwriting_result,
             score=score,
