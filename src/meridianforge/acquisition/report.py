@@ -71,17 +71,11 @@ class AcquisitionReport:
             self.snapshot = UnderwritingSnapshot(
                 purchase_price=self.purchase_price,
                 monthly_rent=self.monthly_rent,
-                annual_cash_flow=(
-                    self.annual_cash_flow
-                ),
+                annual_cash_flow=(self.annual_cash_flow),
                 cap_rate=self.cap_rate,
-                cash_on_cash_return=(
-                    self.cash_on_cash_return
-                ),
+                cash_on_cash_return=(self.cash_on_cash_return),
                 dscr=self.dscr,
-                monthly_cash_flow=(
-                    self.annual_cash_flow / 12
-                ),
+                monthly_cash_flow=(self.annual_cash_flow / 12),
             )
 
         if self.risk_summary is None:
@@ -90,6 +84,4 @@ class AcquisitionReport:
             )
 
         if not self.risks:
-            self.risks = (
-                self.risk_summary.all_risks
-            )
+            self.risks = self.risk_summary.all_risks

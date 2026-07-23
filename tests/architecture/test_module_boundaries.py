@@ -1,21 +1,13 @@
 from pathlib import Path
 
 
-SRC = (
-    Path(__file__)
-    .resolve()
-    .parents[2]
-    / "src"
-    / "meridianforge"
-)
+SRC = Path(__file__).resolve().parents[2] / "src" / "meridianforge"
 
 
 def read_python_files(folder: str) -> list[Path]:
     path = SRC / folder
 
-    return list(
-        path.rglob("*.py")
-    )
+    return list(path.rglob("*.py"))
 
 
 def contains_import(
@@ -23,9 +15,7 @@ def contains_import(
     forbidden: str,
 ) -> bool:
 
-    text = file.read_text(
-        encoding="utf-8"
-    )
+    text = file.read_text(encoding="utf-8")
 
     return forbidden in text
 

@@ -51,11 +51,7 @@ def test_ranking_engine_orders_results():
         ),
     ]
 
-    ranked = (
-        AcquisitionRankingEngine.rank(
-            results
-        )
-    )
+    ranked = AcquisitionRankingEngine.rank(results)
 
     assert len(ranked) == 2
 

@@ -18,16 +18,8 @@ def test_deal_pipeline_moves_stage():
         note="Analyze financials",
     )
 
-    assert (
-        deal.stage
-        == PipelineStage.REVIEW
-    )
+    assert deal.stage == PipelineStage.REVIEW
 
-    assert len(
-        deal.events
-    ) == 1
+    assert len(deal.events) == 1
 
-    assert (
-        deal.events[0].note
-        == "Analyze financials"
-    )
+    assert deal.events[0].note == "Analyze financials"

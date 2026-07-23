@@ -58,14 +58,8 @@ class AcquisitionRankingEngine:
                     property_address=property_address,
                     rank=index,
                     score=result.score,
-                    category=(
-                        classify_rank_score(
-                            result.score
-                        )
-                    ),
-                    recommendation=(
-                        result.recommendation
-                    ),
+                    category=(classify_rank_score(result.score)),
+                    recommendation=(result.recommendation),
                 )
             )
 

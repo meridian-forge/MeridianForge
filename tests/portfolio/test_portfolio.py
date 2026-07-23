@@ -10,13 +10,9 @@ def test_portfolio_creation():
         strategy="Cash Flow",
     )
 
-    assert portfolio.name == (
-        "Core Rental Portfolio"
-    )
+    assert portfolio.name == ("Core Rental Portfolio")
 
-    assert portfolio.strategy == (
-        "Cash Flow"
-    )
+    assert portfolio.strategy == ("Cash Flow")
 
     assert portfolio.asset_count == 0
 
@@ -28,11 +24,7 @@ def test_portfolio_add_asset():
         strategy="Appreciation",
     )
 
-    portfolio.add_asset(
-        "property-a"
-    )
+    portfolio.add_asset("property-a")
 
     assert portfolio.asset_count == 1
-    assert portfolio.assets[0] == (
-        "property-a"
-    )
+    assert portfolio.assets[0] == ("property-a")

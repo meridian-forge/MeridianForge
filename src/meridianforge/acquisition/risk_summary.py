@@ -33,8 +33,4 @@ class RiskSummary:
         Flatten all risk categories.
         """
 
-        return (
-            self.high
-            + self.medium
-            + self.low
-        )
+        return self.high + self.medium + self.low

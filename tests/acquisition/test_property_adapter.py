@@ -49,20 +49,11 @@ def test_property_adapter_creates_canonical_property() -> None:
         Property,
     )
 
-    assert (
-        result.acquisition.purchase_price
-        == 200000
-    )
+    assert result.acquisition.purchase_price == 200000
 
-    assert (
-        result.income.monthly_rent
-        == 2000
-    )
+    assert result.income.monthly_rent == 2000
 
-    assert (
-        result.address.city
-        == "Philadelphia"
-    )
+    assert result.address.city == "Philadelphia"
 
 
 def test_property_adapter_creates_financing_defaults() -> None:
@@ -88,17 +79,8 @@ def test_property_adapter_creates_financing_defaults() -> None:
         opportunity,
     )
 
-    assert (
-        result.financing.down_payment
-        == 60000
-    )
+    assert result.financing.down_payment == 60000
 
-    assert (
-        result.financing.loan_term_years
-        == 30
-    )
+    assert result.financing.loan_term_years == 30
 
-    assert (
-        result.financing.interest_rate
-        == 7.0
-    )
+    assert result.financing.interest_rate == 7.0

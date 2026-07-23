@@ -44,62 +44,42 @@ class AcquisitionDecisionEngine:
         risks: list[RiskFlag] = []
 
         if analysis.dscr >= criteria.minimum_dscr:
-            reasons.append(
-                "DSCR meets target"
-            )
+            reasons.append("DSCR meets target")
         else:
             risks.append(
                 RiskFlag(
                     code="LOW_DSCR",
-                    message=(
-                        "Debt service coverage "
-                        "below target"
-                    ),
+                    message=("Debt service coverage " "below target"),
                     severity=RiskSeverity.HIGH,
                 )
             )
 
         if analysis.cap_rate >= criteria.minimum_cap_rate:
-            reasons.append(
-                "Cap rate meets target"
-            )
+            reasons.append("Cap rate meets target")
         else:
             risks.append(
                 RiskFlag(
                     code="LOW_CAP_RATE",
-                    message=(
-                        "Cap rate below minimum"
-                    ),
+                    message=("Cap rate below minimum"),
                     severity=RiskSeverity.MEDIUM,
                 )
             )
 
-        if (
-            analysis.cash_on_cash_return
-            >= criteria.minimum_cash_return
-        ):
-            reasons.append(
-                "Cash return meets target"
-            )
+        if analysis.cash_on_cash_return >= criteria.minimum_cash_return:
+            reasons.append("Cash return meets target")
         else:
             risks.append(
                 RiskFlag(
                     code="LOW_CASH_RETURN",
-                    message=(
-                        "Cash-on-cash return "
-                        "below target"
-                    ),
+                    message=("Cash-on-cash return " "below target"),
                     severity=RiskSeverity.MEDIUM,
                 )
             )
 
         status = (
             "BUY"
-            if score >= 70 and not any(
-                risk.severity
-                == RiskSeverity.HIGH
-                for risk in risks
-            )
+            if score >= 70
+            and not any(risk.severity == RiskSeverity.HIGH for risk in risks)
             else "REVIEW"
         )
 

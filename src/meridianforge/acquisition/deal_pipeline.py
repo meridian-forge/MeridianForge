@@ -26,9 +26,7 @@ class DealPipeline:
 
     property_address: str
 
-    stage: PipelineStage = (
-        PipelineStage.NEW
-    )
+    stage: PipelineStage = PipelineStage.NEW
 
     score: float = 0.0
 

@@ -37,9 +37,7 @@ def test_workflow_engine_creates_buy_actions():
         confidence=0.95,
     )
 
-    actions = WorkflowEngine.generate(
-        result
-    )
+    actions = WorkflowEngine.generate(result)
 
     assert len(actions) == 3
     assert actions[0].action_type == "REVIEW_FOR_OFFER"

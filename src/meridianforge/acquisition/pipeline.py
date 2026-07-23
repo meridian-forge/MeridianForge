@@ -61,11 +61,7 @@ class AcquisitionPipeline:
         criteria: AcquisitionCriteria | None = None,
     ) -> None:
 
-        self.criteria = (
-            criteria
-            if criteria is not None
-            else AcquisitionCriteria()
-        )
+        self.criteria = criteria if criteria is not None else AcquisitionCriteria()
 
         self.engine = UnderwritingEngine()
         self.adapter = AcquisitionPropertyAdapter()
@@ -105,10 +101,7 @@ class AcquisitionPipeline:
             ranking=0,
             recommendation=decision.status,
             confidence=score / 100,
-            warnings=[
-                risk.message
-                for risk in decision.risks
-            ],
+            warnings=[risk.message for risk in decision.risks],
         )
 
         return AcquisitionResult(

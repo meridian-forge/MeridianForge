@@ -38,9 +38,7 @@ class Normalizer:
 
             for mapping in mappings:
                 if mapping.source_field in record:
-                    attributes[mapping.target_field] = (
-                        record[mapping.source_field]
-                    )
+                    attributes[mapping.target_field] = record[mapping.source_field]
 
         return NormalizedAsset(
             asset_type=asset_type,

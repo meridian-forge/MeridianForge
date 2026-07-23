@@ -57,11 +57,7 @@ class UnderwritingEngine:
             annual_debt,
         )
 
-        score = (
-            cap_rate
-            + cash_return
-            + dscr
-        )
+        score = cap_rate + cash_return + dscr
 
         return AnalysisResult(
             cash_flow_monthly=annual_cash_flow / 12,

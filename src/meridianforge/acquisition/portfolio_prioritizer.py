@@ -37,33 +37,23 @@ class PortfolioPrioritizer:
                 "A",
             ]:
                 action = "BUY NOW"
-                rationale = (
-                    "Strong acquisition metrics."
-                )
+                rationale = "Strong acquisition metrics."
 
             elif ranking.category == "B":
                 action = "REVIEW"
-                rationale = (
-                    "Meets baseline but requires review."
-                )
+                rationale = "Meets baseline but requires review."
 
             elif ranking.category == "C":
                 action = "WATCH"
-                rationale = (
-                    "Potential opportunity if conditions improve."
-                )
+                rationale = "Potential opportunity if conditions improve."
 
             else:
                 action = "REJECT"
-                rationale = (
-                    "Does not meet acquisition criteria."
-                )
+                rationale = "Does not meet acquisition criteria."
 
             priorities.append(
                 PortfolioPriority(
-                    property_address=(
-                        ranking.property_address
-                    ),
+                    property_address=(ranking.property_address),
                     rank=ranking.rank,
                     score=ranking.score,
                     action=action,

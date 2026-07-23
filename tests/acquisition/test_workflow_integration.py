@@ -37,8 +37,6 @@ def test_workflow_integration():
         confidence=0.95,
     )
 
-    actions = WorkflowEngine.generate(
-        result
-    )
+    actions = WorkflowEngine.generate(result)
 
     assert actions[0].action == "REVIEW_FOR_OFFER"

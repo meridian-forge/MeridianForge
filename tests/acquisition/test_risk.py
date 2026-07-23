@@ -20,7 +20,4 @@ def test_risk_flag_creation() -> None:
 
     assert risk.code == "HIGH_RATE"
 
-    assert (
-        risk.severity
-        == RiskSeverity.MEDIUM
-    )
+    assert risk.severity == RiskSeverity.MEDIUM

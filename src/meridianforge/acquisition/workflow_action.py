@@ -43,26 +43,16 @@ class WorkflowAction:
         self.action_type = (
             action_type
             if action_type is not None
-            else action
-            if action is not None
-            else ""
+            else action if action is not None else ""
         )
 
         self.status = status
         self.priority = priority
         self.reason = reason
 
-        self.notes = (
-            notes
-            if notes is not None
-            else []
-        )
+        self.notes = notes if notes is not None else []
 
-        self.created_at = (
-            created_at
-            if created_at is not None
-            else datetime.now()
-        )
+        self.created_at = created_at if created_at is not None else datetime.now()
 
     @property
     def action(self) -> str:

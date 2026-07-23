@@ -45,33 +45,17 @@ class AcquisitionDashboardBuilder:
 
         total_deals = len(results)
 
-        buy_candidates = sum(
-            1
-            for result in results
-            if result.recommendation == "BUY"
-        )
+        buy_candidates = sum(1 for result in results if result.recommendation == "BUY")
 
         review_candidates = sum(
-            1
-            for result in results
-            if result.recommendation == "REVIEW"
+            1 for result in results if result.recommendation == "REVIEW"
         )
 
-        average_score = (
-            sum(result.score for result in results)
-            / total_deals
-        )
+        average_score = sum(result.score for result in results) / total_deals
 
-        average_confidence = (
-            sum(result.confidence for result in results)
-            / total_deals
-        )
+        average_confidence = sum(result.confidence for result in results) / total_deals
 
-        high_risk_count = sum(
-            1
-            for result in results
-            if len(result.warnings) > 0
-        )
+        high_risk_count = sum(1 for result in results if len(result.warnings) > 0)
 
         return AcquisitionDashboard(
             total_deals=total_deals,

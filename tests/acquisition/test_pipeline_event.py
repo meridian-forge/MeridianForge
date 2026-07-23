@@ -15,12 +15,6 @@ def test_pipeline_event_creation():
         note="Initial review",
     )
 
-    assert (
-        event.from_stage
-        == PipelineStage.NEW
-    )
+    assert event.from_stage == PipelineStage.NEW
 
-    assert (
-        event.to_stage
-        == PipelineStage.REVIEW
-    )
+    assert event.to_stage == PipelineStage.REVIEW

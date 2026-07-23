@@ -58,9 +58,7 @@ def test_thesis_generator_creates_summary():
         warnings=[],
     )
 
-    thesis = InvestmentThesisGenerator.generate(
-        result
-    )
+    thesis = InvestmentThesisGenerator.generate(result)
 
     assert thesis.recommendation == "BUY"
     assert len(thesis.highlights) == 3

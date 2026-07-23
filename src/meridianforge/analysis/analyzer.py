@@ -13,9 +13,7 @@ def analyze(
     warnings: list[str] = []
 
     if not opportunity.fields:
-        warnings.append(
-            "Missing financial data"
-        )
+        warnings.append("Missing financial data")
 
     return AnalysisInput(
         opportunity_file=opportunity.source_file,

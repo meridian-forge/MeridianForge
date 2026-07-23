@@ -24,9 +24,7 @@ def test_acquisition_pipeline():
         created_at=datetime.now(),
     )
 
-    result = AcquisitionPipeline().run(
-        opportunity
-    )
+    result = AcquisitionPipeline().run(opportunity)
 
     assert result.opportunity == opportunity
     assert result.recommendation in [

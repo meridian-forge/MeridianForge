@@ -58,9 +58,7 @@ class AcquisitionPropertyAdapter:
         Build canonical Property object.
         """
 
-        annual_expenses = (
-            opportunity.monthly_expenses * 12
-        )
+        annual_expenses = opportunity.monthly_expenses * 12
 
         return Property(
             address=Address(
@@ -70,22 +68,16 @@ class AcquisitionPropertyAdapter:
                 zip_code=opportunity.zip_code,
             ),
             acquisition=Acquisition(
-                purchase_price=(
-                    opportunity.purchase_price
-                ),
+                purchase_price=(opportunity.purchase_price),
                 closing_costs=0,
             ),
             financing=Financing(
-                down_payment=(
-                    opportunity.purchase_price * 0.20
-                ),
+                down_payment=(opportunity.purchase_price * 0.20),
                 interest_rate=7.0,
                 loan_term_years=30,
             ),
             income=Income(
-                monthly_rent=(
-                    opportunity.monthly_rent
-                ),
+                monthly_rent=(opportunity.monthly_rent),
             ),
             expenses=Expenses(
                 taxes=annual_expenses * 0.60,
@@ -94,8 +86,6 @@ class AcquisitionPropertyAdapter:
             assumptions=Assumptions(),
             metadata=Metadata(
                 provider=opportunity.source,
-                imported_at=(
-                    opportunity.created_at.isoformat()
-                ),
+                imported_at=(opportunity.created_at.isoformat()),
             ),
         )

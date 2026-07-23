@@ -32,9 +32,7 @@ def test_dashboard_builder():
         ),
     ]
 
-    dashboard = AcquisitionDashboardBuilder.build(
-        results
-    )
+    dashboard = AcquisitionDashboardBuilder.build(results)
 
     assert dashboard.total_deals == 2
     assert dashboard.buy_candidates == 1

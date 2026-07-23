@@ -38,10 +38,7 @@ class AcquisitionReportBuilder:
         """
 
         if result.thesis is None:
-            raise ValueError(
-                "Investment thesis required "
-                "before report generation."
-            )
+            raise ValueError("Investment thesis required " "before report generation.")
 
         analysis = result.analysis
 
@@ -57,17 +54,11 @@ class AcquisitionReportBuilder:
         snapshot = UnderwritingSnapshot(
             purchase_price=analysis.purchase_price,
             monthly_rent=analysis.monthly_rent,
-            annual_cash_flow=(
-                analysis.annual_cash_flow
-            ),
+            annual_cash_flow=(analysis.annual_cash_flow),
             cap_rate=analysis.cap_rate,
-            cash_on_cash_return=(
-                analysis.cash_on_cash_return
-            ),
+            cash_on_cash_return=(analysis.cash_on_cash_return),
             dscr=analysis.dscr,
-            monthly_cash_flow=(
-                analysis.monthly_cash_flow
-            ),
+            monthly_cash_flow=(analysis.monthly_cash_flow),
         )
 
         risk_summary = RiskSummary(
@@ -81,13 +72,9 @@ class AcquisitionReportBuilder:
             confidence=result.confidence,
             purchase_price=analysis.purchase_price,
             monthly_rent=analysis.monthly_rent,
-            annual_cash_flow=(
-                analysis.annual_cash_flow
-            ),
+            annual_cash_flow=(analysis.annual_cash_flow),
             cap_rate=analysis.cap_rate,
-            cash_on_cash_return=(
-                analysis.cash_on_cash_return
-            ),
+            cash_on_cash_return=(analysis.cash_on_cash_return),
             dscr=analysis.dscr,
             thesis=result.thesis,
             snapshot=snapshot,

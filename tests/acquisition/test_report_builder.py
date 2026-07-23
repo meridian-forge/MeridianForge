@@ -28,17 +28,11 @@ def test_report_builder_creates_report():
         created_at=datetime.now(),
     )
 
-    result = AcquisitionPipeline().run(
-        opportunity
-    )
+    result = AcquisitionPipeline().run(opportunity)
 
-    report = AcquisitionReportBuilder.build(
-        result
-    )
+    report = AcquisitionReportBuilder.build(result)
 
-    assert report.property_address.startswith(
-        "123 Main"
-    )
+    assert report.property_address.startswith("123 Main")
 
     assert report.recommendation in [
         "BUY",

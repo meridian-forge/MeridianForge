@@ -30,19 +30,13 @@ def monthly_payment(
     """
 
     if loan_amount <= 0:
-        raise ValueError(
-            "Loan amount must be positive"
-        )
+        raise ValueError("Loan amount must be positive")
 
     if annual_rate < 0:
-        raise ValueError(
-            "Interest rate cannot be negative"
-        )
+        raise ValueError("Interest rate cannot be negative")
 
     if years <= 0:
-        raise ValueError(
-            "Loan term must be positive"
-        )
+        raise ValueError("Loan term must be positive")
 
     if annual_rate < 1:
         interest_rate = annual_rate * 100

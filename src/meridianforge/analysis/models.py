@@ -36,9 +36,7 @@ class AnalysisInput:
         default_factory=dict,
     )
 
-    recommendation: Recommendation = (
-        Recommendation.WATCH
-    )
+    recommendation: Recommendation = Recommendation.WATCH
 
     warnings: list[str] = field(
         default_factory=list,

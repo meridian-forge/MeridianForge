@@ -33,11 +33,7 @@ def test_portfolio_prioritizer_actions():
         ),
     ]
 
-    result = (
-        PortfolioPrioritizer.prioritize(
-            rankings
-        )
-    )
+    result = PortfolioPrioritizer.prioritize(rankings)
 
     assert result[0].action == "BUY NOW"
 

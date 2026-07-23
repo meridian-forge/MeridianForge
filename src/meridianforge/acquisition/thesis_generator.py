@@ -44,32 +44,20 @@ class InvestmentThesisGenerator:
         analysis = result.analysis
 
         if analysis.dscr >= 1.20:
-            highlights.append(
-                "DSCR exceeds acquisition target"
-            )
+            highlights.append("DSCR exceeds acquisition target")
 
         if analysis.cap_rate >= 0.05:
-            highlights.append(
-                "Cap rate meets minimum threshold"
-            )
+            highlights.append("Cap rate meets minimum threshold")
 
         if analysis.cash_on_cash_return >= 0.08:
-            highlights.append(
-                "Cash return meets target"
-            )
+            highlights.append("Cash return meets target")
 
         risks = result.warnings.copy()
 
         if result.recommendation == "BUY":
-            summary = (
-                "Strong acquisition candidate "
-                "based on underwriting metrics."
-            )
+            summary = "Strong acquisition candidate " "based on underwriting metrics."
         else:
-            summary = (
-                "Property requires additional "
-                "review before acquisition."
-            )
+            summary = "Property requires additional " "review before acquisition."
 
         return InvestmentThesis(
             property_address=property_address,

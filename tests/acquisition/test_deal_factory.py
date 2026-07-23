@@ -32,17 +32,13 @@ def test_deal_factory_creates_pipeline():
         created_at=datetime.now(),
     )
 
-    result = AcquisitionPipeline().run(
-        opportunity
-    )
+    result = AcquisitionPipeline().run(opportunity)
 
     deal = DealFactory.create(
         result,
     )
 
-    assert deal.property_address.startswith(
-        "123 Main"
-    )
+    assert deal.property_address.startswith("123 Main")
 
     assert deal.score == result.score
 
