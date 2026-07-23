@@ -13,16 +13,21 @@ def test_deal_pipeline_moves_stage():
         property_address="123 Main",
     )
 
-    assert (
-        deal.stage
-        == PipelineStage.NEW
-    )
-
     deal.move_to(
-        PipelineStage.REVIEW
+        PipelineStage.REVIEW,
+        note="Analyze financials",
     )
 
     assert (
         deal.stage
         == PipelineStage.REVIEW
+    )
+
+    assert len(
+        deal.events
+    ) == 1
+
+    assert (
+        deal.events[0].note
+        == "Analyze financials"
     )

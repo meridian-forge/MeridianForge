@@ -1,13 +1,17 @@
 """
 Deal pipeline model.
 
-MF-338.1
+MF-338.2
 
-Tracks acquisition workflow status.
+Tracks acquisition workflow status and history.
 """
 
 from dataclasses import dataclass, field
 from datetime import datetime
+
+from meridianforge.acquisition.pipeline_event import (
+    PipelineEvent,
+)
 
 from meridianforge.acquisition.pipeline_stage import (
     PipelineStage,
@@ -34,6 +38,10 @@ class DealPipeline:
         default_factory=list,
     )
 
+    events: list[PipelineEvent] = field(
+        default_factory=list,
+    )
+
     created_at: datetime = field(
         default_factory=datetime.now,
     )
@@ -45,11 +53,27 @@ class DealPipeline:
     def move_to(
         self,
         stage: PipelineStage,
+        note: str = "",
     ) -> None:
         """
-        Update pipeline stage.
+        Move deal to new workflow stage.
         """
 
+        event = PipelineEvent(
+            from_stage=self.stage,
+            to_stage=stage,
+            note=note,
+        )
+
+        self.events.append(
+            event,
+        )
+
         self.stage = stage
+
+        if note:
+            self.notes.append(
+                note,
+            )
 
         self.updated_at = datetime.now()
