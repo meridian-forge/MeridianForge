@@ -1,7 +1,7 @@
 """
 Acquisition report builder.
 
-MF-336.3
+MF-336.3.3
 
 Transforms acquisition intelligence
 into an investor-facing report.
@@ -13,6 +13,10 @@ from meridianforge.acquisition.report import (
 
 from meridianforge.acquisition.result import (
     AcquisitionResult,
+)
+
+from meridianforge.acquisition.risk_summary import (
+    RiskSummary,
 )
 
 from meridianforge.acquisition.snapshot import (
@@ -66,6 +70,10 @@ class AcquisitionReportBuilder:
             ),
         )
 
+        risk_summary = RiskSummary(
+            medium=result.warnings.copy(),
+        )
+
         return AcquisitionReport(
             property_address=property_address,
             recommendation=result.recommendation,
@@ -84,4 +92,5 @@ class AcquisitionReportBuilder:
             thesis=result.thesis,
             snapshot=snapshot,
             risks=result.warnings.copy(),
+            risk_summary=risk_summary,
         )
