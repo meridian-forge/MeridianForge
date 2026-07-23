@@ -1,10 +1,10 @@
 """
 Workflow automation engine.
 
-MF-340.2
+MF-340.3
 
-Creates workflow actions from
-acquisition intelligence.
+Creates operational actions
+from acquisition intelligence.
 """
 
 from meridianforge.acquisition.result import (
@@ -18,17 +18,13 @@ from meridianforge.acquisition.workflow_action import (
 
 class WorkflowEngine:
     """
-    Converts acquisition decisions
-    into operational tasks.
+    Generates next acquisition actions.
     """
 
     @staticmethod
     def generate(
         result: AcquisitionResult,
     ) -> list[WorkflowAction]:
-        """
-        Generate workflow actions.
-        """
 
         actions: list[WorkflowAction] = []
 
@@ -39,6 +35,7 @@ class WorkflowEngine:
                     action_type="REVIEW_FOR_OFFER",
                     status="OPEN",
                     priority="HIGH",
+                    reason="Strong acquisition candidate",
                 )
             )
 
@@ -47,6 +44,7 @@ class WorkflowEngine:
                     action_type="REQUEST_FINANCING",
                     status="OPEN",
                     priority="MEDIUM",
+                    reason="Begin financing review",
                 )
             )
 
@@ -55,6 +53,7 @@ class WorkflowEngine:
                     action_type="ADD_TO_PIPELINE",
                     status="OPEN",
                     priority="HIGH",
+                    reason="Track acquisition progress",
                 )
             )
 
@@ -65,6 +64,7 @@ class WorkflowEngine:
                     action_type="ANALYST_REVIEW",
                     status="OPEN",
                     priority="MEDIUM",
+                    reason="Additional review required",
                 )
             )
 

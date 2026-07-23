@@ -1,7 +1,7 @@
 """
 Acquisition result model.
 
-MF-335.3
+MF-340.3
 
 Canonical output of the acquisition intelligence pipeline.
 
@@ -12,6 +12,7 @@ Combines:
 - ranking
 - decision intelligence
 - investment thesis
+- workflow actions
 """
 
 from dataclasses import dataclass, field
@@ -22,6 +23,10 @@ from meridianforge.acquisition.opportunity import (
 
 from meridianforge.acquisition.thesis import (
     InvestmentThesis,
+)
+
+from meridianforge.acquisition.workflow_action import (
+    WorkflowAction,
 )
 
 from meridianforge.models.results.analysis_result import (
@@ -50,5 +55,9 @@ class AcquisitionResult:
     thesis: InvestmentThesis | None = None
 
     warnings: list[str] = field(
+        default_factory=list,
+    )
+
+    workflow_actions: list[WorkflowAction] = field(
         default_factory=list,
     )
