@@ -8,6 +8,9 @@ from meridianforge.cli.monday_command import run_monday
 from meridianforge.cli.parser import build_parser
 
 
+VERSION = "1.0.0-RC1"
+
+
 def main() -> None:
     parser = build_parser()
 
@@ -25,7 +28,7 @@ def main() -> None:
         run_investor_package(args)
 
     elif args.command == "version":
-        print("MeridianForge v0.10.0")
+        print(f"MeridianForge {VERSION}")
 
 
 if __name__ == "__main__":

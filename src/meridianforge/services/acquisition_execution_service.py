@@ -14,11 +14,11 @@ from meridianforge.models.results.acquisition_orchestration_result import (
     AcquisitionOrchestrationResult,
 )
 from meridianforge.opportunity.models import Opportunity
-from meridianforge.services.acquisition_intake_service import (
-    AcquisitionIntakeService,
-)
 from meridianforge.services.acquisition_orchestrator import (
     AcquisitionOrchestrator,
+)
+from meridianforge.services.acquisition_intake_service import (
+    AcquisitionIntakeService,
 )
 
 
@@ -34,9 +34,15 @@ class AcquisitionExecutionService:
         orchestrator: AcquisitionOrchestrator | None = None,
     ) -> None:
 
-        self.intake_service = intake_service or AcquisitionIntakeService()
+        self.intake_service = (
+            intake_service
+            or AcquisitionIntakeService()
+        )
 
-        self.orchestrator = orchestrator or AcquisitionOrchestrator()
+        self.orchestrator = (
+            orchestrator
+            or AcquisitionOrchestrator()
+        )
 
     def execute(
         self,
@@ -49,11 +55,17 @@ class AcquisitionExecutionService:
         Execute complete acquisition workflow.
         """
 
-        acquisition_input = self.intake_service.convert(
-            opportunity,
+        acquisition_input = (
+            self.intake_service.create_opportunity(
+                opportunity,
+            )
         )
 
-        records = [acquisition_input]
+        records = [
+            acquisition_input.__dict__
+            if hasattr(acquisition_input, "__dict__")
+            else acquisition_input
+        ]
 
         return self.orchestrator.analyze(
             records,
