@@ -9,6 +9,9 @@ from pathlib import Path
 from meridianforge.presentation.excel_renderer import (
     ExcelInvestorReportRenderer,
 )
+from meridianforge.presentation.investor_package_builder import (
+    InvestorPackageBuilder,
+)
 from meridianforge.presentation.investor_report_renderer import (
     InvestorReportRenderer,
 )
@@ -49,6 +52,10 @@ class InvestorReportExportService:
 
         generated_files: list[Path] = []
 
+        package = InvestorPackageBuilder.build(
+            review,
+        )
+
         text_file = output_directory / "investor_review.txt"
 
         text_file.write_text(
@@ -79,8 +86,10 @@ class InvestorReportExportService:
         pdf_file = output_directory / "investor_review.pdf"
 
         self.pdf_renderer.render(
-            review,
+            package,
             pdf_file,
         )
+
+        generated_files.append(pdf_file)
 
         return generated_files

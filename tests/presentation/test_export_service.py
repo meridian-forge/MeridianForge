@@ -31,7 +31,9 @@ def test_export_service_generates_reports(tmp_path: Path):
         tmp_path,
     )
 
-    assert len(files) == 3
+    assert len(files) == 4
+
+    assert any(file.name == "investor_review.pdf" for file in files)
 
     assert (tmp_path / "investor_review.txt").exists()
     assert (tmp_path / "investor_review.md").exists()

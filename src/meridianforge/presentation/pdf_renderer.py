@@ -1,3 +1,7 @@
+"""
+PDF investor package renderer.
+"""
+
 from pathlib import Path
 
 from reportlab.lib.styles import getSampleStyleSheet
@@ -7,21 +11,23 @@ from reportlab.platypus import (
     Spacer,
 )
 
-from meridianforge.product.weekly_review import WeeklyInvestorReview
+from meridianforge.models.results.investor_package import (
+    InvestorPackage,
+)
 
 
 class PDFInvestorReportRenderer:
     """
-    Render investor review as PDF.
+    Render investor package as PDF.
     """
 
     def render(
         self,
-        review: WeeklyInvestorReview,
+        package: InvestorPackage,
         output_file: Path,
     ) -> Path:
         """
-        Create PDF investor report.
+        Create investor PDF report.
         """
 
         document = SimpleDocTemplate(
@@ -34,21 +40,47 @@ class PDFInvestorReportRenderer:
 
         content.append(
             Paragraph(
-                "Meridian Forge Investor Review",
+                "Meridian Forge Investment Package",
                 styles["Title"],
             )
         )
 
         content.append(
-            Spacer(1, 12),
+            Spacer(
+                1,
+                12,
+            )
         )
 
         content.append(
             Paragraph(
-                str(review),
+                str(package.review),
                 styles["BodyText"],
             )
         )
+
+        if package.recommendation:
+
+            content.append(
+                Spacer(
+                    1,
+                    12,
+                )
+            )
+
+            content.append(
+                Paragraph(
+                    f"Recommendation: {package.recommendation.action.value}",
+                    styles["Heading2"],
+                )
+            )
+
+            content.append(
+                Paragraph(
+                    f"Confidence: {package.recommendation.confidence:.0%}",
+                    styles["BodyText"],
+                )
+            )
 
         document.build(
             content,
