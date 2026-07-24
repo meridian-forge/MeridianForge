@@ -3,15 +3,12 @@ from datetime import datetime
 from meridianforge.acquisition.opportunity import (
     Opportunity,
 )
-
 from meridianforge.acquisition.result import (
     AcquisitionResult,
 )
-
 from meridianforge.acquisition.thesis_generator import (
     InvestmentThesisGenerator,
 )
-
 from meridianforge.models.results.analysis_result import (
     AnalysisResult,
 )

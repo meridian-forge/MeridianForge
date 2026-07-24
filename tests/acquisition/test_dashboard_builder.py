@@ -1,7 +1,6 @@
 from meridianforge.acquisition.dashboard_builder import (
     AcquisitionDashboardBuilder,
 )
-
 from meridianforge.acquisition.result import (
     AcquisitionResult,
 )

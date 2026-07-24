@@ -10,7 +10,6 @@ and evaluates acquisition criteria.
 from meridianforge.acquisition.criteria import (
     AcquisitionCriteria,
 )
-
 from meridianforge.models.results.analysis_result import (
     AnalysisResult,
 )

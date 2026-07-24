@@ -3,7 +3,6 @@ from datetime import datetime
 from meridianforge.acquisition import (
     AcquisitionPipeline,
 )
-
 from meridianforge.acquisition.opportunity import (
     Opportunity,
 )

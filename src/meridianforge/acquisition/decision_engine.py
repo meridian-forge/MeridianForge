@@ -10,16 +10,13 @@ into actionable acquisition decisions.
 from meridianforge.acquisition.criteria import (
     AcquisitionCriteria,
 )
-
 from meridianforge.acquisition.decision import (
     AcquisitionDecision,
 )
-
 from meridianforge.acquisition.risk import (
     RiskFlag,
     RiskSeverity,
 )
-
 from meridianforge.models.results.analysis_result import (
     AnalysisResult,
 )

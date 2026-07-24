@@ -9,11 +9,9 @@ from datetime import datetime
 from meridianforge.acquisition.opportunity import (
     Opportunity,
 )
-
 from meridianforge.acquisition.property_adapter import (
     AcquisitionPropertyAdapter,
 )
-
 from meridianforge.models.domain.property import (
     Property,
 )

@@ -2,7 +2,6 @@ from meridianforge.analysis.models import (
     AnalysisInput,
     Recommendation,
 )
-
 from meridianforge.opportunity.models import Opportunity
 
 

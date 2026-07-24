@@ -1,7 +1,6 @@
 from meridianforge.acquisition.report import (
     AcquisitionReport,
 )
-
 from meridianforge.acquisition.thesis import (
     InvestmentThesis,
 )

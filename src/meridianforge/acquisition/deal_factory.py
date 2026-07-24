@@ -9,11 +9,9 @@ Creates workflow deals from acquisition results.
 from meridianforge.acquisition.deal_pipeline import (
     DealPipeline,
 )
-
 from meridianforge.acquisition.pipeline_stage import (
     PipelineStage,
 )
-
 from meridianforge.acquisition.result import (
     AcquisitionResult,
 )

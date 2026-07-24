@@ -10,7 +10,6 @@ into investor-facing reasoning.
 from meridianforge.acquisition.result import (
     AcquisitionResult,
 )
-
 from meridianforge.acquisition.thesis import (
     InvestmentThesis,
 )

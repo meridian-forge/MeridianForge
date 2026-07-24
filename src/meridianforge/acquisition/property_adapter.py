@@ -10,35 +10,27 @@ canonical underwriting Property models.
 from meridianforge.acquisition.opportunity import (
     Opportunity,
 )
-
 from meridianforge.models.domain.acquisition import (
     Acquisition,
 )
-
 from meridianforge.models.domain.address import (
     Address,
 )
-
 from meridianforge.models.domain.assumptions import (
     Assumptions,
 )
-
 from meridianforge.models.domain.expenses import (
     Expenses,
 )
-
 from meridianforge.models.domain.financing import (
     Financing,
 )
-
 from meridianforge.models.domain.income import (
     Income,
 )
-
 from meridianforge.models.domain.metadata import (
     Metadata,
 )
-
 from meridianforge.models.domain.property import (
     Property,
 )

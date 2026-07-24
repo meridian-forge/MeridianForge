@@ -9,11 +9,9 @@ Ranks multiple acquisition opportunities.
 from meridianforge.acquisition.ranking_category import (
     classify_rank_score,
 )
-
 from meridianforge.acquisition.ranking_model import (
     RankingResult,
 )
-
 from meridianforge.acquisition.result import (
     AcquisitionResult,
 )

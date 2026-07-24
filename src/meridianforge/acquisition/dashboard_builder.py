@@ -12,7 +12,6 @@ from collections.abc import Iterable
 from meridianforge.acquisition.dashboard import (
     AcquisitionDashboard,
 )
-
 from meridianforge.acquisition.result import (
     AcquisitionResult,
 )

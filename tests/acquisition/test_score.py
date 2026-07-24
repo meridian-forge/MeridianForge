@@ -1,11 +1,9 @@
 from meridianforge.acquisition.criteria import (
     AcquisitionCriteria,
 )
-
 from meridianforge.acquisition.score import (
     calculate_score,
 )
-
 from meridianforge.models.results.analysis_result import (
     AnalysisResult,
 )

@@ -12,11 +12,9 @@ from datetime import datetime
 from meridianforge.acquisition.risk_summary import (
     RiskSummary,
 )
-
 from meridianforge.acquisition.snapshot import (
     UnderwritingSnapshot,
 )
-
 from meridianforge.acquisition.thesis import (
     InvestmentThesis,
 )

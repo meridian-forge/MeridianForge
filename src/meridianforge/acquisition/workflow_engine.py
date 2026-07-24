@@ -10,7 +10,6 @@ from acquisition intelligence.
 from meridianforge.acquisition.result import (
     AcquisitionResult,
 )
-
 from meridianforge.acquisition.workflow_action import (
     WorkflowAction,
 )

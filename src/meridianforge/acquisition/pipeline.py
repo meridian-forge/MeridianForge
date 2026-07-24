@@ -21,31 +21,24 @@ Acquisition Result
 from meridianforge.acquisition.criteria import (
     AcquisitionCriteria,
 )
-
 from meridianforge.acquisition.decision_engine import (
     AcquisitionDecisionEngine,
 )
-
 from meridianforge.acquisition.opportunity import (
     Opportunity,
 )
-
 from meridianforge.acquisition.property_adapter import (
     AcquisitionPropertyAdapter,
 )
-
 from meridianforge.acquisition.result import (
     AcquisitionResult,
 )
-
 from meridianforge.acquisition.score import (
     calculate_score,
 )
-
 from meridianforge.acquisition.thesis_generator import (
     InvestmentThesisGenerator,
 )
-
 from meridianforge.engine.underwriting_engine import (
     UnderwritingEngine,
 )

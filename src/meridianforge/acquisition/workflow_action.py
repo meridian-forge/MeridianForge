@@ -7,7 +7,7 @@ Represents operational next steps
 generated from acquisition intelligence.
 """
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from datetime import datetime
 
 

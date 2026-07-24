@@ -10,15 +10,12 @@ into an investor-facing report.
 from meridianforge.acquisition.report import (
     AcquisitionReport,
 )
-
 from meridianforge.acquisition.result import (
     AcquisitionResult,
 )
-
 from meridianforge.acquisition.risk_summary import (
     RiskSummary,
 )
-
 from meridianforge.acquisition.snapshot import (
     UnderwritingSnapshot,
 )

@@ -9,7 +9,6 @@ Converts rankings into investor actions.
 from meridianforge.acquisition.portfolio_priority import (
     PortfolioPriority,
 )
-
 from meridianforge.acquisition.ranking_model import (
     RankingResult,
 )

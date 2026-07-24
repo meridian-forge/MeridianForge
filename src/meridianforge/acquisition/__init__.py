@@ -5,13 +5,11 @@ Acquisition intelligence package.
 from meridianforge.acquisition.criteria import (
     AcquisitionCriteria,
 )
-
-from meridianforge.acquisition.result import (
-    AcquisitionResult,
-)
-
 from meridianforge.acquisition.pipeline import (
     AcquisitionPipeline,
+)
+from meridianforge.acquisition.result import (
+    AcquisitionResult,
 )
 
 __all__ = [

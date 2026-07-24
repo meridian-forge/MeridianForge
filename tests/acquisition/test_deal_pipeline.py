@@ -1,7 +1,6 @@
 from meridianforge.acquisition.deal_pipeline import (
     DealPipeline,
 )
-
 from meridianforge.acquisition.pipeline_stage import (
     PipelineStage,
 )

@@ -3,15 +3,12 @@ from datetime import datetime
 from meridianforge.acquisition.deal_factory import (
     DealFactory,
 )
-
-from meridianforge.acquisition.pipeline import (
-    AcquisitionPipeline,
-)
-
 from meridianforge.acquisition.opportunity import (
     Opportunity,
 )
-
+from meridianforge.acquisition.pipeline import (
+    AcquisitionPipeline,
+)
 from meridianforge.acquisition.pipeline_stage import (
     PipelineStage,
 )

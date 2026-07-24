@@ -1,15 +1,13 @@
 from datetime import datetime
 
-from meridianforge.acquisition.workflow_engine import (
-    WorkflowEngine,
+from meridianforge.acquisition.opportunity import (
+    Opportunity,
 )
-
 from meridianforge.acquisition.result import (
     AcquisitionResult,
 )
-
-from meridianforge.acquisition.opportunity import (
-    Opportunity,
+from meridianforge.acquisition.workflow_engine import (
+    WorkflowEngine,
 )
 
 

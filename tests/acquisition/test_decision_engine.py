@@ -7,11 +7,9 @@ MF-334.2
 from meridianforge.acquisition.criteria import (
     AcquisitionCriteria,
 )
-
 from meridianforge.acquisition.decision_engine import (
     AcquisitionDecisionEngine,
 )
-
 from meridianforge.models.results.analysis_result import (
     AnalysisResult,
 )

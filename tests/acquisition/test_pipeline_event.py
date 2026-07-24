@@ -1,7 +1,6 @@
 from meridianforge.acquisition.pipeline_event import (
     PipelineEvent,
 )
-
 from meridianforge.acquisition.pipeline_stage import (
     PipelineStage,
 )

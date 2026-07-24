@@ -3,11 +3,9 @@ from datetime import datetime
 from meridianforge.acquisition.opportunity import (
     Opportunity,
 )
-
 from meridianforge.acquisition.pipeline import (
     AcquisitionPipeline,
 )
-
 from meridianforge.acquisition.report_builder import (
     AcquisitionReportBuilder,
 )

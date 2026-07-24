@@ -1,7 +1,6 @@
 from meridianforge.acquisition.portfolio_prioritizer import (
     PortfolioPrioritizer,
 )
-
 from meridianforge.acquisition.ranking_model import (
     RankingResult,
 )

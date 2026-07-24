@@ -16,7 +16,6 @@ from meridianforge.analysis.metrics import (
     calculate_cash_on_cash,
     calculate_dscr,
 )
-
 from meridianforge.analysis.result import AnalysisResult
 
 

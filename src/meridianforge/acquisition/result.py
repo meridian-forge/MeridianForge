@@ -20,15 +20,12 @@ from dataclasses import dataclass, field
 from meridianforge.acquisition.opportunity import (
     Opportunity,
 )
-
 from meridianforge.acquisition.thesis import (
     InvestmentThesis,
 )
-
 from meridianforge.acquisition.workflow_action import (
     WorkflowAction,
 )
-
 from meridianforge.models.results.analysis_result import (
     AnalysisResult,
 )
