@@ -14,6 +14,9 @@ from reportlab.platypus import (
 from meridianforge.models.results.investor_package import (
     InvestorPackage,
 )
+from meridianforge.presentation.pdf_sections import (
+    PDFSectionBuilder,
+)
 
 
 class PDFInvestorReportRenderer:
@@ -52,33 +55,33 @@ class PDFInvestorReportRenderer:
             )
         )
 
-        content.append(
-            Paragraph(
-                str(package.review),
-                styles["BodyText"],
-            )
+        sections = PDFSectionBuilder.build(
+            package,
         )
 
-        if package.recommendation:
-
-            content.append(
-                Spacer(
-                    1,
-                    12,
-                )
-            )
+        for title, body in sections:
 
             content.append(
                 Paragraph(
-                    f"Recommendation: {package.recommendation.action.value}",
+                    title,
                     styles["Heading2"],
                 )
             )
 
             content.append(
                 Paragraph(
-                    f"Confidence: {package.recommendation.confidence:.0%}",
+                    body.replace(
+                        "\n",
+                        "<br/>",
+                    ),
                     styles["BodyText"],
+                )
+            )
+
+            content.append(
+                Spacer(
+                    1,
+                    12,
                 )
             )
 
