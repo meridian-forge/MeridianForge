@@ -12,7 +12,6 @@ from dataclasses import dataclass
 from meridianforge.portfolio.analytics import (
     PortfolioAnalytics,
 )
-
 from meridianforge.portfolio.portfolio import (
     Portfolio,
 )
