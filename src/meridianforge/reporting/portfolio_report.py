@@ -12,11 +12,9 @@ from dataclasses import dataclass, field
 from meridianforge.portfolio.analytics import (
     PortfolioAnalytics,
 )
-
 from meridianforge.portfolio.portfolio import (
     Portfolio,
 )
-
 from meridianforge.reporting.report_section import (
     ReportSection,
 )
