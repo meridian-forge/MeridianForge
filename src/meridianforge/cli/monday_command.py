@@ -23,15 +23,12 @@ def run_monday(
 ) -> Path:
     """
     Executes the Monday analyzer flow.
-
-    Uses CSV input when provided.
-    Falls back to sample opportunities.
     """
 
     opportunities: list[dict[str, Any]]
 
     if file_path:
-        opportunities = PropertyImportService().import_csv(
+        opportunities = PropertyImportService().import_file(
             file_path,
         )
     else:
@@ -49,18 +46,25 @@ def run_monday(
         summary,
     )
 
-    output_dir = Path("runtime/outputs")
+    output_dir = Path(
+        "runtime/outputs"
+    )
 
     output_dir.mkdir(
         parents=True,
         exist_ok=True,
     )
 
-    output = output_dir / "MeridianForge_Monday_Dashboard.md"
+    output = (
+        output_dir
+        / "MeridianForge_Monday_Dashboard.md"
+    )
 
     output.write_text(
         dashboard,
         encoding="utf-8",
     )
+
+    print(output)
 
     return output
