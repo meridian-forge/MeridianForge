@@ -4,10 +4,10 @@ Portfolio action lifecycle states.
 MF-347.3
 """
 
-from enum import Enum
+from enum import StrEnum
 
 
-class PortfolioActionStatus(str, Enum):
+class PortfolioActionStatus(StrEnum):
     """
     Lifecycle states for portfolio actions.
     """
