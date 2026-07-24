@@ -1,24 +1,30 @@
 """
-Deal pipeline stages.
+Pipeline stage definitions.
 
 MF-338.1
+
+Defines the canonical acquisition workflow stages.
 """
 
-from enum import Enum
+from enum import StrEnum
 
 
-class PipelineStage(str, Enum):
+class PipelineStage(StrEnum):
     """
     Acquisition workflow stages.
     """
 
     NEW = "NEW"
 
+    SCREENING = "SCREENING"
+
     ANALYZING = "ANALYZING"
 
-    RANKED = "RANKED"
+    UNDERWRITING = "UNDERWRITING"
 
     REVIEW = "REVIEW"
+
+    APPROVED = "APPROVED"
 
     OFFER = "OFFER"
 
