@@ -46,19 +46,14 @@ def run_monday(
         summary,
     )
 
-    output_dir = Path(
-        "runtime/outputs"
-    )
+    output_dir = Path("runtime/outputs")
 
     output_dir.mkdir(
         parents=True,
         exist_ok=True,
     )
 
-    output = (
-        output_dir
-        / "MeridianForge_Monday_Dashboard.md"
-    )
+    output = output_dir / "MeridianForge_Monday_Dashboard.md"
 
     output.write_text(
         dashboard,

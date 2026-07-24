@@ -7,7 +7,6 @@ from meridianforge.cli.investor_package import (
 from meridianforge.cli.monday_command import run_monday
 from meridianforge.cli.parser import build_parser
 
-
 VERSION = "1.0.0-RC1"
 
 

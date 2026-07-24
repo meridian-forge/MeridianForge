@@ -1,11 +1,11 @@
 from pathlib import Path
 
+from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.platypus import (
-    SimpleDocTemplate,
     Paragraph,
+    SimpleDocTemplate,
     Spacer,
 )
-from reportlab.lib.styles import getSampleStyleSheet
 
 from meridianforge.product.weekly_review import WeeklyInvestorReview
 

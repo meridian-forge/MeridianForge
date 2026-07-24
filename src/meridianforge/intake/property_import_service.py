@@ -35,9 +35,7 @@ class PropertyImportService:
                 file_path,
             )
 
-        raise ValueError(
-            f"Unsupported file type: {suffix}"
-        )
+        raise ValueError(f"Unsupported file type: {suffix}")
 
     def import_csv(
         self,
@@ -72,10 +70,7 @@ class PropertyImportService:
             sheet.values,
         )
 
-        headers = [
-            str(value).strip()
-            for value in rows[0]
-        ]
+        headers = [str(value).strip() for value in rows[0]]
 
         opportunities: list[dict[str, Any]] = []
 
@@ -85,21 +80,19 @@ class PropertyImportService:
                 zip(
                     headers,
                     row,
+                    strict=True,
                 )
             )
 
+            price_value = data.get("price") or data.get("purchase_price") or 0
+
+            rent_value = data.get("rent") or data.get("monthly_rent") or 0
+
             opportunities.append(
                 {
-                    "name": data.get("name")
-                    or data.get("address"),
-                    "price": float(
-                        data.get("price")
-                        or data.get("purchase_price")
-                    ),
-                    "rent": float(
-                        data.get("rent")
-                        or data.get("monthly_rent")
-                    ),
+                    "name": data.get("name") or data.get("address"),
+                    "price": float(price_value),
+                    "rent": float(rent_value),
                 }
             )
 

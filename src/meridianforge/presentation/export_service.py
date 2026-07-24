@@ -12,11 +12,11 @@ from meridianforge.presentation.excel_renderer import (
 from meridianforge.presentation.investor_report_renderer import (
     InvestorReportRenderer,
 )
-from meridianforge.presentation.pdf_renderer import (
-    PDFInvestorReportRenderer,
-)
 from meridianforge.presentation.markdown_renderer import (
     MarkdownInvestorReportRenderer,
+)
+from meridianforge.presentation.pdf_renderer import (
+    PDFInvestorReportRenderer,
 )
 from meridianforge.product.weekly_review import WeeklyInvestorReview
 
@@ -82,6 +82,5 @@ class InvestorReportExportService:
             review,
             pdf_file,
         )
-
 
         return generated_files

@@ -6,10 +6,10 @@ by Meridian Forge intelligence services.
 """
 
 from dataclasses import dataclass, field
-from enum import Enum
+from enum import StrEnum
 
 
-class RecommendationAction(str, Enum):
+class RecommendationAction(StrEnum):
     """
     Available investment recommendations.
     """

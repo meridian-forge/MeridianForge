@@ -3,11 +3,18 @@ Acquisition orchestration service.
 
 Coordinates pipeline analysis,
 decision intelligence,
+decision recommendation,
 and investor packaging.
 """
 
 from pathlib import Path
 
+from meridianforge.decision.intelligence.decision_context_builder import (
+    DecisionContextBuilder,
+)
+from meridianforge.decision.intelligence.recommendation_engine import (
+    RecommendationEngine,
+)
 from meridianforge.models.domain.investor_profile import (
     InvestorProfile,
 )
@@ -35,6 +42,7 @@ class AcquisitionOrchestrator:
         pipeline: InvestmentPipeline | None = None,
         intelligence: AcquisitionIntelligenceService | None = None,
         package_service: InvestorPackageService | None = None,
+        recommendation_engine: RecommendationEngine | None = None,
     ) -> None:
 
         self.pipeline = pipeline or InvestmentPipeline()
@@ -42,6 +50,8 @@ class AcquisitionOrchestrator:
         self.intelligence = intelligence or AcquisitionIntelligenceService()
 
         self.package_service = package_service or InvestorPackageService()
+
+        self.recommendation_engine = recommendation_engine or RecommendationEngine()
 
     def analyze(
         self,
@@ -57,6 +67,15 @@ class AcquisitionOrchestrator:
         pipeline_result = self.pipeline.analyze(
             records,
             investor_profile,
+        )
+
+        context = DecisionContextBuilder.build(
+            pipeline_result,
+            investor_profile.strategy.value,
+        )
+
+        recommendation = self.recommendation_engine.evaluate(
+            context,
         )
 
         review = self.intelligence.create_review(
@@ -75,4 +94,5 @@ class AcquisitionOrchestrator:
         return AcquisitionOrchestrationResult(
             review=review,
             package_location=package_location,
+            recommendation=recommendation,
         )
