@@ -11,7 +11,6 @@ Validates:
 
 from pathlib import Path
 
-
 SRC = Path("src/meridianforge")
 
 
