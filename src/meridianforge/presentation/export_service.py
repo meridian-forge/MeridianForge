@@ -12,6 +12,9 @@ from meridianforge.presentation.excel_renderer import (
 from meridianforge.presentation.investor_report_renderer import (
     InvestorReportRenderer,
 )
+from meridianforge.presentation.pdf_renderer import (
+    PDFInvestorReportRenderer,
+)
 from meridianforge.presentation.markdown_renderer import (
     MarkdownInvestorReportRenderer,
 )
@@ -28,6 +31,7 @@ class InvestorReportExportService:
         self.text_renderer = InvestorReportRenderer()
         self.markdown_renderer = MarkdownInvestorReportRenderer()
         self.excel_renderer = ExcelInvestorReportRenderer()
+        self.pdf_renderer = PDFInvestorReportRenderer()
 
     def export(
         self,
@@ -71,5 +75,13 @@ class InvestorReportExportService:
         )
 
         generated_files.append(excel_file)
+
+        pdf_file = output_directory / "investor_review.pdf"
+
+        self.pdf_renderer.render(
+            review,
+            pdf_file,
+        )
+
 
         return generated_files

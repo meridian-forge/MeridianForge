@@ -1,22 +1,43 @@
-"""
-Acquisition intake service.
-
-Supports:
-- Raw acquisition data -> Opportunity
-- Opportunity -> pipeline record
-"""
-
+from dataclasses import dataclass
 from datetime import datetime
 from typing import Any
 
-from meridianforge.acquisition.opportunity import Opportunity as AcquisitionOpportunity
-from meridianforge.opportunity.models import Opportunity
+
+@dataclass(frozen=True)
+class AcquisitionOpportunity:
+    """
+    Normalized acquisition opportunity.
+    """
+
+    address: str
+    city: str
+    state: str
+    zip_code: str
+    purchase_price: float
+    monthly_rent: float
+    monthly_expenses: float
+    market: str
+    source: str
+    created_at: datetime
+
+    @property
+    def monthly_cash_flow(self) -> float:
+        return self.monthly_rent - self.monthly_expenses
+
+    @property
+    def cap_rate(self) -> float:
+        if self.purchase_price <= 0:
+            return 0.0
+
+        annual_noi = self.monthly_cash_flow * 12
+
+        return annual_noi / self.purchase_price
 
 
 class AcquisitionIntakeService:
     """
-    Converts acquisition inputs into domain objects
-    and pipeline-ready records.
+    Converts raw acquisition inputs
+    into normalized acquisition opportunities.
     """
 
     def create_opportunity(
@@ -24,58 +45,96 @@ class AcquisitionIntakeService:
         data: dict[str, Any],
     ) -> AcquisitionOpportunity:
         """
-        Create opportunity from raw input record.
+        Create normalized opportunity from raw input.
         """
 
-        return AcquisitionOpportunity(
-            address=str(data["address"]),
-            city=str(data["city"]),
-            state=str(data["state"]),
-            zip_code=str(data["zip_code"]),
-            purchase_price=float(data["purchase_price"]),
-            monthly_rent=float(data["monthly_rent"]),
-            monthly_expenses=float(data["monthly_expenses"]),
-            market=str(data["market"]),
-            source=str(data["source"]),
-            created_at=datetime.now(),
+        address = str(
+            data.get(
+                "address",
+                data.get(
+                    "property_address",
+                    "Unknown Address",
+                ),
+            )
         )
 
-    def convert(
-        self,
-        opportunity: Opportunity,
-    ) -> dict[str, Any]:
-        """
-        Convert intake Opportunity into
-        real estate pipeline record.
-        """
-
-        fields = opportunity.fields
-
-        return {
-            "address": fields.get(
-                "address",
-                fields.get(
-                    "property_address",
-                    "UNKNOWN",
+        city = str(
+            data.get(
+                "city",
+                data.get(
+                    "market",
+                    "Unknown",
                 ),
-            ),
-            "purchase_price": fields.get(
-                "purchase_price",
-                0,
-            ),
-            "monthly_rent": fields.get(
-                "monthly_rent",
-                fields.get(
-                    "rent",
+            )
+        )
+
+        state_value = data.get(
+            "state",
+        )
+
+        if state_value:
+            state = str(state_value)
+        else:
+            market = str(
+                data.get(
+                    "market",
+                    "",
+                )
+            ).lower()
+
+            state_lookup = {
+                "jacksonville": "FL",
+            }
+
+            state = state_lookup.get(
+                market,
+                "NA",
+            )
+
+        zip_code = str(
+            data.get(
+                "zip_code",
+                "00000",
+            )
+        )
+
+        return AcquisitionOpportunity(
+            address=address,
+            city=city,
+            state=state,
+            zip_code=zip_code,
+            purchase_price=float(
+                data.get(
+                    "purchase_price",
                     0,
-                ),
+                )
             ),
-            "market": fields.get(
-                "market",
-                "UNKNOWN",
+            monthly_rent=float(
+                data.get(
+                    "monthly_rent",
+                    data.get(
+                        "rent",
+                        0,
+                    ),
+                )
             ),
-            "noi": fields.get(
-                "noi",
-                0,
+            monthly_expenses=float(
+                data.get(
+                    "monthly_expenses",
+                    0,
+                )
             ),
-        }
+            market=str(
+                data.get(
+                    "market",
+                    city,
+                )
+            ),
+            source=str(
+                data.get(
+                    "source",
+                    "import",
+                )
+            ),
+            created_at=datetime.now(),
+        )
