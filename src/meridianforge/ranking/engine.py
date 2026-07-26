@@ -15,11 +15,18 @@ from meridianforge.ranking.models import (
 def calculate_score(
     analysis: RankingInput,
 ) -> float:
+    """
+    Calculate a normalized ranking score.
+    """
+
     score = 50.0
 
     if "cash_on_cash" in analysis.metrics:
         coc = analysis.metrics["cash_on_cash"]
-        score += min(coc * 100, 20)
+        score += min(
+            coc * 100,
+            20,
+        )
 
     if "dscr" in analysis.metrics:
         dscr = analysis.metrics["dscr"]
@@ -32,13 +39,20 @@ def calculate_score(
 
     return max(
         0,
-        min(score, 100),
+        min(
+            score,
+            100,
+        ),
     )
 
 
 def rank(
     analyses: list[RankingInput],
 ) -> list[RankingResult]:
+    """
+    Rank opportunities from highest score to lowest.
+    """
+
     ranked = [
         RankingResult(
             opportunity_file=result.opportunity_file,
