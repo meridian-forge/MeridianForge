@@ -1,7 +1,7 @@
 {
-    "production_modules": 297,
-    "test_modules": 201,
-    "test_functions": 235,
+    "production_modules": 391,
+    "test_modules": 281,
+    "test_functions": 320,
     "duplicate_test_names": {
         "test_version.py": [
             "tests/test_version.py",
@@ -17,17 +17,29 @@
         ],
         "test_metrics.py": [
             "tests/test_metrics.py",
-            "tests/analysis/test_metrics.py"
+            "tests/analysis/test_metrics.py",
+            "tests/portfolio/test_metrics.py"
         ],
         "__init__.py": [
             "tests/__init__.py",
             "tests/opportunity/__init__.py",
             "tests/ranking/__init__.py",
             "tests/analysis/__init__.py",
+            "tests/intelligence/__init__.py",
             "tests/acquisition/__init__.py",
             "tests/intake/__init__.py",
             "tests/architecture/__init__.py",
+            "tests/portfolio/__init__.py",
+            "tests/portfolio/intelligence/__init__.py",
             "tests/domain/__init__.py"
+        ],
+        "test_risk.py": [
+            "tests/test_risk.py",
+            "tests/acquisition/test_risk.py"
+        ],
+        "test_recommendation_engine.py": [
+            "tests/test_recommendation_engine.py",
+            "tests/decision/intelligence/test_recommendation_engine.py"
         ],
         "test_import_pipeline.py": [
             "tests/test_import_pipeline.py",
@@ -39,7 +51,8 @@
         ],
         "test_investor_profile.py": [
             "tests/test_investor_profile.py",
-            "tests/intelligence/test_investor_profile.py"
+            "tests/intelligence/test_investor_profile.py",
+            "tests/investor/test_investor_profile.py"
         ],
         "test_cli.py": [
             "tests/test_cli.py",
@@ -51,8 +64,34 @@
         ],
         "test_pipeline.py": [
             "tests/ranking/test_pipeline.py",
+            "tests/acquisition/test_pipeline.py",
             "tests/intake/test_pipeline.py",
             "tests/decision/test_pipeline.py"
+        ],
+        "test_ranking_engine.py": [
+            "tests/ranking/test_ranking_engine.py",
+            "tests/acquisition/test_ranking_engine.py"
+        ],
+        "test_decision.py": [
+            "tests/intelligence/test_decision.py",
+            "tests/portfolio/intelligence/test_decision.py"
+        ],
+        "test_recommendation.py": [
+            "tests/intelligence/test_recommendation.py",
+            "tests/portfolio/intelligence/test_recommendation.py"
+        ],
+        "test_dashboard.py": [
+            "tests/acquisition/test_dashboard.py",
+            "tests/portfolio/test_dashboard.py",
+            "tests/portfolio/intelligence/test_dashboard.py"
+        ],
+        "test_property_adapter.py": [
+            "tests/acquisition/test_property_adapter.py",
+            "tests/decision/test_property_adapter.py"
+        ],
+        "test_ranking.py": [
+            "tests/acquisition/test_ranking.py",
+            "tests/portfolio/intelligence/test_ranking.py"
         ],
         "test_opportunity.py": [
             "tests/acquisition/test_opportunity.py",
@@ -61,6 +100,14 @@
         "test_workflow.py": [
             "tests/product/test_workflow.py",
             "tests/intake/test_workflow.py"
+        ],
+        "test_alerts.py": [
+            "tests/portfolio/intelligence/test_alerts.py",
+            "tests/investor/test_alerts.py"
+        ],
+        "test_action.py": [
+            "tests/portfolio/intelligence/test_action.py",
+            "tests/portfolio/operations/test_action.py"
         ]
     },
     "duplicate_production_names": {
@@ -78,7 +125,9 @@
             "src/meridianforge/intelligence/decision/__init__.py",
             "src/meridianforge/intelligence/profiles/__init__.py",
             "src/meridianforge/acquisition/__init__.py",
+            "src/meridianforge/integration/__init__.py",
             "src/meridianforge/workspace/__init__.py",
+            "src/meridianforge/lifecycle/__init__.py",
             "src/meridianforge/workflows/__init__.py",
             "src/meridianforge/utils/__init__.py",
             "src/meridianforge/repositories/__init__.py",
@@ -90,14 +139,21 @@
             "src/meridianforge/product/__init__.py",
             "src/meridianforge/operations/__init__.py",
             "src/meridianforge/intake/__init__.py",
+            "src/meridianforge/dashboard/__init__.py",
+            "src/meridianforge/dashboard/panels/__init__.py",
+            "src/meridianforge/dashboard/command/__init__.py",
             "src/meridianforge/scenario/__init__.py",
             "src/meridianforge/knowledge/__init__.py",
             "src/meridianforge/batch/__init__.py",
             "src/meridianforge/workflow/__init__.py",
             "src/meridianforge/scoring/__init__.py",
+            "src/meridianforge/portfolio/__init__.py",
+            "src/meridianforge/portfolio/intelligence/__init__.py",
             "src/meridianforge/finance/__init__.py",
             "src/meridianforge/decision/__init__.py",
+            "src/meridianforge/decision/intelligence/__init__.py",
             "src/meridianforge/application/__init__.py",
+            "src/meridianforge/investor/__init__.py",
             "src/meridianforge/data/__init__.py",
             "src/meridianforge/engine/__init__.py",
             "src/meridianforge/domain/__init__.py",
@@ -123,9 +179,25 @@
             "src/meridianforge/normalization/normalizer.py",
             "src/meridianforge/data/normalizer.py"
         ],
+        "dashboard.py": [
+            "src/meridianforge/ui/dashboard.py",
+            "src/meridianforge/acquisition/dashboard.py",
+            "src/meridianforge/portfolio/dashboard.py",
+            "src/meridianforge/portfolio/intelligence/dashboard.py"
+        ],
+        "investor_package.py": [
+            "src/meridianforge/reporting/investor_package.py",
+            "src/meridianforge/models/results/investor_package.py",
+            "src/meridianforge/cli/investor_package.py",
+            "src/meridianforge/product/investor_package.py"
+        ],
         "acquisition_report.py": [
             "src/meridianforge/reporting/acquisition_report.py",
             "src/meridianforge/reports/acquisition_report.py"
+        ],
+        "ranking_engine.py": [
+            "src/meridianforge/ranking/ranking_engine.py",
+            "src/meridianforge/acquisition/ranking_engine.py"
         ],
         "engine.py": [
             "src/meridianforge/ranking/engine.py",
@@ -135,11 +207,14 @@
         ],
         "pipeline.py": [
             "src/meridianforge/ranking/pipeline.py",
+            "src/meridianforge/acquisition/pipeline.py",
             "src/meridianforge/intake/pipeline.py",
             "src/meridianforge/decision/pipeline.py"
         ],
         "metrics.py": [
             "src/meridianforge/analysis/metrics.py",
+            "src/meridianforge/dashboard/metrics.py",
+            "src/meridianforge/portfolio/metrics.py",
             "src/meridianforge/engine/metrics.py"
         ],
         "underwriting_engine.py": [
@@ -152,6 +227,7 @@
         ],
         "result.py": [
             "src/meridianforge/analysis/result.py",
+            "src/meridianforge/acquisition/result.py",
             "src/meridianforge/workflow/result.py"
         ],
         "file_reader.py": [
@@ -163,9 +239,41 @@
             "src/meridianforge/models/domain/investor_profile.py",
             "src/meridianforge/domain/investor_profile.py"
         ],
+        "actions.py": [
+            "src/meridianforge/intelligence/decision/actions.py",
+            "src/meridianforge/dashboard/panels/actions.py"
+        ],
+        "decision.py": [
+            "src/meridianforge/acquisition/decision.py",
+            "src/meridianforge/portfolio/intelligence/decision.py"
+        ],
         "opportunity.py": [
             "src/meridianforge/acquisition/opportunity.py",
             "src/meridianforge/domain/opportunity.py"
+        ],
+        "property_adapter.py": [
+            "src/meridianforge/acquisition/property_adapter.py",
+            "src/meridianforge/decision/property_adapter.py"
+        ],
+        "ranking.py": [
+            "src/meridianforge/acquisition/ranking.py",
+            "src/meridianforge/portfolio/intelligence/ranking.py"
+        ],
+        "risk.py": [
+            "src/meridianforge/acquisition/risk.py",
+            "src/meridianforge/engine/risk.py"
+        ],
+        "report.py": [
+            "src/meridianforge/acquisition/report.py",
+            "src/meridianforge/models/results/report.py"
+        ],
+        "queue.py": [
+            "src/meridianforge/workspace/queue.py",
+            "src/meridianforge/portfolio/operations/queue.py"
+        ],
+        "recommendation.py": [
+            "src/meridianforge/models/results/recommendation.py",
+            "src/meridianforge/portfolio/intelligence/recommendation.py"
         ],
         "expenses.py": [
             "src/meridianforge/models/domain/expenses.py",
@@ -183,22 +291,39 @@
             "src/meridianforge/models/domain/assumptions.py",
             "src/meridianforge/finance/assumptions.py"
         ],
-        "investor_package.py": [
-            "src/meridianforge/cli/investor_package.py",
-            "src/meridianforge/product/investor_package.py"
-        ],
         "workflow.py": [
             "src/meridianforge/product/workflow.py",
             "src/meridianforge/intake/workflow.py",
             "src/meridianforge/application/workflow.py"
         ],
+        "alerts.py": [
+            "src/meridianforge/dashboard/panels/alerts.py",
+            "src/meridianforge/portfolio/intelligence/alerts.py",
+            "src/meridianforge/investor/alerts.py"
+        ],
+        "command_center.py": [
+            "src/meridianforge/dashboard/command/command_center.py",
+            "src/meridianforge/investor/command_center.py"
+        ],
+        "action.py": [
+            "src/meridianforge/portfolio/intelligence/action.py",
+            "src/meridianforge/portfolio/operations/action.py"
+        ],
         "mortgage.py": [
             "src/meridianforge/finance/mortgage.py",
             "src/meridianforge/engine/mortgage.py"
         ],
+        "recommendation_engine.py": [
+            "src/meridianforge/decision/intelligence/recommendation_engine.py",
+            "src/meridianforge/services/recommendation_engine.py"
+        ],
         "import_pipeline.py": [
             "src/meridianforge/data/import_pipeline.py",
             "src/meridianforge/services/import_pipeline.py"
+        ],
+        "investor_package_builder.py": [
+            "src/meridianforge/presentation/investor_package_builder.py",
+            "src/meridianforge/services/investor_package_builder.py"
         ]
     },
     "test_distribution": {
@@ -206,7 +331,7 @@
         "analysis": 2,
         "ranking": 5,
         "scoring": 1,
-        "reporting": 14,
+        "reporting": 20,
         "services": 11,
         "workflows": 6,
         "e2e": 4,
@@ -217,6 +342,7 @@
             "references": [
                 "src/meridianforge/models/results/investment_pipeline_result.py",
                 "src/meridianforge/models/results/investment_workflow_result.py",
+                "src/meridianforge/decision/intelligence/decision_context_builder.py",
                 "src/meridianforge/services/investment_pipeline.py",
                 "src/meridianforge/services/acquisition_orchestrator.py",
                 "src/meridianforge/services/investment_workflow.py",
@@ -239,6 +365,8 @@
             "references": [
                 "src/meridianforge/reporting/builder.py",
                 "src/meridianforge/analysis/underwriting_engine.py",
+                "src/meridianforge/analysis/__init__.py",
+                "src/meridianforge/acquisition/pipeline.py",
                 "src/meridianforge/decision/pipeline.py",
                 "src/meridianforge/application/workflow.py",
                 "src/meridianforge/engine/underwriting_engine.py",
