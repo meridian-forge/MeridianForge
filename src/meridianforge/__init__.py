@@ -1,7 +1,7 @@
 """
-Meridian Forge
+MeridianForge.
 
-AI assisted real estate underwriting platform.
+AI-assisted real estate acquisition platform.
 """
 
-__version__ = "0.1.0"
+__version__ = "0.1.1"

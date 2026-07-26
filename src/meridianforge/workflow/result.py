@@ -1,23 +1,24 @@
 """
-Workflow result model.
+Workflow result models.
 
 MF-332.2
 
-Represents the complete output of the investment workflow
-after underwriting, scoring, recommendation, and decision.
+The workflow layer represents orchestration results.
+
+It is intentionally distinct from the canonical underwriting
+AnalysisResult located in:
+
+    meridianforge.models.results.analysis_result
 """
 
 from dataclasses import dataclass
 from typing import Any
 
 
-@dataclass(slots=True)
+@dataclass
 class WorkflowResult:
     """
-    Canonical output of the investment workflow.
-
-    This is intentionally distinct from the underwriting
-    AnalysisResult model.
+    Unified output from the MeridianForge workflow layer.
     """
 
     property: Any
@@ -30,14 +31,9 @@ class WorkflowResult:
 
 
 # ------------------------------------------------------------------
-# Backwards compatibility
+# Temporary compatibility alias.
 #
-# Existing modules still import:
-#
-#     from meridianforge.workflow.result import AnalysisResult
-#
-# During MF-332.x we preserve that API while callers migrate to the
-# canonical WorkflowResult name.
+# Remove during MF-333 after all imports migrate.
 # ------------------------------------------------------------------
 
 AnalysisResult = WorkflowResult
