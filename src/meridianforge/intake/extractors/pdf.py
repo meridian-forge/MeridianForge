@@ -8,6 +8,7 @@ from pathlib import Path
 
 from meridianforge.intake.extracted_data import ExtractedData
 from meridianforge.intake.extractors.base import Extractor
+from meridianforge.intake.text_parser import parse_text_fields
 
 
 class PDFExtractor(Extractor):
@@ -20,24 +21,18 @@ class PDFExtractor(Extractor):
         file_path: Path,
     ) -> ExtractedData:
 
-        try:
-            from pypdf import PdfReader
+        from pypdf import PdfReader
 
-            reader = PdfReader(
-                str(file_path),
-            )
+        reader = PdfReader(
+            str(file_path),
+        )
 
-            content = "\n".join(
-                page.extract_text() or ""
-                for page in reader.pages
-            )
-
-        except ImportError:
-            content = ""
+        content = "\n".join(
+            page.extract_text() or ""
+            for page in reader.pages
+        )
 
         return ExtractedData(
             source_file=file_path.name,
-            fields={
-                "content": content,
-            },
+            fields=parse_text_fields(content),
         )
