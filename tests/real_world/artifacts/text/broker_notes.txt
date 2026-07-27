@@ -1,0 +1,8 @@
+Property Address: 456 Investor Lane
+City: Memphis
+State: TN
+Purchase Price: 215000
+Monthly Rent: 1800
+Monthly Expenses: 450
+Market: Memphis
+Source: Broker Notes

@@ -1,6 +1,12 @@
 from collections.abc import Mapping
 
+
 FIELD_ALIASES: Mapping[str, list[str]] = {
+    "address": [
+        "address",
+        "property address",
+        "street address",
+    ],
     "purchase_price": [
         "purchase price",
         "price",
@@ -22,6 +28,10 @@ FIELD_ALIASES: Mapping[str, list[str]] = {
 
 
 def normalize_field_name(field_name: str) -> str:
+    """
+    Convert external field labels into
+    MeridianForge normalized fields.
+    """
 
     normalized = field_name.strip().lower()
 
