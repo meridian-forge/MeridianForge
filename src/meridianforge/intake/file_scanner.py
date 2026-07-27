@@ -5,11 +5,18 @@ SUPPORTED_EXTENSIONS = {
     ".xls",
     ".csv",
     ".pdf",
-    ".json",
+    ".docx",
+    ".txt",
+    ".rtf",
 }
 
 
 def scan_directory(path: str) -> list[Path]:
+    """
+    Scan a directory recursively for supported
+    investment opportunity artifacts.
+    """
+
     directory = Path(path)
 
     if not directory.exists():
@@ -18,5 +25,6 @@ def scan_directory(path: str) -> list[Path]:
     return [
         file
         for file in directory.rglob("*")
-        if file.is_file() and file.suffix.lower() in SUPPORTED_EXTENSIONS
+        if file.is_file()
+        and file.suffix.lower() in SUPPORTED_EXTENSIONS
     ]
