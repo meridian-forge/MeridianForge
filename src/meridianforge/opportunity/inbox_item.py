@@ -20,6 +20,9 @@ from meridianforge.models.domain.source_document import (
 from meridianforge.opportunity.inbox_record import (
     OpportunityInboxRecord,
 )
+from meridianforge.opportunity.inbox_status import (
+    OpportunityInboxStatus,
+)
 
 
 @dataclass(slots=True)
@@ -43,7 +46,7 @@ class OpportunityInboxItem:
         return self.record.record_id
 
     @property
-    def status(self):
+    def status(self) -> OpportunityInboxStatus:
         """
         Current inbox processing state.
         """
