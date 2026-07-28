@@ -4,9 +4,11 @@ Operations orchestration service.
 The OperationsService is the conductor of the MeridianForge Monday workflow.
 
 Responsibilities:
-- coordinate existing services
-- track execution state
-- return an operations summary
+- discover incoming artifacts
+- manage artifact lifecycle
+- coordinate analysis
+- aggregate investor decisions
+- generate Monday outputs
 
 Not responsible for:
 - extraction
@@ -20,11 +22,17 @@ from __future__ import annotations
 from datetime import datetime
 from pathlib import Path
 
-from meridianforge.models.domain.investor_profile import (
-    InvestorProfile,
+from meridianforge.artifacts.artifact_lifecycle_service import (
+    ArtifactLifecycleService,
+)
+from meridianforge.artifacts.artifact_status import (
+    ArtifactStatus,
 )
 from meridianforge.models.domain.investment_strategy import (
     InvestmentStrategy,
+)
+from meridianforge.models.domain.investor_profile import (
+    InvestorProfile,
 )
 from meridianforge.models.operations import (
     OperationsRunResult,
@@ -45,15 +53,7 @@ from meridianforge.services.review_aggregator import (
 
 class OperationsService:
     """
-    Coordinates the MeridianForge operational workflow.
-
-    Monday execution boundary.
-
-    Responsibilities:
-    - discover incoming opportunities
-    - run folder analysis
-    - aggregate investor reviews
-    - generate Monday artifacts
+    Coordinates MeridianForge Monday operations.
     """
 
     def __init__(
@@ -69,9 +69,11 @@ class OperationsService:
 
         self.artifact_service = MondayArtifactService()
 
+        self.lifecycle = ArtifactLifecycleService()
+
     def discover_files(self) -> list[Path]:
         """
-        Discover supported artifacts awaiting processing.
+        Discover incoming opportunity artifacts.
         """
 
         if not self.deals_directory.exists():
@@ -83,7 +85,7 @@ class OperationsService:
 
     def execute(self) -> OperationsRunResult:
         """
-        Execute Monday operations workflow.
+        Execute Monday operational workflow.
         """
 
         started_at = datetime.now()
@@ -94,11 +96,32 @@ class OperationsService:
 
         discovered = self.discover_files()
 
-        result.files_discovered.extend(
-            discovered,
-        )
+        result.files_discovered.extend(discovered)
 
         if not discovered:
+            result.completed_at = datetime.now()
+            return result
+
+        artifacts = []
+
+        for path in discovered:
+            artifact = self.lifecycle.register(path)
+
+            artifact = self.lifecycle.validate(
+                artifact,
+            )
+
+            if artifact.status == ArtifactStatus.READY:
+                artifacts.append(
+                    artifact,
+                )
+            else:
+                result.failed_files.append(path)
+
+                if artifact.error:
+                    result.errors.append(f"{path.name}: {artifact.error}")
+
+        if not artifacts:
             result.completed_at = datetime.now()
             return result
 
@@ -127,11 +150,18 @@ class OperationsService:
             self.output_directory,
         )
 
+        for artifact in artifacts:
+            self.lifecycle.mark_analyzed(
+                artifact,
+            )
+
+            self.lifecycle.archive(
+                artifact,
+            )
+
         result.dashboard_path = dashboard_directory
 
-        result.files_processed.extend(
-            discovered,
-        )
+        result.files_processed.extend([artifact.path for artifact in artifacts])
 
         result.analyses_completed = len(valid_results)
 
