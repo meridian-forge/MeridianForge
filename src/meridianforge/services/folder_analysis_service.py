@@ -48,6 +48,10 @@ class FolderAnalysisService:
         """
         Analyze all accepted artifacts
         within a folder.
+
+        Invalid artifacts are skipped so that
+        one bad document does not stop the
+        complete Monday workflow.
         """
 
         results: list[AcquisitionOrchestrationResult] = []
@@ -61,15 +65,19 @@ class FolderAnalysisService:
             if record.status != OpportunityInboxStatus.READY:
                 continue
 
-            results.append(
-                self._analyzer.analyze(
-                    input_file=Path(
-                        record.source_reference,
-                    ),
-                    investor_profile=investor_profile,
-                    export_path=export_path,
-                    archive_path=archive_path,
+            try:
+                results.append(
+                    self._analyzer.analyze(
+                        input_file=Path(
+                            record.source_reference,
+                        ),
+                        investor_profile=investor_profile,
+                        export_path=export_path,
+                        archive_path=archive_path,
+                    )
                 )
-            )
+
+            except Exception:
+                continue
 
         return results
