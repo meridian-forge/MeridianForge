@@ -6,6 +6,7 @@ The OperationsService is the conductor of the MeridianForge Monday workflow.
 Responsibilities:
 - discover incoming artifacts
 - manage artifact lifecycle
+- persist artifact records
 - coordinate analysis
 - aggregate investor decisions
 - generate Monday outputs
@@ -40,6 +41,9 @@ from meridianforge.models.operations import (
 from meridianforge.product.weekly_review import (
     WeeklyInvestorReview,
 )
+from meridianforge.repositories.artifact_repository import (
+    ArtifactRepository,
+)
 from meridianforge.services.folder_analysis_service import (
     FolderAnalysisService,
 )
@@ -70,6 +74,8 @@ class OperationsService:
         self.artifact_service = MondayArtifactService()
 
         self.lifecycle = ArtifactLifecycleService()
+
+        self.artifact_repository = ArtifactRepository()
 
     def discover_files(self) -> list[Path]:
         """
@@ -105,7 +111,14 @@ class OperationsService:
         artifacts = []
 
         for path in discovered:
-            artifact = self.lifecycle.register(path)
+
+            artifact = self.lifecycle.register(
+                path,
+            )
+
+            self.artifact_repository.add(
+                artifact,
+            )
 
             artifact = self.lifecycle.validate(
                 artifact,
@@ -115,11 +128,16 @@ class OperationsService:
                 artifacts.append(
                     artifact,
                 )
+
             else:
-                result.failed_files.append(path)
+                result.failed_files.append(
+                    path,
+                )
 
                 if artifact.error:
-                    result.errors.append(f"{path.name}: {artifact.error}")
+                    result.errors.append(
+                        f"{path.name}: {artifact.error}",
+                    )
 
         if not artifacts:
             result.completed_at = datetime.now()
@@ -151,6 +169,7 @@ class OperationsService:
         )
 
         for artifact in artifacts:
+
             self.lifecycle.mark_analyzed(
                 artifact,
             )
@@ -161,9 +180,13 @@ class OperationsService:
 
         result.dashboard_path = dashboard_directory
 
-        result.files_processed.extend([artifact.path for artifact in artifacts])
+        result.files_processed.extend(
+            [artifact.path for artifact in artifacts],
+        )
 
-        result.analyses_completed = len(valid_results)
+        result.analyses_completed = len(
+            valid_results,
+        )
 
         result.buy_count = len(
             portfolio_review.buy_candidates(),
@@ -178,7 +201,7 @@ class OperationsService:
                 card
                 for card in portfolio_review.cards
                 if card.recommendation.upper() == "PASS"
-            ]
+            ],
         )
 
         result.completed_at = datetime.now()
