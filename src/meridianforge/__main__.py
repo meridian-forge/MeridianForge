@@ -6,7 +6,7 @@ from meridianforge.cli.parser import build_parser
 
 def load_version() -> str:
     """
-    Load Meridian Forge version from repository VERSION file.
+    Load MeridianForge version.
     """
 
     version_file = Path("VERSION")
@@ -21,7 +21,7 @@ def load_version() -> str:
 
 def main() -> None:
     """
-    Meridian Forge command-line entry point.
+    MeridianForge CLI entry point.
     """
 
     parser = build_parser()
@@ -29,31 +29,12 @@ def main() -> None:
     args = parser.parse_args()
 
     if args.command == "version":
-
-        print(f"Meridian Forge {load_version()}")
-
+        print(f"MeridianForge {load_version()}")
         return
 
     if args.command == "monday":
-
-        file_path = None
-
-        if args.file:
-            file_path = Path(args.file)
-
-        print("====================================")
-        print("Meridian Forge Monday Workflow")
-        print("====================================")
-
-        print("Running opportunity analysis...")
-
-        print("Status: READY")
-
-        output = run_monday(file_path)
-
-        print(f"Dashboard generated: {output}")
-
-        print("Status: COMPLETE")
+        run_monday()
+        return
 
 
 if __name__ == "__main__":

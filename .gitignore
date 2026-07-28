@@ -110,3 +110,32 @@ runtime/outputs/*
 !runtime/outputs/.gitkeep
 !runtime/outputs/.gitkeep
 Documentation/Artifacts/Exports/
+
+# --------------------------------------------------
+# Local developer environment
+# --------------------------------------------------
+dev.sh
+
+# Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+
+# macOS
+.DS_Store
+
+# Runtime output
+runtime/
+
+# IDE
+.vscode/
+.idea/
+
+# Coverage
+.coverage
+htmlcov/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+

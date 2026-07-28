@@ -1,9 +1,5 @@
-from pathlib import Path
-
 from meridianforge.cli.acquisition import run_acquisition
-from meridianforge.cli.investor_package import (
-    run_investor_package,
-)
+from meridianforge.cli.investor_package import run_investor_package
 from meridianforge.cli.monday_command import run_monday
 from meridianforge.cli.parser import build_parser
 
@@ -16,9 +12,7 @@ def main() -> None:
     args = parser.parse_args()
 
     if args.command == "monday":
-        run_monday(
-            Path(args.file) if args.file else None,
-        )
+        run_monday()
 
     elif args.command == "acquisition":
         run_acquisition(args)

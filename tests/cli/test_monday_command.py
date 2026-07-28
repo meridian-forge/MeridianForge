@@ -1,19 +1,21 @@
-from meridianforge.cli.monday_command import (
-    run_monday,
-)
+from pathlib import Path
+
+from meridianforge.cli.monday_command import run_monday
 
 
-def test_monday_command_creates_dashboard(
+def test_monday_command_discovers_runtime_deals(
     tmp_path,
     monkeypatch,
 ) -> None:
-
     monkeypatch.chdir(tmp_path)
 
-    output = run_monday()
+    deals = Path("runtime/incoming/deals")
+    deals.mkdir(parents=True)
 
-    assert output.exists()
+    (deals / "property.xlsx").write_text("test")
 
-    content = output.read_text()
+    result = run_monday()
 
-    assert "Meridian Forge Monday Dashboard" in content
+    assert result.success
+    assert result.total_files == 1
+    assert len(result.files_discovered) == 1

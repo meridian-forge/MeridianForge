@@ -1,65 +1,41 @@
+"""
+Monday CLI command.
+
+SP-430.2
+
+Routes the Monday command through the OperationsService.
+"""
+
 from pathlib import Path
-from typing import Any
 
-from meridianforge.intake.property_import_service import (
-    PropertyImportService,
-)
-from meridianforge.ranking.pipeline import (
-    RankingPipeline,
-)
-from meridianforge.reporting.monday_dashboard import (
-    MondayDashboardGenerator,
-)
-from meridianforge.reporting.portfolio_summary import (
-    PortfolioSummary,
-)
-from meridianforge.workspace.sample_opportunities import (
-    load_sample_opportunities,
-)
+from meridianforge.models.operations import OperationsRunResult
+from meridianforge.services.operations_service import OperationsService
 
 
-def run_monday(
-    file_path: Path | None = None,
-) -> Path:
+def run_monday() -> OperationsRunResult:
     """
-    Executes the Monday analyzer flow.
+    Execute the MeridianForge Monday operational workflow.
     """
 
-    opportunities: list[dict[str, Any]]
+    runtime_root = Path("runtime")
 
-    if file_path:
-        opportunities = PropertyImportService().import_file(
-            file_path,
-        )
-    else:
-        opportunities = load_sample_opportunities()
+    deals_directory = runtime_root / "incoming" / "deals"
 
-    ranked = RankingPipeline().rank(
-        opportunities,
+    service = OperationsService(
+        deals_directory=deals_directory,
     )
 
-    summary = PortfolioSummary().summarize(
-        ranked,
-    )
+    result = service.execute()
 
-    dashboard = MondayDashboardGenerator().generate(
-        summary,
-    )
+    print()
+    print("====================================")
+    print("MeridianForge Monday Operations")
+    print("====================================")
+    print(f"Deals discovered : {result.total_files}")
+    print(f"Deals processed  : {len(result.files_processed)}")
+    print(f"Failures         : {len(result.failed_files)}")
+    print(f"Success          : {result.success}")
+    print("====================================")
+    print()
 
-    output_dir = Path("runtime/outputs")
-
-    output_dir.mkdir(
-        parents=True,
-        exist_ok=True,
-    )
-
-    output = output_dir / "MeridianForge_Monday_Dashboard.md"
-
-    output.write_text(
-        dashboard,
-        encoding="utf-8",
-    )
-
-    print(output)
-
-    return output
+    return result
