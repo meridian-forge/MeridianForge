@@ -22,6 +22,4 @@ def test_folder_connector_imports_supported_files(
 
     assert records[0].source == "FOLDER"
 
-    assert records[0].source_reference == str(
-        deal_file
-    )
+    assert records[0].source_reference == str(deal_file)

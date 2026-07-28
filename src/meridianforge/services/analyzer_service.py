@@ -37,9 +37,7 @@ class AnalyzerService:
         execution_service: AcquisitionExecutionService | None = None,
     ) -> None:
         self.file_service = file_service or AcquisitionFileService()
-        self.execution_service = (
-            execution_service or AcquisitionExecutionService()
-        )
+        self.execution_service = execution_service or AcquisitionExecutionService()
 
     def analyze(
         self,
@@ -67,9 +65,7 @@ class AnalyzerService:
         """
 
         if not input_file.exists():
-            raise FileNotFoundError(
-                f"Input file does not exist: {input_file}"
-            )
+            raise FileNotFoundError(f"Input file does not exist: {input_file}")
 
         opportunity = self.file_service.load(
             str(input_file),

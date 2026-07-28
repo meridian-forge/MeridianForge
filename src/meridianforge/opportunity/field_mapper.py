@@ -1,6 +1,5 @@
 from collections.abc import Mapping
 
-
 FIELD_ALIASES: Mapping[str, list[str]] = {
     "address": [
         "address",

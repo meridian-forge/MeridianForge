@@ -29,10 +29,7 @@ class DocumentExtractor(Extractor):
             str(file_path),
         )
 
-        content = "\n".join(
-            paragraph.text
-            for paragraph in document.paragraphs
-        )
+        content = "\n".join(paragraph.text for paragraph in document.paragraphs)
 
         return ExtractedData(
             source_file=file_path.name,

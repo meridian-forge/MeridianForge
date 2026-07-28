@@ -27,10 +27,7 @@ class PDFExtractor(Extractor):
             str(file_path),
         )
 
-        content = "\n".join(
-            page.extract_text() or ""
-            for page in reader.pages
-        )
+        content = "\n".join(page.extract_text() or "" for page in reader.pages)
 
         return ExtractedData(
             source_file=file_path.name,

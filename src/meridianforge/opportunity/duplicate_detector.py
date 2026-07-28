@@ -30,10 +30,7 @@ class DuplicateDetector:
         Generate a stable fingerprint for an artifact.
         """
 
-        value = (
-            f"{source.strip().lower()}|"
-            f"{source_reference.strip().lower()}"
-        )
+        value = f"{source.strip().lower()}|" f"{source_reference.strip().lower()}"
 
         return hashlib.sha256(
             value.encode("utf-8"),
@@ -48,7 +45,4 @@ class DuplicateDetector:
         Determine whether a record already exists.
         """
 
-        return any(
-            item.duplicate_hash == record.duplicate_hash
-            for item in existing
-        )
+        return any(item.duplicate_hash == record.duplicate_hash for item in existing)

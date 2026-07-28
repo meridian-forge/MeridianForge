@@ -7,9 +7,6 @@ Transforms investor review artifacts into
 an actionable acquisition decision package.
 """
 
-from meridianforge.models.results.ranked_opportunity import (
-    RankedOpportunity,
-)
 from meridianforge.product.investor_decision_package import (
     InvestorDecisionPackage,
 )

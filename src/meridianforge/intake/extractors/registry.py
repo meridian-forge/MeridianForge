@@ -45,8 +45,6 @@ def get_extractor(
     extractor = registry.get(extension)
 
     if extractor is None:
-        raise ValueError(
-            f"No extractor registered for '{extension}'."
-        )
+        raise ValueError(f"No extractor registered for '{extension}'.")
 
     return extractor()

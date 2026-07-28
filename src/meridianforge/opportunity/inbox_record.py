@@ -28,18 +28,10 @@ class OpportunityInboxRecord:
 
     duplicate_hash: str
 
-    record_id: str = field(
-        default_factory=lambda: str(uuid4())
-    )
+    record_id: str = field(default_factory=lambda: str(uuid4()))
 
-    status: OpportunityInboxStatus = (
-        OpportunityInboxStatus.RECEIVED
-    )
+    status: OpportunityInboxStatus = OpportunityInboxStatus.RECEIVED
 
-    received_at: datetime = field(
-        default_factory=datetime.now
-    )
+    received_at: datetime = field(default_factory=datetime.now)
 
-    metadata: dict[str, str] = field(
-        default_factory=dict
-    )
+    metadata: dict[str, str] = field(default_factory=dict)

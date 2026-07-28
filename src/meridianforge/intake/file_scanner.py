@@ -25,6 +25,5 @@ def scan_directory(path: str) -> list[Path]:
     return [
         file
         for file in directory.rglob("*")
-        if file.is_file()
-        and file.suffix.lower() in SUPPORTED_EXTENSIONS
+        if file.is_file() and file.suffix.lower() in SUPPORTED_EXTENSIONS
     ]
