@@ -41,7 +41,11 @@ class ExcelExtractor(Extractor):
                 first_data_row = rows[1]
 
                 if headers and len(first_data_row) >= len(headers):
-                    for header, value in zip(headers, first_data_row):
+                    for header, value in zip(
+                        headers,
+                        first_data_row,
+                        strict=False,
+                    ):
                         fields[header] = value
 
                     break

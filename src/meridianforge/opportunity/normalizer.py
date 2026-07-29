@@ -1,31 +1,26 @@
+"""
+Opportunity normalization.
+
+Converts extracted intake data into the lightweight
+Opportunity container used by the intake pipeline.
+"""
+
 from meridianforge.intake.extracted_data import ExtractedData
-from meridianforge.opportunity.field_mapper import normalize_field_name
-from meridianforge.opportunity.models import (
-    Opportunity,
-    OpportunityType,
-)
+from meridianforge.opportunity.models import Opportunity
 
 
-def normalize(
-    extracted: ExtractedData,
-) -> Opportunity:
+def normalize(extracted: ExtractedData) -> Opportunity:
+    """
+    Normalize extracted property data into an intake Opportunity.
+    """
 
-    fields: dict[str, str] = {}
-
-    for key, value in extracted.fields.items():
-        fields[normalize_field_name(key)] = value
-
-    opportunity_type = OpportunityType.UNKNOWN
-
-    if "purchase_price" in fields or "rent" in fields:
-        opportunity_type = OpportunityType.RENTAL_PROPERTY
-
-    if "irr" in fields or "preferred_return" in fields:
-        opportunity_type = OpportunityType.SYNDICATION
+    fields: dict[str, str] = {
+        key: "" if value is None else str(value)
+        for key, value in extracted.fields.items()
+    }
 
     return Opportunity(
         source_file=extracted.source_file,
-        opportunity_type=opportunity_type,
         fields=fields,
-        confidence=0.80,
+        confidence=1.0,
     )
