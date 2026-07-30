@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-from meridianforge.acquisition.opportunity import Opportunity
+from pathlib import Path
+
 from meridianforge.models.domain.investment_strategy import (
     InvestmentStrategy,
 )
@@ -17,62 +18,98 @@ from meridianforge.portfolio.models import (
 from meridianforge.services.acquisition_execution_service import (
     AcquisitionExecutionService,
 )
+from meridianforge.services.portfolio_intake_service import (
+    PortfolioIntakeService,
+)
 
 
 class PortfolioAnalyzerService:
     """
-    Analyze every opportunity in a portfolio and return
-    a ranked portfolio-ready analysis result.
+    Analyze portfolio opportunities and produce portfolio-domain results.
 
-    Portfolio opportunities are already normalized acquisition
-    domain objects. This service enriches them through the
-    acquisition execution pipeline.
+    MF-502 contract preserved while adding file/directory entry points
+    required by MF-506 workflow orchestration.
     """
 
-    def __init__(
-        self,
-        execution_service: AcquisitionExecutionService | None = None,
-    ) -> None:
-        self.execution_service = execution_service or AcquisitionExecutionService()
+    def __init__(self) -> None:
+        self.intake = PortfolioIntakeService()
+        self.execution = AcquisitionExecutionService()
+
+        self.default_investor = InvestorProfile(
+            name="Portfolio Investor",
+            strategy=InvestmentStrategy.CASH_FLOW,
+        )
 
     def analyze(
         self,
         portfolio: PortfolioIngestionResult,
-        investor: InvestorProfile | None = None,
     ) -> PortfolioAnalysisResult:
-
-        investor = investor or InvestorProfile(
-            name="Family Office",
-            strategy=InvestmentStrategy.CASH_FLOW,
-        )
+        """
+        Analyze an already-ingested portfolio.
+        """
 
         deals: list[PortfolioDealResult] = []
 
         for item in portfolio.opportunities:
-
-            opportunity: Opportunity = item.opportunity
-
-            execution = self.execution_service.execute(
-                opportunity,
-                investor,
+            orchestration = self.execution.execute(
+                item.opportunity,
+                investor_profile=self.default_investor,
             )
 
             deals.append(
                 PortfolioDealResult(
                     row_number=item.row_number,
-                    opportunity=opportunity,
-                    review=execution.review,
+                    opportunity=item.opportunity,
+                    review=orchestration.review,
                 )
             )
-
-        deals.sort(
-            key=lambda deal: (
-                0
-                if deal.review.buy_candidates()
-                else (1 if deal.review.watch_candidates() else 2)
-            )
-        )
 
         return PortfolioAnalysisResult(
             deals=deals,
         )
+
+    def analyze_file(
+        self,
+        file_path: Path,
+    ) -> PortfolioAnalysisResult:
+        """
+        Analyze a single portfolio workbook or CSV.
+        """
+
+        ingestion = self.intake.ingest(
+            file_path,
+        )
+
+        return self.analyze(
+            ingestion,
+        )
+
+    def analyze_directory(
+        self,
+        directory: Path,
+    ) -> PortfolioAnalysisResult:
+        """
+        Analyze every supported portfolio artifact inside a directory.
+        """
+
+        combined = PortfolioAnalysisResult()
+
+        if not directory.exists():
+            return combined
+
+        for path in sorted(directory.iterdir()):
+            if not path.is_file():
+                continue
+
+            if path.suffix.lower() not in {".xlsx", ".csv"}:
+                continue
+
+            result = self.analyze_file(
+                path,
+            )
+
+            combined.deals.extend(
+                result.deals,
+            )
+
+        return combined
