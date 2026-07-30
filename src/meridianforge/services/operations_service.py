@@ -1,23 +1,3 @@
-"""
-Operations orchestration service.
-
-The OperationsService is the conductor of the MeridianForge Monday workflow.
-
-Responsibilities:
-- discover incoming artifacts
-- manage artifact lifecycle
-- persist artifact records
-- coordinate analysis
-- aggregate investor decisions
-- generate Monday outputs
-
-Not responsible for:
-- extraction
-- parsing
-- underwriting
-- recommendations
-"""
-
 from __future__ import annotations
 
 from datetime import datetime
@@ -112,12 +92,9 @@ class OperationsService:
 
         for path in discovered:
 
-            artifact = self.lifecycle.register(
+            artifact = self.artifact_repository.register(
                 path,
-            )
-
-            self.artifact_repository.add(
-                artifact,
+                source="operations",
             )
 
             artifact = self.lifecycle.validate(
