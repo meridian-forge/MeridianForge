@@ -1,6 +1,5 @@
 import subprocess
 import sys
-from pathlib import Path
 
 
 def test_monday_cli_runs() -> None:
