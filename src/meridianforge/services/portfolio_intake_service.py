@@ -6,10 +6,10 @@ from pathlib import Path
 
 from openpyxl import load_workbook
 
+from meridianforge.acquisition.opportunity import Opportunity
 from meridianforge.intake.extracted_data import ExtractedData
 from meridianforge.opportunity.models import Opportunity as NormalizedOpportunity
 from meridianforge.opportunity.normalizer import normalize
-from meridianforge.acquisition.opportunity import Opportunity
 from meridianforge.portfolio.models import (
     PortfolioIngestionResult,
     PortfolioOpportunity,
