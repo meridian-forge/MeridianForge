@@ -23,12 +23,33 @@ class ArtifactRecord:
 
     path: Path
 
-    artifact_id: str = field(default_factory=lambda: str(uuid4()))
+    artifact_id: str = field(
+        default_factory=lambda: str(uuid4()),
+    )
 
     status: ArtifactStatus = ArtifactStatus.RECEIVED
 
-    created_at: datetime = field(default_factory=datetime.now)
+    created_at: datetime = field(
+        default_factory=datetime.now,
+    )
 
-    metadata: dict[str, str] = field(default_factory=dict)
+    metadata: dict[str, str] = field(
+        default_factory=dict,
+    )
 
     error: str | None = None
+
+    @property
+    def checksum(
+        self,
+    ) -> str | None:
+        """
+        Return artifact checksum.
+
+        Exposes repository identity without
+        leaking metadata implementation.
+        """
+
+        return self.metadata.get(
+            "checksum",
+        )
