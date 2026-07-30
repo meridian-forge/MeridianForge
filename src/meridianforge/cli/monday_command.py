@@ -29,7 +29,9 @@ def run_monday() -> OperationsRunResult:
 
     print()
     print("====================================")
+    print("Meridian Forge Monday Workflow")
     print("MeridianForge Monday Operations")
+    print("Status: READY")
     print("====================================")
     print(f"Deals discovered : {result.total_files}")
     print(f"Deals processed  : {len(result.files_processed)}")
