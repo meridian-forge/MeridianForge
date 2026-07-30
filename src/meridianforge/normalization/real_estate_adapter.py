@@ -62,7 +62,19 @@ class RealEstateAdapter:
         data = asset.attributes
 
         purchase_price = RealEstateAdapter._to_float(
-            data.get("purchase_price"),
+            data.get(
+                "purchase_price",
+                data.get(
+                    "price",
+                    data.get(
+                        "list_price",
+                        data.get(
+                            "purchase price",
+                            data.get("list price"),
+                        ),
+                    ),
+                ),
+            ),
         )
 
         address = Address(
@@ -121,7 +133,10 @@ class RealEstateAdapter:
 
         expenses = Expenses(
             taxes=RealEstateAdapter._to_float(
-                data.get("property_tax"),
+                data.get(
+                    "property_tax",
+                    data.get("taxes"),
+                ),
             ),
             insurance=RealEstateAdapter._to_float(
                 data.get("insurance"),
@@ -166,7 +181,10 @@ class RealEstateAdapter:
             provider=str(
                 data.get(
                     "provider",
-                    "unknown",
+                    data.get(
+                        "source",
+                        "unknown",
+                    ),
                 )
             ),
             imported_at=str(

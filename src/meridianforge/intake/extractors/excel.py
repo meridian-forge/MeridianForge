@@ -10,16 +10,20 @@ class ExcelExtractor(Extractor):
     """
     Excel extractor.
 
-    Supports both:
+    Supports:
 
     1. Tabular workbooks
        address | city | state | purchase_price | ...
 
-    2. Legacy key/value workbooks
+    2. Key/value workbooks
        Field | Value
     """
 
-    def extract(self, file_path: Path) -> ExtractedData:
+    def extract(
+        self,
+        file_path: Path,
+    ) -> ExtractedData:
+
         workbook = load_workbook(
             file_path,
             data_only=True,
@@ -28,34 +32,74 @@ class ExcelExtractor(Extractor):
         fields: dict[str, object] = {}
 
         for sheet in workbook.worksheets:
-            rows = list(sheet.iter_rows(values_only=True))
+
+            rows = list(
+                sheet.iter_rows(
+                    values_only=True,
+                )
+            )
 
             if not rows:
                 continue
 
-            # Detect tabular workbook:
-            # first row contains headers and at least one data row exists.
-            if len(rows) >= 2:
-                headers = [str(value).strip() for value in rows[0] if value is not None]
+            cleaned_rows = [
+                [
+                    value
+                    for value in row
+                    if value is not None
+                ]
+                for row in rows
+            ]
 
-                first_data_row = rows[1]
+            cleaned_rows = [
+                row
+                for row in cleaned_rows
+                if len(row) > 0
+            ]
 
-                if headers and len(first_data_row) >= len(headers):
+            if not cleaned_rows:
+                continue
+
+            # Detect legacy key/value format first.
+            # Example:
+            # purchase_price | 250000
+            # rent            | 2500
+            key_value_rows = True
+
+            for row in cleaned_rows:
+                if len(row) < 2:
+                    key_value_rows = False
+                    break
+
+            if key_value_rows:
+                for row in cleaned_rows:
+                    fields[str(row[0]).strip()] = row[1]
+
+                break
+
+            # Detect tabular format.
+            # Example:
+            # address | price | rent
+            # Main St | 250000 | 2500
+            if len(cleaned_rows) >= 2:
+
+                headers = [
+                    str(value).strip()
+                    for value in cleaned_rows[0]
+                ]
+
+                first_row = cleaned_rows[1]
+
+                if headers and len(first_row) >= len(headers):
+
                     for header, value in zip(
                         headers,
-                        first_data_row,
+                        first_row,
                         strict=False,
                     ):
                         fields[header] = value
 
                     break
-
-            # Fallback: legacy key/value workbook
-            for row in rows:
-                values = [value for value in row if value is not None]
-
-                if len(values) >= 2:
-                    fields[str(values[0]).strip()] = values[1]
 
         return ExtractedData(
             source_file=file_path.name,
