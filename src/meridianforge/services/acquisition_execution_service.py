@@ -1,21 +1,25 @@
 """
 Acquisition execution service.
 
-Bridges normalized opportunities
-into complete acquisition intelligence workflow.
+Bridges intake opportunities and acquisition opportunities
+into the canonical acquisition orchestration pipeline.
 """
+
+from __future__ import annotations
 
 from pathlib import Path
 
+from meridianforge.acquisition.opportunity import (
+    Opportunity as AcquisitionOpportunity,
+)
 from meridianforge.models.domain.investor_profile import (
     InvestorProfile,
 )
 from meridianforge.models.results.acquisition_orchestration_result import (
     AcquisitionOrchestrationResult,
 )
-from meridianforge.opportunity.models import Opportunity
-from meridianforge.services.acquisition_intake_service import (
-    AcquisitionIntakeService,
+from meridianforge.opportunity.models import (
+    Opportunity as IntakeOpportunity,
 )
 from meridianforge.services.acquisition_orchestrator import (
     AcquisitionOrchestrator,
@@ -24,51 +28,57 @@ from meridianforge.services.acquisition_orchestrator import (
 
 class AcquisitionExecutionService:
     """
-    Executes complete acquisition workflow
-    from normalized opportunity to investor output.
+    Executes acquisition analysis using the canonical
+    orchestration pipeline.
     """
 
     def __init__(
         self,
-        intake_service: AcquisitionIntakeService | None = None,
         orchestrator: AcquisitionOrchestrator | None = None,
     ) -> None:
-
-        self.intake_service = intake_service or AcquisitionIntakeService()
         self.orchestrator = orchestrator or AcquisitionOrchestrator()
 
     def execute(
         self,
-        opportunity: Opportunity,
+        opportunity: IntakeOpportunity | AcquisitionOpportunity,
         investor_profile: InvestorProfile,
         export_path: Path | None = None,
         archive_path: Path | None = None,
     ) -> AcquisitionOrchestrationResult:
         """
-        Execute complete acquisition workflow.
+        Execute acquisition analysis from either an intake opportunity
+        or a canonical acquisition opportunity.
         """
 
-        acquisition_input = self.intake_service.create_opportunity(
-            opportunity.fields,
-        )
-
-        records = [
-            {
-                "address": acquisition_input.address,
-                "city": acquisition_input.city,
-                "state": acquisition_input.state,
-                "zip_code": acquisition_input.zip_code,
-                "purchase_price": acquisition_input.purchase_price,
-                "monthly_rent": acquisition_input.monthly_rent,
-                "monthly_expenses": acquisition_input.monthly_expenses,
-                "market": acquisition_input.market,
-                "source": acquisition_input.source,
-            }
-        ]
+        record = self._to_record(opportunity)
 
         return self.orchestrator.analyze(
-            records,
+            [record],
             investor_profile,
-            export_path,
-            archive_path,
+            export_path=export_path,
+            archive_path=archive_path,
         )
+
+    @staticmethod
+    def _to_record(
+        opportunity: IntakeOpportunity | AcquisitionOpportunity,
+    ) -> dict[str, object]:
+        """
+        Convert either opportunity model into the normalized record
+        format expected by AcquisitionOrchestrator.
+        """
+
+        if isinstance(opportunity, AcquisitionOpportunity):
+            return {
+                "address": opportunity.address,
+                "city": opportunity.city,
+                "state": opportunity.state,
+                "zip_code": opportunity.zip_code,
+                "purchase_price": opportunity.purchase_price,
+                "monthly_rent": opportunity.monthly_rent,
+                "monthly_expenses": opportunity.monthly_expenses,
+                "market": opportunity.market,
+                "source": opportunity.source,
+            }
+
+        return {key: value for key, value in opportunity.fields.items()}

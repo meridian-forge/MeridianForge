@@ -6,9 +6,22 @@ from meridianforge.opportunity.models import Opportunity
 from meridianforge.opportunity.normalizer import normalize
 
 
+def process_records(
+    extracted_items: list,
+) -> list[Opportunity]:
+    """
+    Normalize multiple extracted records into opportunities.
+    """
+
+    return [normalize(item) for item in extracted_items]
+
+
 def process_file(
     file_path: Path,
 ) -> Opportunity:
+    """
+    Backward-compatible single-opportunity loader.
+    """
 
     extractor = get_extractor(file_path)
 
@@ -20,6 +33,9 @@ def process_file(
 def process_folder(
     folder_path: str,
 ) -> list[Opportunity]:
+    """
+    Load all opportunities from all supported files in a folder.
+    """
 
     detections = detect_sources(folder_path)
 
