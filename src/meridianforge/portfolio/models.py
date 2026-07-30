@@ -3,7 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from meridianforge.opportunity.models import Opportunity
+from meridianforge.acquisition.opportunity import Opportunity
 
 
 @dataclass(slots=True)

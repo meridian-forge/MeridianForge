@@ -1,12 +1,15 @@
 from __future__ import annotations
 
 import csv
+from datetime import datetime
 from pathlib import Path
 
 from openpyxl import load_workbook
 
 from meridianforge.intake.extracted_data import ExtractedData
+from meridianforge.opportunity.models import Opportunity as NormalizedOpportunity
 from meridianforge.opportunity.normalizer import normalize
+from meridianforge.acquisition.opportunity import Opportunity
 from meridianforge.portfolio.models import (
     PortfolioIngestionResult,
     PortfolioOpportunity,
@@ -56,7 +59,10 @@ class PortfolioIntakeService:
         if not rows:
             return result
 
-        headers = [str(value).strip() if value is not None else "" for value in rows[0]]
+        headers = [
+            str(value).strip() if value is not None else ""
+            for value in rows[0]
+        ]
 
         for row_number, row in enumerate(
             rows[1:],
@@ -102,7 +108,9 @@ class PortfolioIntakeService:
             ):
 
                 normalized_record = {
-                    str(key): value for key, value in record.items() if key is not None
+                    str(key): value
+                    for key, value in record.items()
+                    if key is not None
                 }
 
                 self._process_record(
@@ -129,7 +137,11 @@ class PortfolioIntakeService:
                 fields=record,
             )
 
-            opportunity = normalize(extracted)
+            normalized = normalize(extracted)
+
+            opportunity = self._to_acquisition_opportunity(
+                normalized,
+            )
 
             result.opportunities.append(
                 PortfolioOpportunity(
@@ -149,3 +161,59 @@ class PortfolioIntakeService:
                     raw_record=record,
                 )
             )
+
+    @staticmethod
+    def _to_acquisition_opportunity(
+        normalized: NormalizedOpportunity,
+    ) -> Opportunity:
+
+        fields = normalized.fields
+
+        def number(
+            name: str,
+        ) -> float:
+
+            value = fields.get(
+                name,
+                "0",
+            )
+
+            return float(
+                str(value)
+                .replace("$", "")
+                .replace(",", "")
+            )
+
+        return Opportunity(
+            address=fields.get(
+                "address",
+                "UNKNOWN",
+            ),
+            city=fields.get(
+                "city",
+                "UNKNOWN",
+            ),
+            state=fields.get(
+                "state",
+                "NA",
+            ),
+            zip_code=fields.get(
+                "zip_code",
+                "00000",
+            ),
+            purchase_price=number(
+                "purchase_price",
+            ),
+            monthly_rent=number(
+                "monthly_rent",
+            ),
+            monthly_expenses=number(
+                "monthly_expenses",
+            ),
+            market=fields.get(
+                "market",
+                "UNKNOWN",
+            ),
+            source=normalized.source_file,
+            created_at=datetime.now(),
+        )
