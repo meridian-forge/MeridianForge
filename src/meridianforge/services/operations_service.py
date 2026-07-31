@@ -9,6 +9,9 @@ from meridianforge.artifacts.artifact_lifecycle_service import (
 from meridianforge.artifacts.artifact_status import (
     ArtifactStatus,
 )
+from meridianforge.connectors.connector import (
+    Connector,
+)
 from meridianforge.models.domain.investment_strategy import (
     InvestmentStrategy,
 )
@@ -45,17 +48,18 @@ class OperationsService:
     """
     Coordinates MeridianForge Monday operations.
 
-    MF-508.3
+    MF-509.4
 
-    OperationsService is the single producer of OperationsRunResult.
-    All discovery sources (directory, email, future APIs) are injected
-    through the InputAdapter abstraction.
+    OperationsService remains the single producer of OperationsRunResult.
+    Connectors synchronize artifacts into the working directory before
+    discovery occurs through the configured input adapter.
     """
 
     def __init__(
         self,
         deals_directory: Path,
         input_adapter: InputAdapter | None = None,
+        connector: Connector | None = None,
     ) -> None:
 
         self.deals_directory = deals_directory
@@ -72,6 +76,21 @@ class OperationsService:
 
         self.input_adapter = input_adapter or DirectoryInputAdapter(
             deals_directory,
+        )
+
+        self.connector = connector
+
+    def synchronize(self) -> list[Path]:
+        """
+        Synchronize artifacts from the configured connector into the
+        working directory.
+        """
+
+        if self.connector is None:
+            return []
+
+        return self.connector.sync(
+            self.deals_directory,
         )
 
     def discover_files(self) -> list[Path]:
@@ -92,6 +111,8 @@ class OperationsService:
         result = OperationsRunResult(
             started_at=started_at,
         )
+
+        self.synchronize()
 
         discovered = self.discover_files()
 
