@@ -1,42 +1,49 @@
-"""
-Monday execution pipeline.
-
-MF-505.1
-
-End-to-end orchestration for the MeridianForge Monday workflow.
-For now, this wraps the existing OperationsService so the CLI can
-transition to a workflow layer without breaking the current
-production pipeline.
-"""
-
 from __future__ import annotations
 
 from dataclasses import dataclass
 from pathlib import Path
 
-from meridianforge.models.operations import OperationsRunResult
-from meridianforge.portfolio.analysis import PortfolioAnalysisResult
+from meridianforge.models.operations import (
+    OperationsRunResult,
+)
+from meridianforge.portfolio.analysis import (
+    PortfolioAnalysisResult,
+)
 from meridianforge.portfolio.intelligence.package import (
     InvestorDecisionPackage,
 )
-from meridianforge.services.operations_service import OperationsService
+from meridianforge.services.operations_service import (
+    OperationsService,
+)
+from meridianforge.services.portfolio_analyzer_service import (
+    PortfolioAnalyzerService,
+)
+from meridianforge.services.portfolio_intelligence_service import (
+    PortfolioIntelligenceService,
+)
 
 
 @dataclass(slots=True)
 class MondayPipelineResult:
     """
-    Result of the Monday execution pipeline.
+    Canonical workflow result for the Monday execution pipeline.
     """
 
     operations: OperationsRunResult
-    portfolio_analysis: PortfolioAnalysisResult
+    analysis: PortfolioAnalysisResult
     intelligence: InvestorDecisionPackage | None
-    dashboard_path: Path | None
 
 
 class MondayExecutionPipeline:
     """
-    Workflow-layer wrapper around the current Monday operations flow.
+    MF-506.2
+
+    Canonical Family Office operating workflow.
+
+    Orchestrates:
+    - operations
+    - portfolio analysis
+    - portfolio intelligence
     """
 
     def __init__(
@@ -44,20 +51,46 @@ class MondayExecutionPipeline:
         deals_directory: Path,
     ) -> None:
         self.deals_directory = deals_directory
+
         self.operations = OperationsService(
-            deals_directory=deals_directory,
+            deals_directory,
         )
+
+        self.analyzer = PortfolioAnalyzerService()
+
+        self.intelligence = PortfolioIntelligenceService()
 
     def execute(
         self,
     ) -> MondayPipelineResult:
+        """
+        Execute the complete Monday workflow.
+
+        Portfolio analysis is intentionally best-effort. The Monday
+        operational workflow must continue even when an incoming file
+        is not a valid portfolio workbook.
+        """
+
         operations_result = self.operations.execute()
 
-        analysis = PortfolioAnalysisResult()
+        try:
+            analysis = self.analyzer.analyze_directory(
+                self.deals_directory,
+            )
+
+        except Exception:
+            analysis = PortfolioAnalysisResult()
+
+        intelligence: InvestorDecisionPackage | None = None
+
+        if analysis.deals:
+
+            intelligence = self.intelligence.analyze(
+                analysis,
+            )
 
         return MondayPipelineResult(
             operations=operations_result,
-            portfolio_analysis=analysis,
-            intelligence=None,
-            dashboard_path=operations_result.dashboard_path,
+            analysis=analysis,
+            intelligence=intelligence,
         )
