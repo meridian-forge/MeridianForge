@@ -6,6 +6,9 @@ from pathlib import Path
 from meridianforge.models.operations import (
     OperationsRunResult,
 )
+from meridianforge.operations.email_input_adapter import (
+    EmailInputAdapter,
+)
 from meridianforge.portfolio.analysis import (
     PortfolioAnalysisResult,
 )
@@ -36,14 +39,7 @@ class MondayPipelineResult:
 
 class MondayExecutionPipeline:
     """
-    MF-506.2
-
     Canonical Family Office operating workflow.
-
-    Orchestrates:
-    - operations
-    - portfolio analysis
-    - portfolio intelligence
     """
 
     def __init__(
@@ -60,31 +56,20 @@ class MondayExecutionPipeline:
 
         self.intelligence = PortfolioIntelligenceService()
 
-    def execute(
+    def _build_result(
         self,
+        operations_result: OperationsRunResult,
     ) -> MondayPipelineResult:
-        """
-        Execute the complete Monday workflow.
-
-        Portfolio analysis is intentionally best-effort. The Monday
-        operational workflow must continue even when an incoming file
-        is not a valid portfolio workbook.
-        """
-
-        operations_result = self.operations.execute()
-
         try:
             analysis = self.analyzer.analyze_directory(
                 self.deals_directory,
             )
-
         except Exception:
             analysis = PortfolioAnalysisResult()
 
         intelligence: InvestorDecisionPackage | None = None
 
         if analysis.deals:
-
             intelligence = self.intelligence.analyze(
                 analysis,
             )
@@ -93,4 +78,35 @@ class MondayExecutionPipeline:
             operations=operations_result,
             analysis=analysis,
             intelligence=intelligence,
+        )
+
+    def execute(
+        self,
+    ) -> MondayPipelineResult:
+        operations_result = self.operations.execute()
+
+        return self._build_result(
+            operations_result,
+        )
+
+    def execute_from_email(
+        self,
+        inbox_directory: Path,
+    ) -> MondayPipelineResult:
+        """
+        Execute the canonical Monday workflow using the email inbox as
+        the operational input source.
+        """
+
+        operations = OperationsService(
+            deals_directory=inbox_directory,
+            input_adapter=EmailInputAdapter(
+                inbox_directory,
+            ),
+        )
+
+        operations_result = operations.execute()
+
+        return self._build_result(
+            operations_result,
         )

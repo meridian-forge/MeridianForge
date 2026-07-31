@@ -18,6 +18,12 @@ from meridianforge.models.domain.investor_profile import (
 from meridianforge.models.operations import (
     OperationsRunResult,
 )
+from meridianforge.operations.directory_input_adapter import (
+    DirectoryInputAdapter,
+)
+from meridianforge.operations.input_adapter import (
+    InputAdapter,
+)
 from meridianforge.product.weekly_review import (
     WeeklyInvestorReview,
 )
@@ -38,11 +44,18 @@ from meridianforge.services.review_aggregator import (
 class OperationsService:
     """
     Coordinates MeridianForge Monday operations.
+
+    MF-508.3
+
+    OperationsService is the single producer of OperationsRunResult.
+    All discovery sources (directory, email, future APIs) are injected
+    through the InputAdapter abstraction.
     """
 
     def __init__(
         self,
         deals_directory: Path,
+        input_adapter: InputAdapter | None = None,
     ) -> None:
 
         self.deals_directory = deals_directory
@@ -57,17 +70,17 @@ class OperationsService:
 
         self.artifact_repository = ArtifactRepository()
 
+        self.input_adapter = input_adapter or DirectoryInputAdapter(
+            deals_directory,
+        )
+
     def discover_files(self) -> list[Path]:
         """
-        Discover incoming opportunity artifacts.
+        Discover incoming opportunity artifacts through the configured
+        input adapter.
         """
 
-        if not self.deals_directory.exists():
-            return []
-
-        return sorted(
-            [path for path in self.deals_directory.iterdir() if path.is_file()]
-        )
+        return self.input_adapter.discover()
 
     def execute(self) -> OperationsRunResult:
         """
@@ -131,13 +144,21 @@ class OperationsService:
         )
 
         valid_results = [
-            item for item in orchestration_results if item.review is not None
+            item
+            for item in orchestration_results
+            if item.review is not None
         ]
 
-        reviews = [item.review for item in valid_results if item.review is not None]
+        reviews = [
+            item.review
+            for item in valid_results
+            if item.review is not None
+        ]
 
         portfolio_review = (
-            ReviewAggregator.combine(reviews) if reviews else WeeklyInvestorReview()
+            ReviewAggregator.combine(reviews)
+            if reviews
+            else WeeklyInvestorReview()
         )
 
         dashboard_directory = self.artifact_service.generate(
@@ -158,7 +179,10 @@ class OperationsService:
         result.dashboard_path = dashboard_directory
 
         result.files_processed.extend(
-            [artifact.path for artifact in artifacts],
+            [
+                artifact.path
+                for artifact in artifacts
+            ],
         )
 
         result.analyses_completed = len(
