@@ -39,31 +39,45 @@ class MondayPipelineResult:
 
 class MondayExecutionPipeline:
     """
+    MF-511.0
+
     Canonical Family Office operating workflow.
+
+    Supports both local-directory execution and Gmail-backed execution.
     """
 
     def __init__(
         self,
         deals_directory: Path,
+        use_email: bool = False,
     ) -> None:
         self.deals_directory = deals_directory
 
+        input_adapter = EmailInputAdapter() if use_email else None
+
         self.operations = OperationsService(
             deals_directory,
+            input_adapter=input_adapter,
         )
 
         self.analyzer = PortfolioAnalyzerService()
 
         self.intelligence = PortfolioIntelligenceService()
 
-    def _build_result(
+    def execute(
         self,
-        operations_result: OperationsRunResult,
     ) -> MondayPipelineResult:
+        """
+        Execute the complete Monday workflow.
+        """
+
+        operations_result = self.operations.execute()
+
         try:
             analysis = self.analyzer.analyze_directory(
                 self.deals_directory,
             )
+
         except Exception:
             analysis = PortfolioAnalysisResult()
 
@@ -80,33 +94,16 @@ class MondayExecutionPipeline:
             intelligence=intelligence,
         )
 
-    def execute(
-        self,
-    ) -> MondayPipelineResult:
-        operations_result = self.operations.execute()
-
-        return self._build_result(
-            operations_result,
-        )
-
-    def execute_from_email(
-        self,
-        inbox_directory: Path,
-    ) -> MondayPipelineResult:
+    @classmethod
+    def from_email(
+        cls,
+        deals_directory: Path,
+    ) -> "MondayExecutionPipeline":
         """
-        Execute the canonical Monday workflow using the email inbox as
-        the operational input source.
+        Construct a pipeline that synchronizes Gmail before operations.
         """
 
-        operations = OperationsService(
-            deals_directory=inbox_directory,
-            input_adapter=EmailInputAdapter(
-                inbox_directory,
-            ),
-        )
-
-        operations_result = operations.execute()
-
-        return self._build_result(
-            operations_result,
+        return cls(
+            deals_directory=deals_directory,
+            use_email=True,
         )

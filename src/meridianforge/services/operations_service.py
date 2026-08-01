@@ -44,15 +44,27 @@ from meridianforge.services.review_aggregator import (
 )
 
 
+class _ConnectorInputAdapter(InputAdapter):
+    """
+    Backward-compatible adapter wrapper for legacy Connector implementations.
+    """
+
+    def __init__(
+        self,
+        connector: Connector,
+        destination: Path,
+    ) -> None:
+        self.connector = connector
+        self.destination = destination
+
+    def discover(self) -> list[Path]:
+        self.destination.mkdir(parents=True, exist_ok=True)
+        return self.connector.sync(self.destination)
+
+
 class OperationsService:
     """
     Coordinates MeridianForge Monday operations.
-
-    MF-509.4
-
-    OperationsService remains the single producer of OperationsRunResult.
-    Connectors synchronize artifacts into the working directory before
-    discovery occurs through the configured input adapter.
     """
 
     def __init__(
@@ -74,24 +86,17 @@ class OperationsService:
 
         self.artifact_repository = ArtifactRepository()
 
-        self.input_adapter = input_adapter or DirectoryInputAdapter(
-            deals_directory,
-        )
-
-        self.connector = connector
-
-    def synchronize(self) -> list[Path]:
-        """
-        Synchronize artifacts from the configured connector into the
-        working directory.
-        """
-
-        if self.connector is None:
-            return []
-
-        return self.connector.sync(
-            self.deals_directory,
-        )
+        if input_adapter is not None:
+            self.input_adapter = input_adapter
+        elif connector is not None:
+            self.input_adapter = _ConnectorInputAdapter(
+                connector,
+                deals_directory,
+            )
+        else:
+            self.input_adapter = DirectoryInputAdapter(
+                deals_directory,
+            )
 
     def discover_files(self) -> list[Path]:
         """
@@ -111,8 +116,6 @@ class OperationsService:
         result = OperationsRunResult(
             started_at=started_at,
         )
-
-        self.synchronize()
 
         discovered = self.discover_files()
 
@@ -165,21 +168,13 @@ class OperationsService:
         )
 
         valid_results = [
-            item
-            for item in orchestration_results
-            if item.review is not None
+            item for item in orchestration_results if item.review is not None
         ]
 
-        reviews = [
-            item.review
-            for item in valid_results
-            if item.review is not None
-        ]
+        reviews = [item.review for item in valid_results if item.review is not None]
 
         portfolio_review = (
-            ReviewAggregator.combine(reviews)
-            if reviews
-            else WeeklyInvestorReview()
+            ReviewAggregator.combine(reviews) if reviews else WeeklyInvestorReview()
         )
 
         dashboard_directory = self.artifact_service.generate(
@@ -200,10 +195,7 @@ class OperationsService:
         result.dashboard_path = dashboard_directory
 
         result.files_processed.extend(
-            [
-                artifact.path
-                for artifact in artifacts
-            ],
+            [artifact.path for artifact in artifacts],
         )
 
         result.analyses_completed = len(

@@ -10,16 +10,26 @@ from meridianforge.workflows.monday_execution_pipeline import (
 
 @dataclass(slots=True)
 class EmailAutomationResult:
-    processed_workbooks: int
-    duplicate_workbooks: int
-    quarantined_artifacts: int
-    analyses_completed: int
+    """
+    Result of the email intake automation workflow.
+    """
+
+    processed_workbooks: int = 0
+    duplicate_workbooks: int = 0
+    quarantined_artifacts: int = 0
+    analyses_completed: int = 0
 
 
 class EmailIntakeWorkflow:
     """
-    Backward-compatible wrapper around the canonical Monday pipeline.
+    Executes the email intake workflow.
+
+    The default behavior remains local-directory based so tests and
+    existing workflows continue to operate. A Gmail-backed pipeline can
+    be injected by the production Monday workflow.
     """
+
+    WORKBOOK_SUFFIXES = {".xlsx", ".xls", ".csv"}
 
     def __init__(
         self,
@@ -35,25 +45,23 @@ class EmailIntakeWorkflow:
             deals_directory=inbox_directory,
         )
 
-        result = pipeline.execute_from_email(
-            inbox_directory,
+        result = pipeline.execute()
+
+        processed_workbooks = sum(
+            1
+            for path in result.operations.files_processed
+            if path.suffix.lower() in self.WORKBOOK_SUFFIXES
         )
 
-        discovered_workbooks = sum(
+        quarantined_artifacts = sum(
             1
-            for path in result.operations.files_discovered
-            if path.suffix.lower() == ".xlsx"
-        )
-
-        quarantined = sum(
-            1
-            for path in result.operations.files_discovered
-            if path.suffix.lower() != ".xlsx"
+            for path in result.operations.files_processed
+            if path.suffix.lower() not in self.WORKBOOK_SUFFIXES
         )
 
         return EmailAutomationResult(
-            processed_workbooks=discovered_workbooks,
+            processed_workbooks=processed_workbooks,
             duplicate_workbooks=0,
-            quarantined_artifacts=quarantined,
+            quarantined_artifacts=quarantined_artifacts,
             analyses_completed=result.operations.analyses_completed,
         )

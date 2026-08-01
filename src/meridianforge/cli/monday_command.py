@@ -1,12 +1,12 @@
 """
 Monday CLI command.
 
-MF-505.2
+MF-511.0.4
 
 Routes the Monday command through the
-MondayExecutionPipeline while preserving
-the historical CLI contract expected by
-existing tests and automation.
+Gmail-backed MondayExecutionPipeline while
+preserving the historical CLI contract
+expected by existing tests and automation.
 """
 
 from __future__ import annotations
@@ -21,16 +21,32 @@ from meridianforge.workflows.monday_execution_pipeline import (
 
 def run_monday(
     deals_directory: Path | None = None,
+    use_email: bool = False,
 ) -> OperationsRunResult:
     """
     Execute the MeridianForge Monday workflow.
+
+    Historical behavior is preserved by default (local runtime directory).
+    Gmail synchronization is available by passing use_email=True.
     """
 
     if deals_directory is None:
-        deals_directory = Path("runtime") / "incoming" / "deals"
+        if use_email:
+            deals_directory = (
+                Path.home()
+                / "Documents"
+                / "MeridianForge"
+                / "10_Runtime"
+                / "Incoming"
+                / "Email"
+            )
+        else:
+            deals_directory = Path("runtime") / "incoming" / "deals"
 
-    pipeline = MondayExecutionPipeline(
-        deals_directory=deals_directory,
+    pipeline = (
+        MondayExecutionPipeline.from_email(deals_directory)
+        if use_email
+        else MondayExecutionPipeline(deals_directory=deals_directory)
     )
 
     pipeline_result = pipeline.execute()
@@ -52,6 +68,9 @@ def run_monday(
 
     print("Meridian Forge Monday Workflow")
     print("MeridianForge Monday Operations")
+    print(
+        f"Input source    : {'Gmail (MeridianForge label)' if use_email else 'Local directory'}"
+    )
     print(f"Deals directory : {deals_directory}")
     print(f"Files processed : {len(operations.files_processed)}")
     print(f"BUY candidates  : {operations.buy_count}")
@@ -69,11 +88,13 @@ def run_monday(
 
 def run(
     deals_directory: Path | None = None,
+    use_email: bool = False,
 ) -> OperationsRunResult:
     """
     Backward-compatible CLI alias.
     """
 
     return run_monday(
-        deals_directory,
+        deals_directory=deals_directory,
+        use_email=use_email,
     )
