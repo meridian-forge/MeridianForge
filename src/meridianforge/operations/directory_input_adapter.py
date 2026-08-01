@@ -22,10 +22,4 @@ class DirectoryInputAdapter(InputAdapter):
         if not self.directory.exists():
             return []
 
-        return sorted(
-            [
-                path
-                for path in self.directory.iterdir()
-                if path.is_file()
-            ]
-        )
+        return sorted([path for path in self.directory.iterdir() if path.is_file()])

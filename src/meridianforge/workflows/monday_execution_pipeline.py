@@ -3,21 +3,11 @@ from __future__ import annotations
 from dataclasses import dataclass
 from pathlib import Path
 
-from meridianforge.models.operations import (
-    OperationsRunResult,
-)
-from meridianforge.operations.email_input_adapter import (
-    EmailInputAdapter,
-)
-from meridianforge.portfolio.analysis import (
-    PortfolioAnalysisResult,
-)
-from meridianforge.portfolio.intelligence.package import (
-    InvestorDecisionPackage,
-)
-from meridianforge.services.operations_service import (
-    OperationsService,
-)
+from meridianforge.models.operations import OperationsRunResult
+from meridianforge.operations.email_input_adapter import EmailInputAdapter
+from meridianforge.portfolio.analysis import PortfolioAnalysisResult
+from meridianforge.portfolio.intelligence.package import InvestorDecisionPackage
+from meridianforge.services.operations_service import OperationsService
 from meridianforge.services.portfolio_analyzer_service import (
     PortfolioAnalyzerService,
 )
@@ -39,11 +29,21 @@ class MondayPipelineResult:
 
 class MondayExecutionPipeline:
     """
-    MF-511.0
+    MF-512.1
 
     Canonical Family Office operating workflow.
 
-    Supports both local-directory execution and Gmail-backed execution.
+    Single analysis path:
+
+    Input
+      |
+    OperationsService
+      |
+    PortfolioAnalyzerService
+      |
+    Portfolio Intelligence
+      |
+    Investor Decision Package
     """
 
     def __init__(
@@ -98,7 +98,7 @@ class MondayExecutionPipeline:
     def from_email(
         cls,
         deals_directory: Path,
-    ) -> "MondayExecutionPipeline":
+    ) -> MondayExecutionPipeline:
         """
         Construct a pipeline that synchronizes Gmail before operations.
         """

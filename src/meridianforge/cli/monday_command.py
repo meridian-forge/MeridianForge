@@ -56,9 +56,7 @@ def run_monday(
     # Preserve historical CLI expectations used by older tests.
     if deals_directory.exists():
         discovered = sorted(
-            path
-            for path in deals_directory.iterdir()
-            if path.is_file()
+            path for path in deals_directory.iterdir() if path.is_file()
         )
     else:
         discovered = []
@@ -68,9 +66,14 @@ def run_monday(
 
     print("Meridian Forge Monday Workflow")
     print("MeridianForge Monday Operations")
-    print(
-        f"Input source    : {'Gmail (MeridianForge label)' if use_email else 'Local directory'}"
+
+    source = (
+    "Gmail (MeridianForge label)"
+    if use_email
+    else "Local directory"
     )
+
+    print(f"Input source    : {source}")
     print(f"Deals directory : {deals_directory}")
     print(f"Files processed : {len(operations.files_processed)}")
     print(f"BUY candidates  : {operations.buy_count}")

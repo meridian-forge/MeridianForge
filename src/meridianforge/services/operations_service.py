@@ -177,6 +177,8 @@ class OperationsService:
             ReviewAggregator.combine(reviews) if reviews else WeeklyInvestorReview()
         )
 
+        result.review = portfolio_review
+
         dashboard_directory = self.artifact_service.generate(
             portfolio_review,
             self.output_directory,

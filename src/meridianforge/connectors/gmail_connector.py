@@ -3,7 +3,6 @@ from __future__ import annotations
 import base64
 import json
 from pathlib import Path
-from typing import Any
 
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
@@ -37,8 +36,7 @@ class GmailConnector(Connector):
         self.state_file = self.state_dir / "gmail_sync_state.json"
 
         self.destination = (
-            destination
-            or workspace / "10_Runtime" / "Incoming" / "Email"
+            destination or workspace / "10_Runtime" / "Incoming" / "Email"
         )
 
     def _load_state(self) -> set[str]:
@@ -46,9 +44,7 @@ class GmailConnector(Connector):
             return set()
 
         try:
-            data = json.loads(
-                self.state_file.read_text(encoding="utf-8")
-            )
+            data = json.loads(self.state_file.read_text(encoding="utf-8"))
             return set(data.get("processed_message_ids", []))
         except Exception:
             return set()
@@ -137,10 +133,7 @@ class GmailConnector(Connector):
                 if not filename:
                     continue
 
-                attachment_id = (
-                    part.get("body", {})
-                    .get("attachmentId")
-                )
+                attachment_id = part.get("body", {}).get("attachmentId")
 
                 if not attachment_id:
                     continue

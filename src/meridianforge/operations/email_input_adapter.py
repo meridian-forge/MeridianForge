@@ -34,9 +34,7 @@ class EmailInputAdapter(InputAdapter):
 
         # Production mode: Gmail sync into workspace runtime.
         self.runtime_root = workspace / "10_Runtime"
-        self.incoming_directory = (
-            self.runtime_root / "Incoming" / "Email"
-        )
+        self.incoming_directory = self.runtime_root / "Incoming" / "Email"
         self.connector = GmailConnector(
             label=label,
             destination=self.incoming_directory,
@@ -55,9 +53,7 @@ class EmailInputAdapter(InputAdapter):
                 return []
 
             return sorted(
-                path
-                for path in self.incoming_directory.iterdir()
-                if path.is_file()
+                path for path in self.incoming_directory.iterdir() if path.is_file()
             )
 
         self.incoming_directory.mkdir(

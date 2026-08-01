@@ -10,6 +10,8 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
 
+from meridianforge.product.weekly_review import WeeklyInvestorReview
+
 
 @dataclass
 class OperationsRunResult:
@@ -37,6 +39,8 @@ class OperationsRunResult:
 
     dashboard_path: Path | None = None
     report_paths: list[Path] = field(default_factory=list)
+
+    review: WeeklyInvestorReview | None = None
 
     errors: list[str] = field(default_factory=list)
 

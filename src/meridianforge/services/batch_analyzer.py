@@ -10,6 +10,9 @@ from meridianforge.engine.deal_scoring import DealScoringEngine
 from meridianforge.engine.underwriting_engine import UnderwritingEngine
 from meridianforge.models.domain.investor_profile import InvestorProfile
 from meridianforge.models.domain.property import Property
+from meridianforge.models.results.analysis_result import (
+    AnalysisResult,
+)
 from meridianforge.models.results.batch_analysis_result import (
     BatchAnalysisResult,
 )
@@ -30,7 +33,10 @@ class BatchAnalyzerService:
         Analyze a collection of properties.
         """
 
-        evaluated: list[tuple[Property, DealEvaluation]] = []
+        evaluated: list[
+            tuple[Property, DealEvaluation]
+            | tuple[Property, AnalysisResult, DealEvaluation]
+        ] = []
 
         dscr_values: list[float] = []
 

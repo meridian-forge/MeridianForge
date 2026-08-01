@@ -59,10 +59,7 @@ class PortfolioIntakeService:
         if not rows:
             return result
 
-        headers = [
-            str(value).strip() if value is not None else ""
-            for value in rows[0]
-        ]
+        headers = [str(value).strip() if value is not None else "" for value in rows[0]]
 
         for row_number, row in enumerate(
             rows[1:],
@@ -108,9 +105,7 @@ class PortfolioIntakeService:
             ):
 
                 normalized_record = {
-                    str(key): value
-                    for key, value in record.items()
-                    if key is not None
+                    str(key): value for key, value in record.items() if key is not None
                 }
 
                 self._process_record(
@@ -178,11 +173,7 @@ class PortfolioIntakeService:
                 "0",
             )
 
-            return float(
-                str(value)
-                .replace("$", "")
-                .replace(",", "")
-            )
+            return float(str(value).replace("$", "").replace(",", ""))
 
         return Opportunity(
             address=fields.get(

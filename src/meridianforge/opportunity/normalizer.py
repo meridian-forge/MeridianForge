@@ -29,11 +29,7 @@ def normalize(
             str(key),
         )
 
-        fields[normalized_key] = (
-            ""
-            if value is None
-            else str(value)
-        )
+        fields[normalized_key] = "" if value is None else str(value)
 
     opportunity_type = OpportunityType.UNKNOWN
 

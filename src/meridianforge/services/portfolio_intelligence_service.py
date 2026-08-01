@@ -94,28 +94,11 @@ class PortfolioIntelligenceService:
 
         return PortfolioAnalytics(
             asset_count=count,
-            total_purchase_price=sum(
-                d.opportunity.purchase_price
-                for d in deals
-            ),
-            total_monthly_rent=sum(
-                d.opportunity.monthly_rent
-                for d in deals
-            ),
-            total_monthly_cash_flow=sum(
-                d.opportunity.monthly_cash_flow
-                for d in deals
-            ),
-            annual_cash_flow=sum(
-                d.opportunity.annual_cash_flow
-                for d in deals
-            ),
-            average_cap_rate=sum(
-                d.opportunity.cap_rate
-                for d in deals
-            ) / count,
+            total_purchase_price=sum(d.opportunity.purchase_price for d in deals),
+            total_monthly_rent=sum(d.opportunity.monthly_rent for d in deals),
+            total_monthly_cash_flow=sum(d.opportunity.monthly_cash_flow for d in deals),
+            annual_cash_flow=sum(d.opportunity.annual_cash_flow for d in deals),
+            average_cap_rate=sum(d.opportunity.cap_rate for d in deals) / count,
             average_dscr=1.5,
-            portfolio_score=(
-                analysis.buy_count / count
-            ) * 100,
+            portfolio_score=(analysis.buy_count / count) * 100,
         )

@@ -43,19 +43,10 @@ class ExcelExtractor(Extractor):
                 continue
 
             cleaned_rows = [
-                [
-                    value
-                    for value in row
-                    if value is not None
-                ]
-                for row in rows
+                [value for value in row if value is not None] for row in rows
             ]
 
-            cleaned_rows = [
-                row
-                for row in cleaned_rows
-                if len(row) > 0
-            ]
+            cleaned_rows = [row for row in cleaned_rows if len(row) > 0]
 
             if not cleaned_rows:
                 continue
@@ -83,10 +74,7 @@ class ExcelExtractor(Extractor):
             # Main St | 250000 | 2500
             if len(cleaned_rows) >= 2:
 
-                headers = [
-                    str(value).strip()
-                    for value in cleaned_rows[0]
-                ]
+                headers = [str(value).strip() for value in cleaned_rows[0]]
 
                 first_row = cleaned_rows[1]
 

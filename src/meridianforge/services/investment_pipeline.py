@@ -31,6 +31,9 @@ from meridianforge.models.domain.normalized_asset import (
 from meridianforge.models.domain.property import (
     Property,
 )
+from meridianforge.models.results.analysis_result import (
+    AnalysisResult,
+)
 from meridianforge.models.results.deal_evaluation import (
     DealEvaluation,
 )
@@ -71,7 +74,10 @@ class InvestmentPipeline:
             asset_type,
         )
 
-        evaluated_deals: list[tuple[Property, DealEvaluation]] = []
+        evaluated_deals: list[
+            tuple[Property, DealEvaluation]
+            | tuple[Property, AnalysisResult, DealEvaluation]
+        ] = []
 
         for asset in import_result.assets:
 
@@ -101,6 +107,7 @@ class InvestmentPipeline:
             evaluated_deals.append(
                 (
                     property_data,
+                    analysis,
                     scored,
                 )
             )
