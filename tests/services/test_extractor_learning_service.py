@@ -95,3 +95,47 @@ def test_extractor_learning_separates_profiles_by_provider() -> None:
         "JWB Capital",
         "Other Provider",
     }
+
+
+def test_extractor_learning_filters_profiles_by_provider() -> None:
+    repository = ExtractionAuditRepository()
+
+    repository.save(
+        ExtractionAuditRecord(
+            artifact_id="artifact-1",
+            source_file="jwb.pdf",
+            field_name="rent",
+            raw_value="$3135",
+            normalized_value="3135",
+            confidence=0.95,
+            extractor="RentalAcquisitionExtractor",
+            status=ExtractionAuditStatus.ACCEPTED,
+            provider="JWB Capital",
+        )
+    )
+
+    repository.save(
+        ExtractionAuditRecord(
+            artifact_id="artifact-2",
+            source_file="other.pdf",
+            field_name="rent",
+            raw_value="$3000",
+            normalized_value="3000",
+            confidence=0.90,
+            extractor="AlternativeRentalExtractor",
+            status=ExtractionAuditStatus.ACCEPTED,
+            provider="Other Provider",
+        )
+    )
+
+    service = ExtractorLearningService(
+        repository=repository,
+    )
+
+    profiles = service.get_profiles(
+        provider="JWB Capital",
+    )
+
+    assert len(profiles) == 1
+    assert profiles[0].extractor == "RentalAcquisitionExtractor"
+    assert profiles[0].provider == "JWB Capital"

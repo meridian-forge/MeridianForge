@@ -1,7 +1,7 @@
 """
 Extractor learning service.
 
-MF-440.4 / MF-440.4.2
+MF-440.4 / MF-440.4.2 / MF-440.5.1
 
 Transforms extraction audit history into reusable extractor intelligence.
 Learning is scoped by extractor and provider when provider information exists.
@@ -67,7 +67,6 @@ class ExtractorLearningService:
                 item[0][1] or "",
             ),
         ):
-
             successful_fields: list[str] = []
             failed_fields: list[str] = []
 
@@ -102,3 +101,22 @@ class ExtractorLearningService:
             )
 
         return profiles
+
+    def get_profiles(
+        self,
+        provider: str | None = None,
+    ) -> list[ExtractorLearningProfile]:
+        """
+        Retrieve learned extractor profiles.
+
+        When provider is supplied, return only profiles learned
+        from that provider. Legacy provider-less profiles remain
+        available through provider=None.
+        """
+
+        profiles = self.build_profiles()
+
+        if provider is None:
+            return profiles
+
+        return [profile for profile in profiles if profile.provider == provider]
