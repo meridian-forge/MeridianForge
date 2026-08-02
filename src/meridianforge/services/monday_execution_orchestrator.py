@@ -1,10 +1,11 @@
 """
 Monday execution orchestrator.
 
-SP-430.2
+SP-430.3
 
-Synchronizes Gmail (when enabled) and then executes the adaptive Monday
-operations workflow against the local inbox directory.
+Executes the end-to-end Monday production workflow:
+Gmail synchronization -> intake -> adaptive routing -> audit reporting ->
+consolidated Monday operations report.
 """
 
 from __future__ import annotations
@@ -27,6 +28,7 @@ class MondayExecutionResult:
 
     gmail_synchronized: bool
     operations: MondayOperationsResult
+    monday_report: str
 
 
 class MondayExecutionOrchestrator:
@@ -62,7 +64,39 @@ class MondayExecutionOrchestrator:
             self._inbox,
         )
 
+        report = self._build_report(
+            gmail_synchronized=gmail_synchronized,
+            operations=operations,
+        )
+
         return MondayExecutionResult(
             gmail_synchronized=gmail_synchronized,
             operations=operations,
+            monday_report=report,
+        )
+
+    def _build_report(
+        self,
+        *,
+        gmail_synchronized: bool,
+        operations: MondayOperationsResult,
+    ) -> str:
+        """
+        Build the consolidated Monday operations report.
+        """
+
+        extractors = (
+            "\n".join(f"- {name}" for name in operations.routed_extractors)
+            if operations.routed_extractors
+            else "- None"
+        )
+
+        return (
+            "# MeridianForge Monday Operations Report\n\n"
+            f"Gmail synchronized: {'Yes' if gmail_synchronized else 'No'}\n"
+            f"Artifacts processed: {operations.artifacts_processed}\n\n"
+            "## Routed extractors\n"
+            f"{extractors}\n\n"
+            "## Extraction audit\n\n"
+            f"{operations.audit_report}\n"
         )
