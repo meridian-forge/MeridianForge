@@ -28,4 +28,5 @@ def test_execution_orchestrator_generates_monday_report(
     assert len(result.operations.routed_extractors) == 1
     assert "MeridianForge Monday Operations Report" in result.monday_report
     assert "Artifacts processed: 1" in result.monday_report
+    assert "Normalized opportunities:" in result.monday_report
     assert "Extraction Audit Dashboard" in result.monday_report
