@@ -1,86 +1,56 @@
 """
 Opportunity routing service.
 
-MF-512.2.2
+MF-513.6
 
-Routes classified investment artifacts to the appropriate extraction
-pipeline. This is the bridge between OpportunityIntakeService and the
-specialized extractors that normalize opportunities for underwriting.
+Routes classified opportunity artifacts to the preferred extractor,
+using adaptive extractor selection when historical performance data is
+available.
 """
 
 from __future__ import annotations
 
-from dataclasses import dataclass
-from pathlib import Path
-
-from meridianforge.extractors.rental_acquisition_extractor import (
-    RentalAcquisitionExtractor,
-    RentalAcquisitionRecord,
-)
 from meridianforge.models.opportunity import OpportunityType
-from meridianforge.services.opportunity_intake_service import (
-    IntakeArtifact,
+from meridianforge.services.adaptive_extractor_selector import (
+    AdaptiveExtractorSelector,
 )
-
-
-@dataclass(frozen=True)
-class RoutedOpportunity:
-    """
-    Result of routing a classified artifact.
-    """
-
-    source_file: Path
-    opportunity_type: OpportunityType
-    payload: object | None
 
 
 class OpportunityRouter:
     """
-    Route classified artifacts into specialized extraction pipelines.
+    Route opportunity classifications to extractors.
     """
+
+    def __init__(
+        self,
+        selector: AdaptiveExtractorSelector | None = None,
+    ) -> None:
+        self._selector = selector or AdaptiveExtractorSelector()
 
     def route(
         self,
-        artifact: IntakeArtifact,
-    ) -> RoutedOpportunity:
-        opportunity_type = artifact.classification.opportunity_type
+        opportunity_type: OpportunityType,
+    ) -> str:
+        """
+        Return the preferred extractor for an opportunity type.
+        """
 
-        if opportunity_type == OpportunityType.RENTAL_ACQUISITION:
-            payload: RentalAcquisitionRecord | None = (
-                RentalAcquisitionExtractor.extract(
-                    artifact.extracted_text,
-                    artifact.path,
-                )
+        if opportunity_type is OpportunityType.RENTAL_ACQUISITION:
+            candidates = [
+                "RentalAcquisitionExtractor",
+                "AlternativeRentalExtractor",
+            ]
+
+            selected = self._selector.select(
+                candidates,
             )
 
-            return RoutedOpportunity(
-                source_file=artifact.path,
-                opportunity_type=opportunity_type,
-                payload=payload,
-            )
+            return selected or "RentalAcquisitionExtractor"
 
-        # MF-512.2.3
-        # Inventory workbook extraction will be connected here.
+        if opportunity_type is OpportunityType.INVENTORY_WORKBOOK:
+            return "InventoryWorkbookExtractor"
 
-        if opportunity_type == OpportunityType.INVENTORY_WORKBOOK:
-            return RoutedOpportunity(
-                source_file=artifact.path,
-                opportunity_type=opportunity_type,
-                payload=None,
-            )
+        if opportunity_type is OpportunityType.PRIVATE_LENDING:
+            return "PrivateLendingExtractor"
 
-        # MF-512.2.4
-        # Private lending extraction will be connected here.
-
-        if opportunity_type == OpportunityType.PRIVATE_LENDING:
-            return RoutedOpportunity(
-                source_file=artifact.path,
-                opportunity_type=opportunity_type,
-                payload=None,
-            )
-
-        return RoutedOpportunity(
-            source_file=artifact.path,
-            opportunity_type=opportunity_type,
-            payload=None,
-        )
+        return "GenericDocumentExtractor"
