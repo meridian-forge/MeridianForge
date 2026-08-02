@@ -91,3 +91,50 @@ def test_selector_falls_back_when_no_history_exists() -> None:
         )
         is None
     )
+
+
+def test_selector_prefers_provider_learning_over_generic_performance() -> None:
+    from meridianforge.models.domain.extractor_learning_profile import (
+        ExtractorLearningProfile,
+    )
+
+    class LearningServiceStub:
+        def get_profiles(
+            self,
+            provider: str | None = None,
+        ) -> list[ExtractorLearningProfile]:
+            return [
+                ExtractorLearningProfile(
+                    extractor="ExtractorB",
+                    provider="JWB Capital",
+                    average_confidence=0.99,
+                    total_records=5,
+                ),
+            ]
+
+    repository = ExtractionAuditRepository()
+
+    repository.save(
+        _record(
+            "ExtractorA",
+            ExtractionAuditStatus.ACCEPTED,
+        )
+    )
+
+    selector = AdaptiveExtractorSelector(
+        performance_service=ExtractorPerformanceService(
+            repository=repository,
+        ),
+        learning_service=LearningServiceStub(),
+    )
+
+    assert (
+        selector.select(
+            [
+                "ExtractorA",
+                "ExtractorB",
+            ],
+            provider="JWB Capital",
+        )
+        == "ExtractorB"
+    )
