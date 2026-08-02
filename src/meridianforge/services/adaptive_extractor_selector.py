@@ -1,16 +1,20 @@
 """
 Adaptive extractor selection service.
 
-MF-513.5.3 / MF-440.6.3
+MF-513.5.3 / MF-440.8.1
 
 Selects the preferred extractor using:
 - extraction learning
 - historical performance
 - decision feedback intelligence
+- confidence calibration
 """
 
 from __future__ import annotations
 
+from meridianforge.services.confidence_calibration_service import (
+    ConfidenceCalibrationService,
+)
 from meridianforge.services.extractor_feedback_learning_service import (
     ExtractorFeedbackLearningService,
 )
@@ -32,6 +36,7 @@ class AdaptiveExtractorSelector:
         performance_service: ExtractorPerformanceService | None = None,
         learning_service: ExtractorLearningService | None = None,
         feedback_learning_service: ExtractorFeedbackLearningService | None = None,
+        confidence_calibration_service: ConfidenceCalibrationService | None = None,
     ) -> None:
         self._performance_service = performance_service or ExtractorPerformanceService()
 
@@ -39,6 +44,10 @@ class AdaptiveExtractorSelector:
 
         self._feedback_learning_service = (
             feedback_learning_service or ExtractorFeedbackLearningService()
+        )
+
+        self._confidence_calibration_service = (
+            confidence_calibration_service or ConfidenceCalibrationService()
         )
 
     def select(
@@ -86,24 +95,26 @@ class AdaptiveExtractorSelector:
 
         def score(
             extractor: str,
-        ) -> tuple[float, float, float, int]:
-            learning = learning_profiles.get(
-                extractor,
+        ) -> tuple[float, float, float, float, int]:
+            learning = learning_profiles.get(extractor)
+
+            performance = performances.get(extractor)
+
+            feedback = feedback_profiles.get(extractor)
+
+            calibration = self._confidence_calibration_service.calibrate(
+                extractor=extractor,
+                raw_confidence=(learning.average_confidence if learning else 0.0),
+                provider=provider,
             )
 
-            performance = performances.get(
-                extractor,
-            )
+            decision_accuracy = feedback.average_accuracy if feedback else 0.0
 
-            feedback = feedback_profiles.get(
-                extractor,
-            )
+            calibrated_confidence = calibration.calibrated_confidence
 
             extraction_confidence = learning.average_confidence if learning else 0.0
 
             acceptance_rate = performance.acceptance_rate if performance else 0.0
-
-            decision_accuracy = feedback.average_accuracy if feedback else 0.0
 
             records = (
                 performance.total_records
@@ -113,6 +124,7 @@ class AdaptiveExtractorSelector:
 
             return (
                 decision_accuracy,
+                calibrated_confidence,
                 extraction_confidence,
                 acceptance_rate,
                 records,
