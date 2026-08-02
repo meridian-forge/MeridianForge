@@ -54,6 +54,12 @@ def test_monday_operations_orchestrator_processes_inbox(
     assert result.artifacts_processed == 1
     assert len(result.routed_extractors) == 1
     assert result.routed_extractors[0] == "RentalAcquisitionExtractor"
+
+    assert len(result.extractor_decisions) == 1
+    assert (
+        result.extractor_decisions[0].selected_extractor == "RentalAcquisitionExtractor"
+    )
+
     assert len(result.normalized_opportunities) == 1
     assert result.normalized_opportunities[0].city == "Rosharon"
     assert "Extraction Audit Dashboard" in result.audit_report

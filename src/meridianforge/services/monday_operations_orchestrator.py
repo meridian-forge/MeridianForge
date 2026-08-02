@@ -1,11 +1,14 @@
 """
 Monday operations orchestrator.
 
-SP-430.1 / SP-430.4.1
+SP-430.1 / SP-430.4.1 / MF-440.3
 
 Coordinates the Monday operating workflow by connecting opportunity
 intake, adaptive routing, extraction execution, normalization, and
 extraction audit reporting into a single execution boundary.
+
+MF-440.3 exposes extractor decision intelligence through the Monday
+workflow while preserving existing operational behavior.
 """
 
 from __future__ import annotations
@@ -13,6 +16,9 @@ from __future__ import annotations
 from dataclasses import dataclass
 from pathlib import Path
 
+from meridianforge.models.domain.extractor_decision_context import (
+    ExtractorDecisionContext,
+)
 from meridianforge.reporting.extraction_audit_report import (
     ExtractionAuditReport,
 )
@@ -38,6 +44,7 @@ class MondayOperationsResult:
 
     artifacts_processed: int
     routed_extractors: list[str]
+    extractor_decisions: list[ExtractorDecisionContext]
     normalized_opportunities: list[NormalizedRentalOpportunity]
     audit_report: str
 
@@ -73,20 +80,25 @@ class MondayOperationsOrchestrator:
         )
 
         routed_extractors: list[str] = []
+        extractor_decisions: list[ExtractorDecisionContext] = []
         normalized_opportunities: list[NormalizedRentalOpportunity] = []
 
         for artifact in artifacts:
-            extractor = self._router.route(
+            decision = self._router.route_with_context(
                 artifact.classification.opportunity_type,
             )
 
             routed_extractors.append(
-                extractor,
+                decision.selected_extractor,
+            )
+
+            extractor_decisions.append(
+                decision,
             )
 
             opportunity = self._pipeline.process(
                 artifact=artifact,
-                extractor_name=extractor,
+                decision_context=decision,
             )
 
             if opportunity is not None:
@@ -99,6 +111,7 @@ class MondayOperationsOrchestrator:
         return MondayOperationsResult(
             artifacts_processed=len(artifacts),
             routed_extractors=routed_extractors,
+            extractor_decisions=extractor_decisions,
             normalized_opportunities=normalized_opportunities,
             audit_report=report,
         )
