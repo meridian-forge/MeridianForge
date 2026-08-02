@@ -28,7 +28,11 @@ class EmailArtifactRepositoryService:
         artifacts: list[EmailRepositoryArtifact] = []
 
         for request in batch.artifacts:
-            artifacts.append(self._persist_request(request))
+            artifacts.append(
+                self._persist_request(
+                    request,
+                )
+            )
 
         return artifacts
 
