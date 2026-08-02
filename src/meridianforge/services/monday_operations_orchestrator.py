@@ -1,14 +1,14 @@
 """
 Monday operations orchestrator.
 
-SP-430.1 / SP-430.4.1 / MF-440.3
+SP-430.1 / SP-430.4.1 / MF-460.1
 
 Coordinates the Monday operating workflow by connecting opportunity
 intake, adaptive routing, extraction execution, normalization, and
 extraction audit reporting into a single execution boundary.
 
-MF-440.3 exposes extractor decision intelligence through the Monday
-workflow while preserving existing operational behavior.
+MF-460.1 adds a Gmail execution path while preserving the existing
+directory-based production workflow.
 """
 
 from __future__ import annotations
@@ -33,6 +33,9 @@ from meridianforge.services.opportunity_mapper import (
 )
 from meridianforge.services.opportunity_router import (
     OpportunityRouter,
+)
+from meridianforge.workflows.monday_operations_gmail_adapter import (
+    MondayOperationsGmailAdapter,
 )
 
 
@@ -60,11 +63,13 @@ class MondayOperationsOrchestrator:
         router: OpportunityRouter | None = None,
         extraction_pipeline: ExtractionPipelineService | None = None,
         audit_report: ExtractionAuditReport | None = None,
+        gmail_adapter: MondayOperationsGmailAdapter | None = None,
     ) -> None:
         self._intake = intake or OpportunityIntakeService()
         self._router = router or OpportunityRouter()
         self._pipeline = extraction_pipeline or ExtractionPipelineService()
         self._audit_report = audit_report or ExtractionAuditReport()
+        self._gmail_adapter = gmail_adapter or MondayOperationsGmailAdapter()
 
     def execute(
         self,
@@ -113,5 +118,28 @@ class MondayOperationsOrchestrator:
             routed_extractors=routed_extractors,
             extractor_decisions=extractor_decisions,
             normalized_opportunities=normalized_opportunities,
+            audit_report=report,
+        )
+
+    def execute_gmail_messages(
+        self,
+        gmail_messages: list[dict[str, object]],
+    ) -> MondayOperationsResult:
+        """
+        Execute the Gmail-driven Monday workflow using the production
+        Gmail adapter while preserving the existing execution boundary.
+        """
+
+        gmail_result = self._gmail_adapter.ingest_gmail_messages(
+            gmail_messages,
+        )
+
+        report = self._audit_report.generate()
+
+        return MondayOperationsResult(
+            artifacts_processed=gmail_result.processed_messages,
+            routed_extractors=[],
+            extractor_decisions=[],
+            normalized_opportunities=[],
             audit_report=report,
         )
