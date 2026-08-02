@@ -1,59 +1,68 @@
+"""
+Monday execution orchestrator.
+
+SP-430.2
+
+Synchronizes Gmail (when enabled) and then executes the adaptive Monday
+operations workflow against the local inbox directory.
+"""
+
 from __future__ import annotations
 
 from dataclasses import dataclass
 from pathlib import Path
 
-from meridianforge.models.operations import OperationsRunResult
-from meridianforge.services.operations_service import OperationsService
+from meridianforge.connectors.gmail_connector import GmailConnector
+from meridianforge.services.monday_operations_orchestrator import (
+    MondayOperationsOrchestrator,
+    MondayOperationsResult,
+)
 
 
-@dataclass(slots=True)
+@dataclass(frozen=True, slots=True)
 class MondayExecutionResult:
     """
-    Result of a complete Monday execution cycle.
+    Result of a Monday execution run.
     """
 
-    operations: OperationsRunResult
-
-    @property
-    def files_processed(self) -> int:
-        return len(self.operations.files_processed)
-
-    @property
-    def buy_count(self) -> int:
-        return self.operations.buy_count
-
-    @property
-    def watch_count(self) -> int:
-        return self.operations.watch_count
-
-    @property
-    def pass_count(self) -> int:
-        return self.operations.pass_count
+    gmail_synchronized: bool
+    operations: MondayOperationsResult
 
 
 class MondayExecutionOrchestrator:
     """
-    High-level orchestration entry point for the
-    Monday Morning automation workflow.
+    Execute the full Monday synchronization and operations workflow.
     """
 
     def __init__(
         self,
-        deals_directory: Path,
+        inbox: Path,
+        operations: MondayOperationsOrchestrator | None = None,
+        gmail: GmailConnector | None = None,
     ) -> None:
+        self._inbox = inbox
+        self._operations = operations or MondayOperationsOrchestrator()
+        self._gmail = gmail or GmailConnector()
 
-        self.operations = OperationsService(
-            deals_directory=deals_directory,
+    def execute(
+        self,
+        synchronize_gmail: bool = True,
+    ) -> MondayExecutionResult:
+        """
+        Synchronize Gmail (optional) and execute Monday operations.
+        """
+
+        gmail_synchronized = False
+
+        if synchronize_gmail:
+            self._gmail.sync(self._inbox)
+            gmail_synchronized = True
+
+        operations = self._operations.execute(
+            self._inbox,
         )
 
-    def execute(self) -> MondayExecutionResult:
-        """
-        Execute the complete Monday workflow.
-        """
-
-        result = self.operations.execute()
-
         return MondayExecutionResult(
-            operations=result,
+            gmail_synchronized=gmail_synchronized,
+            operations=operations,
         )

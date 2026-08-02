@@ -5,20 +5,24 @@ from meridianforge.services.monday_execution_orchestrator import (
 )
 
 
-def test_monday_execution_orchestrator_runs_empty_directory(
+def test_execution_orchestrator_runs_without_gmail_sync(
     tmp_path: Path,
-):
+) -> None:
+    inbox = tmp_path / "inbox"
+    inbox.mkdir()
 
-    orchestrator = MondayExecutionOrchestrator(
-        deals_directory=tmp_path,
+    (inbox / "deal.pdf").write_text(
+        "Location: Rosharon, TX\nPrice: $339,000\nRent: $3,135\n"
     )
 
-    result = orchestrator.execute()
+    orchestrator = MondayExecutionOrchestrator(
+        inbox=inbox,
+    )
 
-    assert result.files_processed == 0
+    result = orchestrator.execute(
+        synchronize_gmail=False,
+    )
 
-    assert result.buy_count == 0
-
-    assert result.watch_count == 0
-
-    assert result.pass_count == 0
+    assert result.gmail_synchronized is False
+    assert result.operations.artifacts_processed == 1
+    assert len(result.operations.routed_extractors) == 1
