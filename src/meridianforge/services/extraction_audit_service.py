@@ -1,11 +1,10 @@
 """
 Extraction audit service.
 
-MF-513.2.2
+MF-513.2.2 / MF-440.4.2
 
 Creates audit records for extracted fields and persists them through
-the extraction audit repository. This forms the operational boundary
-between document extractors and the future learning engine.
+the extraction audit repository.
 """
 
 from __future__ import annotations
@@ -39,6 +38,7 @@ class ExtractionAuditService:
         normalized_value: str | None,
         confidence: float,
         extractor: str,
+        provider: str | None = None,
     ) -> ExtractionAuditRecord:
         """
         Create and persist an extraction audit record.
@@ -52,6 +52,7 @@ class ExtractionAuditService:
             normalized_value=normalized_value,
             confidence=confidence,
             extractor=extractor,
+            provider=provider,
             status=self._status_from_confidence(confidence),
         )
 

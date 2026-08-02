@@ -1,9 +1,10 @@
 """
 Extractor learning service.
 
-MF-440.4
+MF-440.4 / MF-440.4.2
 
 Transforms extraction audit history into reusable extractor intelligence.
+Learning is scoped by extractor and provider when provider information exists.
 """
 
 from __future__ import annotations
@@ -37,18 +38,35 @@ class ExtractorLearningService:
     ) -> list[ExtractorLearningProfile]:
         """
         Generate extractor learning profiles.
+
+        Profiles are separated by extractor and provider.
+        Provider remains optional for legacy audit history.
         """
 
         records = self._repository.all()
 
-        grouped: dict[str, list] = defaultdict(list)
+        grouped: dict[tuple[str, str | None], list] = defaultdict(list)
 
         for record in records:
-            grouped[record.extractor].append(record)
+            grouped[
+                (
+                    record.extractor,
+                    record.provider,
+                )
+            ].append(record)
 
         profiles: list[ExtractorLearningProfile] = []
 
-        for extractor, extractor_records in sorted(grouped.items()):
+        for (
+            extractor,
+            provider,
+        ), extractor_records in sorted(
+            grouped.items(),
+            key=lambda item: (
+                item[0][0],
+                item[0][1] or "",
+            ),
+        ):
 
             successful_fields: list[str] = []
             failed_fields: list[str] = []
@@ -71,6 +89,7 @@ class ExtractorLearningService:
             profiles.append(
                 ExtractorLearningProfile(
                     extractor=extractor,
+                    provider=provider,
                     successful_fields=sorted(
                         set(successful_fields),
                     ),

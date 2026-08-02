@@ -50,3 +50,48 @@ def test_extractor_learning_builds_profile() -> None:
     assert "purchase_price" in profiles[0].successful_fields
     assert "taxes" in profiles[0].failed_fields
     assert profiles[0].total_records == 2
+
+
+def test_extractor_learning_separates_profiles_by_provider() -> None:
+    repository = ExtractionAuditRepository()
+
+    repository.save(
+        ExtractionAuditRecord(
+            artifact_id="artifact-1",
+            source_file="jwb.pdf",
+            field_name="purchase_price",
+            raw_value="$339000",
+            normalized_value="339000",
+            confidence=0.98,
+            extractor="RentalAcquisitionExtractor",
+            status=ExtractionAuditStatus.ACCEPTED,
+            provider="JWB Capital",
+        )
+    )
+
+    repository.save(
+        ExtractionAuditRecord(
+            artifact_id="artifact-2",
+            source_file="other.pdf",
+            field_name="purchase_price",
+            raw_value="$339000",
+            normalized_value="339000",
+            confidence=0.98,
+            extractor="RentalAcquisitionExtractor",
+            status=ExtractionAuditStatus.ACCEPTED,
+            provider="Other Provider",
+        )
+    )
+
+    profiles = ExtractorLearningService(
+        repository=repository,
+    ).build_profiles()
+
+    assert len(profiles) == 2
+
+    providers = {profile.provider for profile in profiles}
+
+    assert providers == {
+        "JWB Capital",
+        "Other Provider",
+    }
