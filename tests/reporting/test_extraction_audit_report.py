@@ -1,6 +1,3 @@
-import json
-from pathlib import Path
-
 from meridianforge.models.domain.extraction_audit import (
     ExtractionAuditRecord,
     ExtractionAuditStatus,
@@ -8,55 +5,38 @@ from meridianforge.models.domain.extraction_audit import (
 from meridianforge.reporting.extraction_audit_report import (
     ExtractionAuditReport,
 )
+from meridianforge.repositories.extraction_audit_repository import (
+    ExtractionAuditRepository,
+)
+from meridianforge.services.extraction_audit_dashboard import (
+    ExtractionAuditDashboardService,
+)
 
 
-def _record(
-    field: str,
-    confidence: float,
-    status: ExtractionAuditStatus,
-) -> ExtractionAuditRecord:
-    return ExtractionAuditRecord(
-        artifact_id="A1",
-        source_file="deal.pdf",
-        field_name=field,
-        raw_value="100",
-        normalized_value="100",
-        confidence=confidence,
-        extractor="OpportunityMapper",
-        status=status,
+def test_extraction_audit_report_generates_markdown() -> None:
+    repository = ExtractionAuditRepository()
+
+    repository.save(
+        ExtractionAuditRecord(
+            artifact_id="artifact-1",
+            source_file="deal.pdf",
+            field_name="purchase_price",
+            raw_value="$339,000",
+            normalized_value="339000",
+            confidence=0.98,
+            extractor="RentalAcquisitionExtractor",
+            status=ExtractionAuditStatus.ACCEPTED,
+        )
     )
 
-
-def test_export_json(
-    tmp_path: Path,
-) -> None:
-    records = [
-        _record(
-            "purchase_price",
-            0.99,
-            ExtractionAuditStatus.ACCEPTED,
-        ),
-        _record(
-            "monthly_rent",
-            0.75,
-            ExtractionAuditStatus.REVIEW,
-        ),
-        _record(
-            "roi",
-            0.20,
-            ExtractionAuditStatus.REJECTED,
-        ),
-    ]
-
-    output = ExtractionAuditReport.export_json(
-        records,
-        tmp_path / "audit.json",
+    dashboard_service = ExtractionAuditDashboardService(
+        repository=repository,
     )
 
-    payload = json.loads(output.read_text())
+    report = ExtractionAuditReport(
+        dashboard_service=dashboard_service,
+    ).generate()
 
-    assert payload["summary"]["total_fields"] == 3
-    assert payload["summary"]["accepted"] == 1
-    assert payload["summary"]["review"] == 1
-    assert payload["summary"]["rejected"] == 1
-    assert len(payload["records"]) == 3
+    assert "Extraction Audit Dashboard" in report
+    assert "Total Records: 1" in report
+    assert "Accepted: 1" in report

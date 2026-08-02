@@ -1,100 +1,42 @@
 """
-Extraction audit reporting.
+Extraction audit report generator.
 
-MF-513.3.2
+MF-513.4
 
-Exports extraction audit records into a structured report that can be
-reviewed after a Monday execution cycle. This provides the human
-feedback loop that will later feed the learning engine.
+Builds a Markdown extraction audit report that can be attached to
+Monday operations output and future investor-facing dashboards.
 """
 
 from __future__ import annotations
 
-import json
-from pathlib import Path
-
-from meridianforge.models.domain.extraction_audit import (
-    ExtractionAuditRecord,
-    ExtractionAuditStatus,
+from meridianforge.reporting.extraction_audit_dashboard_renderer import (
+    ExtractionAuditDashboardRenderer,
+)
+from meridianforge.services.extraction_audit_dashboard import (
+    ExtractionAuditDashboardService,
 )
 
 
 class ExtractionAuditReport:
     """
-    Build and export extraction audit review reports.
+    Generate extraction audit reports for operations workflows.
     """
 
-    @staticmethod
-    def summary(
-        records: list[ExtractionAuditRecord],
-    ) -> dict[str, object]:
-        total = len(records)
-
-        accepted = [
-            record
-            for record in records
-            if record.status is ExtractionAuditStatus.ACCEPTED
-        ]
-
-        review = [
-            record
-            for record in records
-            if record.status is ExtractionAuditStatus.REVIEW
-        ]
-
-        rejected = [
-            record
-            for record in records
-            if record.status is ExtractionAuditStatus.REJECTED
-        ]
-
-        average_confidence = (
-            sum(record.confidence for record in records) / total
-            if total
-            else 0.0
+    def __init__(
+        self,
+        dashboard_service: ExtractionAuditDashboardService | None = None,
+    ) -> None:
+        self._dashboard_service = (
+            dashboard_service or ExtractionAuditDashboardService()
         )
 
-        return {
-            "total_fields": total,
-            "accepted": len(accepted),
-            "review": len(review),
-            "rejected": len(rejected),
-            "average_confidence": round(
-                average_confidence,
-                4,
-            ),
-        }
+    def generate(self) -> str:
+        """
+        Generate a Markdown extraction audit report.
+        """
 
-    @classmethod
-    def export_json(
-        cls,
-        records: list[ExtractionAuditRecord],
-        output_path: Path,
-    ) -> Path:
-        payload = {
-            "summary": cls.summary(records),
-            "records": [
-                {
-                    "artifact_id": record.artifact_id,
-                    "source_file": record.source_file,
-                    "field_name": record.field_name,
-                    "raw_value": record.raw_value,
-                    "normalized_value": record.normalized_value,
-                    "confidence": record.confidence,
-                    "extractor": record.extractor,
-                    "status": record.status.value,
-                }
-                for record in records
-            ],
-        }
+        dashboard = self._dashboard_service.build_dashboard()
 
-        output_path.parent.mkdir(
-            parents=True,
-            exist_ok=True,
+        return ExtractionAuditDashboardRenderer.render(
+            dashboard,
         )
-
-        output_path.write_text(
-            json.dumps(payload, indent=2),
-        )
-
-        return output_path
