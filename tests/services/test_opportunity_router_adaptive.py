@@ -91,3 +91,15 @@ def test_router_falls_back_for_non_adaptive_types() -> None:
         )
         == "InventoryWorkbookExtractor"
     )
+
+
+def test_router_returns_decision_context() -> None:
+    router = OpportunityRouter()
+
+    context = router.route_with_context(
+        OpportunityType.RENTAL_ACQUISITION,
+    )
+
+    assert context.selected_extractor in context.candidate_extractors
+
+    assert "RentalAcquisitionExtractor" in context.candidate_extractors

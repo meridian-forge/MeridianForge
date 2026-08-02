@@ -42,3 +42,46 @@ def test_extraction_pipeline_normalizes_rental_opportunity(
     assert result.city == "Rosharon"
     assert result.state == "TX"
     assert result.monthly_rent == 3135
+
+
+def test_pipeline_accepts_extractor_decision_context(
+    tmp_path: Path,
+) -> None:
+    from meridianforge.models.domain.extractor_decision_context import (
+        ExtractorDecisionContext,
+    )
+
+    artifact = IntakeArtifact(
+        path=tmp_path / "deal.pdf",
+        classification=OpportunityClassification(
+            opportunity_type=OpportunityType.RENTAL_ACQUISITION,
+            confidence=0.99,
+            reason="Rental acquisition document",
+        ),
+        extracted_text=(
+            "Location: Rosharon, TX\n"
+            "Price: $339,000\n"
+            "Rent: $3,135\n"
+            "Cashflow: $539\n"
+            "ROI: 8.7%\n"
+        ),
+    )
+
+    context = ExtractorDecisionContext(
+        opportunity_type="rental_acquisition",
+        selected_extractor="RentalAcquisitionExtractor",
+        candidate_extractors=[
+            "RentalAcquisitionExtractor",
+            "AlternativeRentalExtractor",
+        ],
+    )
+
+    service = ExtractionPipelineService()
+
+    result = service.process(
+        artifact=artifact,
+        decision_context=context,
+    )
+
+    assert result is not None
+    assert result.city == "Rosharon"

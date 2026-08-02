@@ -1,10 +1,10 @@
 """
 Extraction pipeline service.
 
-SP-430.4.1
+SP-430.4.1 / MF-440.2
 
-Connects routed opportunity artifacts to specialized extractors and
-normalizes extracted records into MeridianForge opportunity models.
+Connects routed opportunity artifacts to specialized extractors
+and carries extractor decision intelligence into execution.
 """
 
 from __future__ import annotations
@@ -13,6 +13,9 @@ from pathlib import Path
 
 from meridianforge.extractors.rental_acquisition_extractor import (
     RentalAcquisitionExtractor,
+)
+from meridianforge.models.domain.extractor_decision_context import (
+    ExtractorDecisionContext,
 )
 from meridianforge.services.extraction_audit_service import (
     ExtractionAuditService,
@@ -40,13 +43,22 @@ class ExtractionPipelineService:
     def process(
         self,
         artifact: IntakeArtifact,
-        extractor_name: str,
+        extractor_name: str | None = None,
+        decision_context: ExtractorDecisionContext | None = None,
     ) -> NormalizedRentalOpportunity | None:
         """
-        Execute the selected extractor and normalize the result.
+        Execute extraction.
+
+        Supports both legacy extractor routing and MF-440
+        decision-context aware execution.
         """
 
-        if extractor_name == "RentalAcquisitionExtractor":
+        selected_extractor = extractor_name
+
+        if decision_context is not None:
+            selected_extractor = decision_context.selected_extractor
+
+        if selected_extractor == "RentalAcquisitionExtractor":
             record = RentalAcquisitionExtractor.extract(
                 text=artifact.extracted_text,
                 source_file=Path(artifact.path),
