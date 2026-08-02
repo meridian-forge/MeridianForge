@@ -1,10 +1,10 @@
 """
 Opportunity routing service.
 
-MF-513.6 / MF-440.1
+MF-513.6 / MF-440.1 / MF-440.5.3
 
 Routes classified opportunities to extractors.
-Provides both legacy routing and intelligence context.
+Provides intelligence context including provider-aware learning.
 """
 
 from __future__ import annotations
@@ -32,20 +32,24 @@ class OpportunityRouter:
     def route(
         self,
         opportunity_type: OpportunityType,
+        provider: str | None = None,
     ) -> str:
         """
         Return extractor name.
 
-        Maintains backward compatibility.
+        Maintains backward compatibility while allowing
+        provider-aware routing.
         """
 
         return self.route_with_context(
             opportunity_type,
+            provider=provider,
         ).selected_extractor
 
     def route_with_context(
         self,
         opportunity_type: OpportunityType,
+        provider: str | None = None,
     ) -> ExtractorDecisionContext:
         """
         Return extractor selection intelligence.
@@ -76,6 +80,7 @@ class OpportunityRouter:
 
         selected = self._selector.select(
             candidates,
+            provider=provider,
         )
 
         return ExtractorDecisionContext(
@@ -83,4 +88,5 @@ class OpportunityRouter:
             selected_extractor=(selected or candidates[0]),
             candidate_extractors=candidates,
             historical_confidence=0.0,
+            provider=provider,
         )

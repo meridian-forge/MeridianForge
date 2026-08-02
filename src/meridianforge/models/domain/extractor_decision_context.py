@@ -1,7 +1,7 @@
 """
 Extractor decision context.
 
-MF-440.1 / MF-440.4.2
+MF-440.1 / MF-440.5.3
 
 Captures routing intelligence before extraction execution.
 """
