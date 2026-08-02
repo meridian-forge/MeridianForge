@@ -1,8 +1,8 @@
 """
 Acquisition execution service.
 
-Bridges intake opportunities and acquisition opportunities
-into the canonical acquisition orchestration pipeline.
+Bridges intake opportunities, extracted normalized opportunities,
+and canonical acquisition opportunities into the acquisition pipeline.
 """
 
 from __future__ import annotations
@@ -24,6 +24,9 @@ from meridianforge.opportunity.models import (
 from meridianforge.services.acquisition_orchestrator import (
     AcquisitionOrchestrator,
 )
+from meridianforge.services.opportunity_mapper import (
+    NormalizedRentalOpportunity,
+)
 
 
 class AcquisitionExecutionService:
@@ -40,14 +43,17 @@ class AcquisitionExecutionService:
 
     def execute(
         self,
-        opportunity: IntakeOpportunity | AcquisitionOpportunity,
+        opportunity: (
+            IntakeOpportunity
+            | AcquisitionOpportunity
+            | NormalizedRentalOpportunity
+        ),
         investor_profile: InvestorProfile,
         export_path: Path | None = None,
         archive_path: Path | None = None,
     ) -> AcquisitionOrchestrationResult:
         """
-        Execute acquisition analysis from either an intake opportunity
-        or a canonical acquisition opportunity.
+        Execute acquisition analysis from any supported opportunity source.
         """
 
         record = self._to_record(opportunity)
@@ -61,12 +67,33 @@ class AcquisitionExecutionService:
 
     @staticmethod
     def _to_record(
-        opportunity: IntakeOpportunity | AcquisitionOpportunity,
+        opportunity: (
+            IntakeOpportunity
+            | AcquisitionOpportunity
+            | NormalizedRentalOpportunity
+        ),
     ) -> dict[str, object]:
         """
-        Convert either opportunity model into the normalized record
-        format expected by AcquisitionOrchestrator.
+        Convert supported opportunity models into the normalized
+        record format expected by AcquisitionOrchestrator.
         """
+
+        if isinstance(opportunity, NormalizedRentalOpportunity):
+            return {
+                "city": opportunity.city,
+                "state": opportunity.state,
+                "purchase_price": (
+                    opportunity.acquisition.purchase_price
+                ),
+                "closing_costs": (
+                    opportunity.acquisition.closing_costs
+                ),
+                "rehab_cost": (
+                    opportunity.acquisition.rehab_cost
+                ),
+                "monthly_rent": opportunity.monthly_rent,
+                "source": "extraction_pipeline",
+            }
 
         if isinstance(opportunity, AcquisitionOpportunity):
             return {
@@ -81,4 +108,7 @@ class AcquisitionExecutionService:
                 "source": opportunity.source,
             }
 
-        return {key: value for key, value in opportunity.fields.items()}
+        return {
+            key: value
+            for key, value in opportunity.fields.items()
+        }

@@ -79,7 +79,9 @@ class OpportunityIntakeService:
                 continue
 
             artifacts.append(
-                self.ingest_file(path),
+                self.ingest_file(
+                    path,
+                )
             )
 
         return artifacts
@@ -93,7 +95,23 @@ class OpportunityIntakeService:
         if suffix == ".pdf":
             try:
                 reader = PdfReader(str(path))
-                return "".join(page.extract_text() or "" for page in reader.pages)
+
+                text = "".join(
+                    page.extract_text() or ""
+                    for page in reader.pages
+                )
+
+                if text.strip():
+                    return text
+
+            except Exception:
+                pass
+
+            # Fallback for malformed PDFs, text fixtures,
+            # or files mislabeled with a PDF extension.
+            try:
+                return path.read_text()
+
             except Exception:
                 return ""
 
@@ -119,4 +137,8 @@ class OpportunityIntakeService:
             except Exception:
                 return ""
 
-        return ""
+        try:
+            return path.read_text()
+
+        except Exception:
+            return ""
