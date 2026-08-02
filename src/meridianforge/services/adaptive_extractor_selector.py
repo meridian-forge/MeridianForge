@@ -1,17 +1,22 @@
 """
 Adaptive extractor selection service.
 
-MF-513.5.3 / MF-440.8.1
+MF-513.5.3 / MF-440.8.2
 
 Selects the preferred extractor using:
 - extraction learning
 - historical performance
 - decision feedback intelligence
 - confidence calibration
+
+Also provides decision explanations.
 """
 
 from __future__ import annotations
 
+from meridianforge.models.domain.extractor_selection_explanation import (
+    ExtractorSelectionExplanation,
+)
 from meridianforge.services.confidence_calibration_service import (
     ConfidenceCalibrationService,
 )
@@ -56,12 +61,110 @@ class AdaptiveExtractorSelector:
         provider: str | None = None,
     ) -> str | None:
         """
-        Return best extractor using all available intelligence.
+        Return selected extractor name.
+
+        Maintains backward compatibility.
+        """
+
+        explanation = self.select_with_explanation(
+            candidates,
+            provider=provider,
+        )
+
+        return explanation.extractor if explanation else None
+
+    def select_with_explanation(
+        self,
+        candidates: list[str],
+        provider: str | None = None,
+    ) -> ExtractorSelectionExplanation | None:
+        """
+        Return extractor selection with reasoning.
         """
 
         if not candidates:
             return None
 
+        (
+            available,
+            performances,
+            learning_profiles,
+            feedback_profiles,
+            scores,
+        ) = self._build_selection_context(
+            candidates,
+            provider,
+        )
+
+        if not available:
+            return ExtractorSelectionExplanation(
+                extractor=candidates[0],
+                provider=provider,
+                reason=(
+                    "No historical intelligence available; "
+                    "default candidate selected."
+                ),
+                learning_sources=[],
+            )
+
+        selected = max(
+            available,
+            key=lambda extractor: scores[extractor],
+        )
+
+        learning = learning_profiles.get(selected)
+        performance = performances.get(selected)
+        feedback = feedback_profiles.get(selected)
+
+        calibration = self._confidence_calibration_service.calibrate(
+            extractor=selected,
+            raw_confidence=(learning.average_confidence if learning else 0.0),
+            provider=provider,
+        )
+
+        sources: list[str] = []
+
+        if feedback:
+            sources.append("feedback")
+
+        if learning:
+            sources.append("learning")
+
+        if calibration.sample_size:
+            sources.append("calibration")
+
+        if performance:
+            sources.append("performance")
+
+        return ExtractorSelectionExplanation(
+            extractor=selected,
+            provider=provider,
+            decision_accuracy=(feedback.average_accuracy if feedback else 0.0),
+            calibrated_confidence=calibration.calibrated_confidence,
+            historical_acceptance=(performance.acceptance_rate if performance else 0.0),
+            sample_size=(
+                performance.total_records
+                if performance
+                else feedback.total_decisions if feedback else 0
+            ),
+            reason=(
+                "Highest combined feedback accuracy, calibrated confidence, "
+                "learning confidence, and historical performance."
+            ),
+            learning_sources=sources,
+        )
+
+    def _build_selection_context(
+        self,
+        candidates: list[str],
+        provider: str | None,
+    ) -> tuple[
+        list[str],
+        dict,
+        dict,
+        dict,
+        dict[str, tuple[float, float, float, float, int]],
+    ]:
         performances = {
             performance.extractor: performance
             for performance in self._performance_service.summarize()
@@ -90,16 +193,11 @@ class AdaptiveExtractorSelector:
             )
         ]
 
-        if not available:
-            return candidates[0]
+        scores: dict[str, tuple[float, float, float, float, int]] = {}
 
-        def score(
-            extractor: str,
-        ) -> tuple[float, float, float, float, int]:
+        for extractor in available:
             learning = learning_profiles.get(extractor)
-
             performance = performances.get(extractor)
-
             feedback = feedback_profiles.get(extractor)
 
             calibration = self._confidence_calibration_service.calibrate(
@@ -108,29 +206,22 @@ class AdaptiveExtractorSelector:
                 provider=provider,
             )
 
-            decision_accuracy = feedback.average_accuracy if feedback else 0.0
-
-            calibrated_confidence = calibration.calibrated_confidence
-
-            extraction_confidence = learning.average_confidence if learning else 0.0
-
-            acceptance_rate = performance.acceptance_rate if performance else 0.0
-
-            records = (
-                performance.total_records
-                if performance
-                else feedback.total_decisions if feedback else 0
+            scores[extractor] = (
+                feedback.average_accuracy if feedback else 0.0,
+                calibration.calibrated_confidence,
+                learning.average_confidence if learning else 0.0,
+                performance.acceptance_rate if performance else 0.0,
+                (
+                    performance.total_records
+                    if performance
+                    else feedback.total_decisions if feedback else 0
+                ),
             )
 
-            return (
-                decision_accuracy,
-                calibrated_confidence,
-                extraction_confidence,
-                acceptance_rate,
-                records,
-            )
-
-        return max(
+        return (
             available,
-            key=score,
+            performances,
+            learning_profiles,
+            feedback_profiles,
+            scores,
         )
