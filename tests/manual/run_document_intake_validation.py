@@ -50,9 +50,7 @@ print("=" * 72)
 print()
 
 for name, status, fields, confidence, error in results:
-    print(
-        f"{status:5} | {name:30} | fields={fields:2d} | confidence={confidence:.2f}"
-    )
+    print(f"{status:5} | {name:30} | fields={fields:2d} | confidence={confidence:.2f}")
 
     if error:
         print(f"      {error}")

@@ -44,9 +44,7 @@ class AcquisitionExecutionService:
     def execute(
         self,
         opportunity: (
-            IntakeOpportunity
-            | AcquisitionOpportunity
-            | NormalizedRentalOpportunity
+            IntakeOpportunity | AcquisitionOpportunity | NormalizedRentalOpportunity
         ),
         investor_profile: InvestorProfile,
         export_path: Path | None = None,
@@ -68,9 +66,7 @@ class AcquisitionExecutionService:
     @staticmethod
     def _to_record(
         opportunity: (
-            IntakeOpportunity
-            | AcquisitionOpportunity
-            | NormalizedRentalOpportunity
+            IntakeOpportunity | AcquisitionOpportunity | NormalizedRentalOpportunity
         ),
     ) -> dict[str, object]:
         """
@@ -82,15 +78,9 @@ class AcquisitionExecutionService:
             return {
                 "city": opportunity.city,
                 "state": opportunity.state,
-                "purchase_price": (
-                    opportunity.acquisition.purchase_price
-                ),
-                "closing_costs": (
-                    opportunity.acquisition.closing_costs
-                ),
-                "rehab_cost": (
-                    opportunity.acquisition.rehab_cost
-                ),
+                "purchase_price": (opportunity.acquisition.purchase_price),
+                "closing_costs": (opportunity.acquisition.closing_costs),
+                "rehab_cost": (opportunity.acquisition.rehab_cost),
                 "monthly_rent": opportunity.monthly_rent,
                 "source": "extraction_pipeline",
             }
@@ -108,7 +98,4 @@ class AcquisitionExecutionService:
                 "source": opportunity.source,
             }
 
-        return {
-            key: value
-            for key, value in opportunity.fields.items()
-        }
+        return {key: value for key, value in opportunity.fields.items()}

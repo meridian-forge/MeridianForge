@@ -86,10 +86,7 @@ class MondayExecutionOrchestrator:
         """
 
         extractors = (
-            "\n".join(
-                f"- {name}"
-                for name in operations.routed_extractors
-            )
+            "\n".join(f"- {name}" for name in operations.routed_extractors)
             if operations.routed_extractors
             else "- None"
         )
@@ -100,10 +97,7 @@ class MondayExecutionOrchestrator:
 
         normalized = (
             "\n".join(
-                (
-                    f"- {opportunity.city}, "
-                    f"{opportunity.state}"
-                )
+                (f"- {opportunity.city}, " f"{opportunity.state}")
                 for opportunity in operations.normalized_opportunities
             )
             if operations.normalized_opportunities

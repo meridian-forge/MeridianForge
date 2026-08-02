@@ -66,21 +66,15 @@ class ExtractorPerformanceService:
             statuses = grouped[extractor]
 
             accepted = sum(
-                1
-                for status in statuses
-                if status is ExtractionAuditStatus.ACCEPTED
+                1 for status in statuses if status is ExtractionAuditStatus.ACCEPTED
             )
 
             review = sum(
-                1
-                for status in statuses
-                if status is ExtractionAuditStatus.REVIEW
+                1 for status in statuses if status is ExtractionAuditStatus.REVIEW
             )
 
             rejected = sum(
-                1
-                for status in statuses
-                if status is ExtractionAuditStatus.REJECTED
+                1 for status in statuses if status is ExtractionAuditStatus.REJECTED
             )
 
             total = len(statuses)

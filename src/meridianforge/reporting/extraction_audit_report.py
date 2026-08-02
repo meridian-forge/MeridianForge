@@ -26,9 +26,7 @@ class ExtractionAuditReport:
         self,
         dashboard_service: ExtractionAuditDashboardService | None = None,
     ) -> None:
-        self._dashboard_service = (
-            dashboard_service or ExtractionAuditDashboardService()
-        )
+        self._dashboard_service = dashboard_service or ExtractionAuditDashboardService()
 
     def generate(self) -> str:
         """

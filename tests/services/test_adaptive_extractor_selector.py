@@ -61,24 +61,33 @@ def test_selector_prefers_best_historical_extractor() -> None:
         performance_service=service,
     )
 
-    assert selector.select(
-        [
-            "ExtractorA",
-            "ExtractorB",
-        ]
-    ) == "ExtractorA"
+    assert (
+        selector.select(
+            [
+                "ExtractorA",
+                "ExtractorB",
+            ]
+        )
+        == "ExtractorA"
+    )
 
 
 def test_selector_falls_back_when_no_history_exists() -> None:
     selector = AdaptiveExtractorSelector()
 
-    assert selector.select(
-        [
-            "ExtractorA",
-            "ExtractorB",
-        ]
-    ) == "ExtractorA"
+    assert (
+        selector.select(
+            [
+                "ExtractorA",
+                "ExtractorB",
+            ]
+        )
+        == "ExtractorA"
+    )
 
-    assert selector.select(
-        [],
-    ) is None
+    assert (
+        selector.select(
+            [],
+        )
+        is None
+    )

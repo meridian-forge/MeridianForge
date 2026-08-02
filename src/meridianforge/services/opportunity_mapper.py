@@ -85,9 +85,7 @@ class OpportunityMapper:
                     else None
                 ),
                 claimed_roi=(
-                    Decimal(str(record.roi))
-                    if record.roi is not None
-                    else None
+                    Decimal(str(record.roi)) if record.roi is not None else None
                 ),
                 source_document=str(record.source_file),
             ),

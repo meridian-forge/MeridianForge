@@ -96,10 +96,7 @@ class OpportunityIntakeService:
             try:
                 reader = PdfReader(str(path))
 
-                text = "".join(
-                    page.extract_text() or ""
-                    for page in reader.pages
-                )
+                text = "".join(page.extract_text() or "" for page in reader.pages)
 
                 if text.strip():
                     return text

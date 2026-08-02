@@ -39,10 +39,7 @@ def test_opportunity_mapper_records_audit_events() -> None:
     assert normalized.acquisition.purchase_price == 339000.0
     assert repository.count() == 4
 
-    fields = {
-        audit_record.field_name
-        for audit_record in repository.all()
-    }
+    fields = {audit_record.field_name for audit_record in repository.all()}
 
     assert fields == {
         "purchase_price",

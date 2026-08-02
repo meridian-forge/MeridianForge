@@ -67,11 +67,7 @@ def run_monday(
     print("Meridian Forge Monday Workflow")
     print("MeridianForge Monday Operations")
 
-    source = (
-    "Gmail (MeridianForge label)"
-    if use_email
-    else "Local directory"
-    )
+    source = "Gmail (MeridianForge label)" if use_email else "Local directory"
 
     print(f"Input source    : {source}")
     print(f"Deals directory : {deals_directory}")

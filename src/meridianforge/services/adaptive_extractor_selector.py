@@ -24,9 +24,7 @@ class AdaptiveExtractorSelector:
         self,
         performance_service: ExtractorPerformanceService | None = None,
     ) -> None:
-        self._performance_service = (
-            performance_service or ExtractorPerformanceService()
-        )
+        self._performance_service = performance_service or ExtractorPerformanceService()
 
     def select(
         self,
@@ -42,9 +40,7 @@ class AdaptiveExtractorSelector:
         }
 
         available: list[ExtractorPerformance] = [
-            performances[name]
-            for name in candidates
-            if name in performances
+            performances[name] for name in candidates if name in performances
         ]
 
         if not available:

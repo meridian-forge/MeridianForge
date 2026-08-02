@@ -53,11 +53,7 @@ class ExtractionAuditRepository:
         Return all records associated with an artifact.
         """
 
-        return [
-            record
-            for record in self._records
-            if record.artifact_id == artifact_id
-        ]
+        return [record for record in self._records if record.artifact_id == artifact_id]
 
     def by_field(
         self,
@@ -67,11 +63,7 @@ class ExtractionAuditRepository:
         Return all records for a normalized field.
         """
 
-        return [
-            record
-            for record in self._records
-            if record.field_name == field_name
-        ]
+        return [record for record in self._records if record.field_name == field_name]
 
     def by_status(
         self,
@@ -81,11 +73,7 @@ class ExtractionAuditRepository:
         Return all records with the given audit status.
         """
 
-        return [
-            record
-            for record in self._records
-            if record.status == status
-        ]
+        return [record for record in self._records if record.status == status]
 
     def count(self) -> int:
         """

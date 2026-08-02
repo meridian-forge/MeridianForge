@@ -53,27 +53,19 @@ class ExtractionAuditDashboardService:
         total = len(records)
 
         accepted = sum(
-            1
-            for record in records
-            if record.status is ExtractionAuditStatus.ACCEPTED
+            1 for record in records if record.status is ExtractionAuditStatus.ACCEPTED
         )
 
         review = sum(
-            1
-            for record in records
-            if record.status is ExtractionAuditStatus.REVIEW
+            1 for record in records if record.status is ExtractionAuditStatus.REVIEW
         )
 
         rejected = sum(
-            1
-            for record in records
-            if record.status is ExtractionAuditStatus.REJECTED
+            1 for record in records if record.status is ExtractionAuditStatus.REJECTED
         )
 
         average_confidence = (
-            sum(record.confidence for record in records) / total
-            if total
-            else 0.0
+            sum(record.confidence for record in records) / total if total else 0.0
         )
 
         return ExtractionAuditDashboard(

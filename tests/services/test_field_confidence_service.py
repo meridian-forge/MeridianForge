@@ -58,13 +58,9 @@ def test_field_confidence_service_groups_by_field() -> None:
 
     assert len(summaries) == 2
 
-    purchase = next(
-        item for item in summaries if item.field_name == "purchase_price"
-    )
+    purchase = next(item for item in summaries if item.field_name == "purchase_price")
 
-    rent = next(
-        item for item in summaries if item.field_name == "monthly_rent"
-    )
+    rent = next(item for item in summaries if item.field_name == "monthly_rent")
 
     assert purchase.samples == 2
     assert round(purchase.average_confidence, 2) == 0.94

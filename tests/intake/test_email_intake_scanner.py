@@ -20,8 +20,7 @@ def test_scans_and_classifies_email_artifacts(tmp_path: Path) -> None:
     assert result.total_files == 4
 
     types = {
-        artifact.path.name: artifact.artifact_type
-        for artifact in result.artifacts
+        artifact.path.name: artifact.artifact_type for artifact in result.artifacts
     }
 
     assert types["portfolio.xlsx"] == ArtifactType.PORTFOLIO_WORKBOOK

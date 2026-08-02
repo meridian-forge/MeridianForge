@@ -59,15 +59,11 @@ def test_extractor_performance_service_groups_by_extractor() -> None:
     assert len(summaries) == 2
 
     rental = next(
-        item
-        for item in summaries
-        if item.extractor == "RentalAcquisitionExtractor"
+        item for item in summaries if item.extractor == "RentalAcquisitionExtractor"
     )
 
     alternative = next(
-        item
-        for item in summaries
-        if item.extractor == "AlternativeExtractor"
+        item for item in summaries if item.extractor == "AlternativeExtractor"
     )
 
     assert rental.total_records == 2
