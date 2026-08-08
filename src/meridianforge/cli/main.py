@@ -12,7 +12,9 @@ def main() -> None:
     args = parser.parse_args()
 
     if args.command == "monday":
-        run_monday()
+        run_monday(
+            use_email=args.email,
+        )
 
     elif args.command == "acquisition":
         run_acquisition(args)

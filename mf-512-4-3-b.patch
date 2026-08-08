@@ -1,0 +1,7 @@
+*** Begin Patch
+*** Update File: src/meridianforge/services/opportunity_mapper.py
+@@
+-# Placeholder patch
++# This patch will add InventoryWorkbookRecord support and
++# OpportunityMapper.from_inventory_record() in the next step.
+*** End Patch

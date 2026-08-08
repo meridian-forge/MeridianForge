@@ -30,6 +30,12 @@ def build_parser() -> argparse.ArgumentParser:
         help="Property input CSV/XLSX file",
     )
 
+    monday.add_argument(
+        "--email",
+        action="store_true",
+        help="Use Gmail MeridianForge intake pipeline",
+    )
+
     acquisition = subparsers.add_parser(
         "acquisition",
         help="Run acquisition intelligence workflow",

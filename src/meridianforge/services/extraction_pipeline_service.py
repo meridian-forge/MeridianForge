@@ -1,7 +1,7 @@
 """
 Extraction pipeline service.
 
-SP-430.4.1 / MF-440.2
+SP-430.4.1 / MF-440.2 / MF-512.4.3-C
 
 Connects routed opportunity artifacts to specialized extractors
 and carries extractor decision intelligence into execution.
@@ -10,7 +10,11 @@ and carries extractor decision intelligence into execution.
 from __future__ import annotations
 
 from pathlib import Path
+from typing import Any
 
+from meridianforge.extractors.inventory_workbook_extractor import (
+    InventoryWorkbookExtractor,
+)
 from meridianforge.extractors.rental_acquisition_extractor import (
     RentalAcquisitionExtractor,
 )
@@ -45,7 +49,7 @@ class ExtractionPipelineService:
         artifact: IntakeArtifact,
         extractor_name: str | None = None,
         decision_context: ExtractorDecisionContext | None = None,
-    ) -> NormalizedRentalOpportunity | None:
+    ) -> NormalizedRentalOpportunity | dict[str, object] | list[dict[str, object]] | None:
         """
         Execute extraction.
 
@@ -71,5 +75,22 @@ class ExtractionPipelineService:
                 record=record,
                 audit_service=self._audit,
             )
+
+        if selected_extractor == "InventoryWorkbookExtractor":
+            records = InventoryWorkbookExtractor.extract(
+                Path(artifact.path),
+            )
+
+            normalized: list[dict[str, object]] = []
+
+            for record in records:
+                normalized.append(
+                    OpportunityMapper.from_inventory_record(
+                        record=record,
+                        audit_service=self._audit,
+                    )
+                )
+
+            return normalized
 
         return None

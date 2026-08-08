@@ -1,14 +1,11 @@
 """
 Monday operations orchestrator.
 
-SP-430.1 / SP-430.4.1 / MF-460.1
+SP-430.1 / SP-430.4.1 / MF-460.1 / SP-490.2
 
 Coordinates the Monday operating workflow by connecting opportunity
 intake, adaptive routing, extraction execution, normalization, and
-extraction audit reporting into a single execution boundary.
-
-MF-460.1 adds a Gmail execution path while preserving the existing
-directory-based production workflow.
+evidence-based underwriting into a single execution boundary.
 """
 
 from __future__ import annotations
@@ -19,11 +16,20 @@ from pathlib import Path
 from meridianforge.models.domain.extractor_decision_context import (
     ExtractorDecisionContext,
 )
+from meridianforge.models.domain.investment_strategy import (
+    InvestmentStrategy,
+)
+from meridianforge.models.domain.investor_profile import (
+    InvestorProfile,
+)
 from meridianforge.reporting.extraction_audit_report import (
     ExtractionAuditReport,
 )
 from meridianforge.services.extraction_pipeline_service import (
     ExtractionPipelineService,
+)
+from meridianforge.services.monday_evidence_service import (
+    MondayEvidenceService,
 )
 from meridianforge.services.opportunity_intake_service import (
     OpportunityIntakeService,
@@ -41,10 +47,6 @@ from meridianforge.workflows.monday_operations_gmail_adapter import (
 
 @dataclass(frozen=True, slots=True)
 class MondayOperationsResult:
-    """
-    Result of a Monday operations execution.
-    """
-
     artifacts_processed: int
     routed_extractors: list[str]
     extractor_decisions: list[ExtractorDecisionContext]
@@ -54,8 +56,16 @@ class MondayOperationsResult:
 
 class MondayOperationsOrchestrator:
     """
-    Execute the Monday intake, routing, extraction, and normalization workflow.
+    Execute the Monday intake, routing, extraction, normalization,
+    and evidence-underwriting workflow.
     """
+
+    IMAGE_SUFFIXES = {
+        ".png",
+        ".jpg",
+        ".jpeg",
+        ".webp",
+    }
 
     def __init__(
         self,
@@ -64,29 +74,29 @@ class MondayOperationsOrchestrator:
         extraction_pipeline: ExtractionPipelineService | None = None,
         audit_report: ExtractionAuditReport | None = None,
         gmail_adapter: MondayOperationsGmailAdapter | None = None,
+        evidence: MondayEvidenceService | None = None,
     ) -> None:
         self._intake = intake or OpportunityIntakeService()
         self._router = router or OpportunityRouter()
         self._pipeline = extraction_pipeline or ExtractionPipelineService()
         self._audit_report = audit_report or ExtractionAuditReport()
         self._gmail_adapter = gmail_adapter or MondayOperationsGmailAdapter()
+        self._evidence = evidence or MondayEvidenceService()
 
     def execute(
         self,
         inbox: Path,
     ) -> MondayOperationsResult:
-        """
-        Process an inbox directory through intake, routing, extraction,
-        and normalization.
-        """
-
-        artifacts = self._intake.ingest_directory(
-            inbox,
-        )
+        artifacts = self._intake.ingest_directory(inbox)
 
         routed_extractors: list[str] = []
         extractor_decisions: list[ExtractorDecisionContext] = []
         normalized_opportunities: list[NormalizedRentalOpportunity] = []
+
+        investor_profile = InvestorProfile(
+            name="Monday Operations",
+            strategy=list(InvestmentStrategy)[0],
+        )
 
         for artifact in artifacts:
             decision = self._router.route_with_context(
@@ -111,6 +121,17 @@ class MondayOperationsOrchestrator:
                     opportunity,
                 )
 
+            artifact_path = Path(artifact.path)
+
+            if artifact_path.suffix.lower() in self.IMAGE_SUFFIXES:
+                try:
+                    self._evidence.analyze_artifact(
+                        artifact_path,
+                        investor_profile,
+                    )
+                except Exception:
+                    pass
+
         report = self._audit_report.generate()
 
         return MondayOperationsResult(
@@ -125,11 +146,6 @@ class MondayOperationsOrchestrator:
         self,
         gmail_messages: list[dict[str, object]],
     ) -> MondayOperationsResult:
-        """
-        Execute the Gmail-driven Monday workflow using the production
-        Gmail adapter while preserving the existing execution boundary.
-        """
-
         gmail_result = self._gmail_adapter.ingest_gmail_messages(
             gmail_messages,
         )

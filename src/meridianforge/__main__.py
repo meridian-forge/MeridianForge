@@ -33,7 +33,9 @@ def main() -> None:
         return
 
     if args.command == "monday":
-        run_monday()
+        run_monday(
+            use_email=getattr(args, "email", False),
+        )
         return
 
 

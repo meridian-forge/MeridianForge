@@ -39,6 +39,9 @@ from meridianforge.services.folder_analysis_service import (
 from meridianforge.services.monday_artifact_service import (
     MondayArtifactService,
 )
+from meridianforge.services.opportunity_processing_service import (
+    OpportunityProcessingService,
+)
 from meridianforge.services.review_aggregator import (
     ReviewAggregator,
 )
@@ -65,6 +68,30 @@ class _ConnectorInputAdapter(InputAdapter):
 class OperationsService:
     """
     Coordinates MeridianForge Monday operations.
+
+    MF-512.4.2
+
+    Production execution path:
+
+        Gmail / Folder
+             |
+             v
+        Artifact Lifecycle
+             |
+             v
+        OpportunityProcessingService
+             |
+             v
+        Extraction / Normalization
+             |
+             v
+        AcquisitionExecutionService
+             |
+             v
+        Investor Dashboard
+
+    FolderAnalysisService remains as a compatibility fallback while the
+    extraction pipeline continues expanding across asset classes.
     """
 
     def __init__(
@@ -79,6 +106,8 @@ class OperationsService:
         self.output_directory = Path("runtime") / "outputs" / "monday"
 
         self.folder_analysis = FolderAnalysisService()
+
+        self.opportunity_processing = OpportunityProcessingService()
 
         self.artifact_service = MondayArtifactService()
 
@@ -162,10 +191,24 @@ class OperationsService:
             strategy=InvestmentStrategy.CASH_FLOW,
         )
 
-        orchestration_results = self.folder_analysis.analyze_folder(
-            self.deals_directory,
+        # ------------------------------------------------------------------
+        # Primary production pipeline
+        # ------------------------------------------------------------------
+
+        orchestration_results = self.opportunity_processing.process_artifacts(
+            [artifact.path for artifact in artifacts],
             investor_profile=investor,
         )
+
+        # ------------------------------------------------------------------
+        # Compatibility fallback
+        # ------------------------------------------------------------------
+
+        if not orchestration_results:
+            orchestration_results = self.folder_analysis.analyze_folder(
+                self.deals_directory,
+                investor_profile=investor,
+            )
 
         valid_results = [
             item for item in orchestration_results if item.review is not None

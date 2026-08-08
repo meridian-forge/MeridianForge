@@ -74,15 +74,29 @@ class AcquisitionExecutionService:
         record format expected by AcquisitionOrchestrator.
         """
 
+        if isinstance(opportunity, dict):
+            return opportunity
+
         if isinstance(opportunity, NormalizedRentalOpportunity):
+            source = opportunity.metrics.source
+
             return {
                 "city": opportunity.city,
                 "state": opportunity.state,
-                "purchase_price": (opportunity.acquisition.purchase_price),
-                "closing_costs": (opportunity.acquisition.closing_costs),
-                "rehab_cost": (opportunity.acquisition.rehab_cost),
+                "purchase_price": opportunity.acquisition.purchase_price,
+                "closing_costs": opportunity.acquisition.closing_costs,
+                "rehab_cost": opportunity.acquisition.rehab_cost,
                 "monthly_rent": opportunity.monthly_rent,
                 "source": "extraction_pipeline",
+
+                # Preserve source claims for reconciliation after underwriting.
+                "source_purchase_price": source.claimed_purchase_price,
+                "source_rent": source.claimed_rent,
+                "source_cashflow": source.claimed_cashflow,
+                "source_roi": source.claimed_roi,
+                "source_cap_rate": source.claimed_cap_rate,
+                "source_cash_on_cash": source.claimed_cash_on_cash_return,
+                "source_document": source.source_document,
             }
 
         if isinstance(opportunity, AcquisitionOpportunity):

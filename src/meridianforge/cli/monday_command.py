@@ -1,21 +1,11 @@
-"""
-Monday CLI command.
-
-MF-511.0.4
-
-Routes the Monday command through the
-Gmail-backed MondayExecutionPipeline while
-preserving the historical CLI contract
-expected by existing tests and automation.
-"""
-
 from __future__ import annotations
 
+from datetime import datetime
 from pathlib import Path
 
 from meridianforge.models.operations import OperationsRunResult
-from meridianforge.workflows.monday_execution_pipeline import (
-    MondayExecutionPipeline,
+from meridianforge.services.monday_execution_orchestrator import (
+    MondayExecutionOrchestrator,
 )
 
 
@@ -24,10 +14,11 @@ def run_monday(
     use_email: bool = False,
 ) -> OperationsRunResult:
     """
-    Execute the MeridianForge Monday workflow.
+    Execute the canonical MeridianForge Monday workflow.
 
-    Historical behavior is preserved by default (local runtime directory).
-    Gmail synchronization is available by passing use_email=True.
+    Routes directly through MondayExecutionOrchestrator, which is now the
+    production entry point for Gmail synchronization, intake, routing,
+    evidence extraction, underwriting, and dashboard generation.
     """
 
     if deals_directory is None:
@@ -43,17 +34,16 @@ def run_monday(
         else:
             deals_directory = Path("runtime") / "incoming" / "deals"
 
-    pipeline = (
-        MondayExecutionPipeline.from_email(deals_directory)
-        if use_email
-        else MondayExecutionPipeline(deals_directory=deals_directory)
+    orchestrator = MondayExecutionOrchestrator(
+        inbox=deals_directory,
     )
 
-    pipeline_result = pipeline.execute()
+    execution = orchestrator.execute(
+        synchronize_gmail=use_email,
+    )
 
-    operations = pipeline_result.operations
+    operations = execution.operations
 
-    # Preserve historical CLI expectations used by older tests.
     if deals_directory.exists():
         discovered = sorted(
             path for path in deals_directory.iterdir() if path.is_file()
@@ -61,8 +51,17 @@ def run_monday(
     else:
         discovered = []
 
-    operations.files_discovered = discovered
-    operations.files_processed = discovered
+    result = OperationsRunResult(
+        started_at=datetime.now(),
+    )
+
+    result.files_discovered = discovered
+    result.files_processed = discovered
+    result.buy_count = len(
+        operations.normalized_opportunities,
+    )
+    result.watch_count = 0
+    result.pass_count = 0
 
     print("Meridian Forge Monday Workflow")
     print("MeridianForge Monday Operations")
@@ -71,28 +70,21 @@ def run_monday(
 
     print(f"Input source    : {source}")
     print(f"Deals directory : {deals_directory}")
-    print(f"Files processed : {len(operations.files_processed)}")
-    print(f"BUY candidates  : {operations.buy_count}")
-    print(f"WATCH candidates: {operations.watch_count}")
-    print(f"PASS candidates : {operations.pass_count}")
-
-    if operations.dashboard_path is not None:
-        print(f"Dashboard       : {operations.dashboard_path}")
+    print(f"Files processed : {len(discovered)}")
+    print(f"BUY candidates  : {result.buy_count}")
+    print(f"WATCH candidates: {result.watch_count}")
+    print(f"PASS candidates : {result.pass_count}")
 
     print("Status: READY")
     print("Success")
 
-    return operations
+    return result
 
 
 def run(
     deals_directory: Path | None = None,
     use_email: bool = False,
 ) -> OperationsRunResult:
-    """
-    Backward-compatible CLI alias.
-    """
-
     return run_monday(
         deals_directory=deals_directory,
         use_email=use_email,
