@@ -3,6 +3,9 @@ from __future__ import annotations
 from pathlib import Path
 
 from meridianforge.models.domain.investor_profile import InvestorProfile
+from meridianforge.models.results.acquisition_orchestration_result import (
+    AcquisitionOrchestrationResult,
+)
 from meridianforge.services.acquisition_execution_service import (
     AcquisitionExecutionService,
 )
@@ -37,7 +40,7 @@ class MondayEvidenceService:
         self,
         artifact: Path,
         investor_profile: InvestorProfile,
-    ):
+    ) -> AcquisitionOrchestrationResult:
         payload = EvidenceCoordinator.extract(artifact)
 
         opportunity = EvidenceOpportunityMapper.map(payload)

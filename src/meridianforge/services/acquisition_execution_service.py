@@ -44,7 +44,10 @@ class AcquisitionExecutionService:
     def execute(
         self,
         opportunity: (
-            IntakeOpportunity | AcquisitionOpportunity | NormalizedRentalOpportunity
+            IntakeOpportunity
+            | AcquisitionOpportunity
+            | NormalizedRentalOpportunity
+            | dict[str, object]
         ),
         investor_profile: InvestorProfile,
         export_path: Path | None = None,
@@ -66,7 +69,10 @@ class AcquisitionExecutionService:
     @staticmethod
     def _to_record(
         opportunity: (
-            IntakeOpportunity | AcquisitionOpportunity | NormalizedRentalOpportunity
+            IntakeOpportunity
+            | AcquisitionOpportunity
+            | NormalizedRentalOpportunity
+            | dict[str, object]
         ),
     ) -> dict[str, object]:
         """
@@ -88,7 +94,6 @@ class AcquisitionExecutionService:
                 "rehab_cost": opportunity.acquisition.rehab_cost,
                 "monthly_rent": opportunity.monthly_rent,
                 "source": "extraction_pipeline",
-
                 # Preserve source claims for reconciliation after underwriting.
                 "source_purchase_price": source.claimed_purchase_price,
                 "source_rent": source.claimed_rent,

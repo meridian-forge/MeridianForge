@@ -84,9 +84,7 @@ class EvidenceCoordinator:
                 artifact_path,
             )
 
-        raise ValueError(
-            f"Unsupported artifact type: {artifact_path.suffix}"
-        )
+        raise ValueError(f"Unsupported artifact type: {artifact_path.suffix}")
 
     @staticmethod
     def _from_image(
@@ -100,10 +98,7 @@ class EvidenceCoordinator:
             evidence.text,
         )
 
-        field_dict = {
-            field.name: field.value
-            for field in fields
-        }
+        field_dict: dict[str, object] = {field.name: field.value for field in fields}
 
         identity = IdentityExtractor.extract(
             evidence.text,

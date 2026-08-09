@@ -51,15 +51,11 @@ class EvidenceConsolidator:
 
         confidence_values = [
             evidence.confidence,
-            *[
-                field.confidence
-                for field in fields
-            ],
+            *[field.confidence for field in fields],
         ]
 
         confidence = (
-            sum(confidence_values)
-            / len(confidence_values)
+            sum(confidence_values) / len(confidence_values)
             if confidence_values
             else 0.0
         )

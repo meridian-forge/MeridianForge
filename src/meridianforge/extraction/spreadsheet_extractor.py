@@ -50,27 +50,23 @@ class SpreadsheetExtractor:
                 continue
 
             headers = [
-                str(value).strip()
-                if value is not None
-                else ""
+                str(value).strip() if value is not None else ""
                 for value in rows[header_index]
             ]
 
-            for row in rows[header_index + 1:]:
+            for row in rows[header_index + 1 :]:
 
                 record = {
                     header: value
                     for header, value in zip(
                         headers,
                         row,
+                        strict=False,
                     )
                     if header
                 }
 
-                if any(
-                    value is not None
-                    for value in record.values()
-                ):
+                if any(value is not None for value in record.values()):
                     records.append(record)
 
         return ExtractedArtifact(
@@ -87,15 +83,9 @@ class SpreadsheetExtractor:
         Detect likely table header row.
         """
 
-        for index, row in enumerate(
-            rows[: SpreadsheetExtractor.HEADER_SCAN_LIMIT]
-        ):
+        for index, row in enumerate(rows[: SpreadsheetExtractor.HEADER_SCAN_LIMIT]):
 
-            values = [
-                str(value).strip().lower()
-                for value in row
-                if value is not None
-            ]
+            values = [str(value).strip().lower() for value in row if value is not None]
 
             if len(values) < 3:
                 continue
@@ -110,11 +100,7 @@ class SpreadsheetExtractor:
                 "rent",
             }
 
-            matches = sum(
-                1
-                for value in values
-                if value in keywords
-            )
+            matches = sum(1 for value in values if value in keywords)
 
             if matches >= 2:
                 return index

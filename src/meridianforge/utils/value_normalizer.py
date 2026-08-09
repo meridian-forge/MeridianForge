@@ -8,13 +8,7 @@ class ValueNormalizer:
 
     @staticmethod
     def clean(value: object) -> str:
-        return (
-            str(value)
-            .replace("$", "")
-            .replace(",", "")
-            .replace("%", "")
-            .strip()
-        )
+        return str(value).replace("$", "").replace(",", "").replace("%", "").strip()
 
     @classmethod
     def to_decimal(

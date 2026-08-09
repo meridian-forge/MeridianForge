@@ -29,8 +29,8 @@ class EvidenceRecord:
         self,
         name: str,
     ) -> EvidenceField | None:
-        for field in self.fields:
-            if field.name == name:
-                return field
+        for evidence_field in self.fields:
+            if evidence_field.name == name:
+                return evidence_field
 
         return None

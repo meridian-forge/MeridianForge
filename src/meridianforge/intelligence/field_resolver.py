@@ -22,12 +22,7 @@ class FieldResolver:
         field_name: str,
     ) -> str:
 
-        normalized = (
-            field_name
-            .strip()
-            .lower()
-            .replace("_", " ")
-        )
+        normalized = field_name.strip().lower().replace("_", " ")
 
         for canonical, aliases in FIELD_ALIASES.items():
 

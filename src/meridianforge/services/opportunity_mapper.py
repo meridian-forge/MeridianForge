@@ -13,9 +13,9 @@ normalized field flowing into the underwriting pipeline.
 
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass
 from decimal import Decimal
-import re
 from typing import Any
 
 from meridianforge.extractors.rental_acquisition_extractor import (

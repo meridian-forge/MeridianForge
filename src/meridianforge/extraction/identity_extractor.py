@@ -9,8 +9,8 @@ property identity fields.
 
 from __future__ import annotations
 
-from dataclasses import dataclass
 import re
+from dataclasses import dataclass
 
 
 @dataclass(frozen=True, slots=True)
@@ -37,9 +37,7 @@ class IdentityExtractor:
         r"Address:\s*(.+)",
     ]
 
-    CITY_STATE_PATTERN = re.compile(
-        r"([A-Za-z .]+),\s*([A-Z]{2})\s*(\d{5})"
-    )
+    CITY_STATE_PATTERN = re.compile(r"([A-Za-z .]+),\s*([A-Z]{2})\s*(\d{5})")
 
     @classmethod
     def extract(
@@ -66,12 +64,7 @@ class IdentityExtractor:
         if not address:
             return IdentityEvidence()
 
-        cleaned = (
-            address
-            .replace(" Financed", "")
-            .replace("financed", "")
-            .strip()
-        )
+        cleaned = address.replace(" Financed", "").replace("financed", "").strip()
 
         match = cls.CITY_STATE_PATTERN.search(
             cleaned,

@@ -20,8 +20,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 from pathlib import Path
 
-from PIL import Image
 import pytesseract
+from PIL import Image
 
 
 @dataclass(frozen=True, slots=True)
@@ -60,9 +60,7 @@ class ImageExtractor:
         """
 
         if image_path.suffix.lower() not in cls.SUPPORTED_FORMATS:
-            raise ValueError(
-                f"Unsupported image format: {image_path.suffix}"
-            )
+            raise ValueError(f"Unsupported image format: {image_path.suffix}")
 
         image = Image.open(image_path)
 
@@ -70,11 +68,7 @@ class ImageExtractor:
             image,
         )
 
-        confidence = (
-            0.90
-            if text.strip()
-            else 0.0
-        )
+        confidence = 0.90 if text.strip() else 0.0
 
         return ImageEvidence(
             source_file=image_path,

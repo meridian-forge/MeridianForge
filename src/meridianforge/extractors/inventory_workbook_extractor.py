@@ -88,21 +88,15 @@ class InventoryWorkbookExtractor:
                     roi=float(roi) if roi is not None else None,
                     cash_flow=int(float(cash_flow)) if cash_flow is not None else None,
                     initial_cash=(
-                        int(float(initial_cash))
-                        if initial_cash is not None
-                        else None
+                        int(float(initial_cash)) if initial_cash is not None else None
                     ),
                     beds=float(beds) if beds is not None else None,
                     baths=float(baths) if baths is not None else None,
                     year_built=(
-                        int(float(year_built))
-                        if year_built is not None
-                        else None
+                        int(float(year_built)) if year_built is not None else None
                     ),
                     seller_incentives=(
-                        str(seller_incentives).strip()
-                        if seller_incentives
-                        else None
+                        str(seller_incentives).strip() if seller_incentives else None
                     ),
                     source_file=workbook_path,
                 )

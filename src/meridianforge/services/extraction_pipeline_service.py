@@ -10,7 +10,6 @@ and carries extractor decision intelligence into execution.
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Any
 
 from meridianforge.extractors.inventory_workbook_extractor import (
     InventoryWorkbookExtractor,
@@ -49,7 +48,9 @@ class ExtractionPipelineService:
         artifact: IntakeArtifact,
         extractor_name: str | None = None,
         decision_context: ExtractorDecisionContext | None = None,
-    ) -> NormalizedRentalOpportunity | dict[str, object] | list[dict[str, object]] | None:
+    ) -> (
+        NormalizedRentalOpportunity | dict[str, object] | list[dict[str, object]] | None
+    ):
         """
         Execute extraction.
 
@@ -63,16 +64,16 @@ class ExtractionPipelineService:
             selected_extractor = decision_context.selected_extractor
 
         if selected_extractor == "RentalAcquisitionExtractor":
-            record = RentalAcquisitionExtractor.extract(
+            rental_record = RentalAcquisitionExtractor.extract(
                 text=artifact.extracted_text,
                 source_file=Path(artifact.path),
             )
 
-            if record is None:
+            if rental_record is None:
                 return None
 
             return OpportunityMapper.from_rental_record(
-                record=record,
+                record=rental_record,
                 audit_service=self._audit,
             )
 
@@ -83,10 +84,10 @@ class ExtractionPipelineService:
 
             normalized: list[dict[str, object]] = []
 
-            for record in records:
+            for inventory_record in records:
                 normalized.append(
                     OpportunityMapper.from_inventory_record(
-                        record=record,
+                        record=inventory_record,
                         audit_service=self._audit,
                     )
                 )

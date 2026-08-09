@@ -10,8 +10,8 @@ MF-512.4.4
 
 from __future__ import annotations
 
+from collections.abc import Iterable
 from decimal import Decimal
-from typing import Iterable
 
 from meridianforge.extraction.evidence_field_extractor import (
     ExtractedField,

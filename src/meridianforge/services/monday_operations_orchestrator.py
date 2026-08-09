@@ -116,10 +116,8 @@ class MondayOperationsOrchestrator:
                 decision_context=decision,
             )
 
-            if opportunity is not None:
-                normalized_opportunities.append(
-                    opportunity,
-                )
+            if isinstance(opportunity, NormalizedRentalOpportunity):
+                normalized_opportunities.append(opportunity)
 
             artifact_path = Path(artifact.path)
 

@@ -56,13 +56,10 @@ class SpreadsheetImageExtractor:
 
                 output_path = (
                     output_directory
-                    /
-                    f"{workbook_path.stem}_image_{image_counter}{extension}"
+                    / f"{workbook_path.stem}_image_{image_counter}{extension}"
                 )
 
-                output_path.write_bytes(
-                    image._data()
-                )
+                output_path.write_bytes(image._data())
 
                 artifacts.append(
                     ImageArtifact(

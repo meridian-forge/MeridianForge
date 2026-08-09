@@ -1,8 +1,8 @@
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass
 from decimal import Decimal
-import re
 
 from meridianforge.services.extraction_audit_service import (
     ExtractionAuditService,

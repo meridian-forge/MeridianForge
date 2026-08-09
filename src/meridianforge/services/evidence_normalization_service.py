@@ -8,7 +8,6 @@ MeridianForge opportunity records.
 from __future__ import annotations
 
 from meridianforge.models.evidence.evidence_field import (
-    EvidenceField,
     EvidenceRecord,
 )
 

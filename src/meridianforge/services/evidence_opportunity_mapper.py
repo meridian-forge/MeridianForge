@@ -8,6 +8,8 @@ NormalizedRentalOpportunity model.
 
 from __future__ import annotations
 
+from decimal import Decimal
+
 from meridianforge.models.domain.acquisition import Acquisition
 from meridianforge.models.domain.evidence_payload import (
     EvidencePayload,
@@ -41,12 +43,10 @@ class EvidenceOpportunityMapper:
                 "closing_costs",
                 purchase_price * cls.DEFAULT_CLOSING_COST_RATE,
             ),
-            rehab_cost=evidence.get_float(
-                "rehab_cost"
-            ),
+            rehab_cost=evidence.get_float("rehab_cost"),
         )
 
-        def dec(name: str):
+        def dec(name: str) -> Decimal | None:
             return evidence.get_decimal(name)
 
         metrics = OpportunityMetrics(
