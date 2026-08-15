@@ -1,4 +1,11 @@
+"""
+MeridianForge CLI entry point.
+"""
+
+from __future__ import annotations
+
 from meridianforge.cli.acquisition import run_acquisition
+from meridianforge.cli.init_command import run_init
 from meridianforge.cli.investor_package import run_investor_package
 from meridianforge.cli.monday_command import run_monday
 from meridianforge.cli.parser import build_parser
@@ -8,7 +15,6 @@ VERSION = "1.0.0-RC1"
 
 def main() -> None:
     parser = build_parser()
-
     args = parser.parse_args()
 
     if args.command == "monday":
@@ -21,6 +27,9 @@ def main() -> None:
 
     elif args.command == "investor-package":
         run_investor_package(args)
+
+    elif args.command == "init":
+        raise SystemExit(run_init())
 
     elif args.command == "version":
         print(f"MeridianForge {VERSION}")

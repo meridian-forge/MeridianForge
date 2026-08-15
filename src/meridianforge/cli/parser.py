@@ -1,6 +1,8 @@
 """
-Meridian Forge CLI argument parser.
+MeridianForge CLI argument parser.
 """
+
+from __future__ import annotations
 
 import argparse
 
@@ -12,7 +14,7 @@ def build_parser() -> argparse.ArgumentParser:
 
     parser = argparse.ArgumentParser(
         prog="meridianforge",
-        description="Meridian Forge Investment Analysis Platform",
+        description="MeridianForge Family Office Operating System",
     )
 
     subparsers = parser.add_subparsers(
@@ -89,8 +91,13 @@ def build_parser() -> argparse.ArgumentParser:
     )
 
     subparsers.add_parser(
+        "init",
+        help="Initialize the MeridianForge workspace and runtime directories",
+    )
+
+    subparsers.add_parser(
         "version",
-        help="Show Meridian Forge version",
+        help="Show MeridianForge version",
     )
 
     return parser
