@@ -103,7 +103,14 @@ updates/packages/*/files/**/__pycache__/
 # Meridian Forge Runtime Workspace
 # ======================================
 
-runtime/*
+runtime/
+
+# Allow the Python runtime package
+!src/meridianforge/runtime/
+!src/meridianforge/runtime/**
+!tests/runtime/
+!tests/runtime/**
+*
 !runtime/
 !runtime/outputs/
 runtime/outputs/*
