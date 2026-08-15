@@ -151,3 +151,17 @@ htmlcov/
 property.xlsx
 samples/
 scripts/gmail_auth_bootstrap.py
+
+# Runtime package exceptions
+!src/
+!src/meridianforge/
+!src/meridianforge/runtime/
+!src/meridianforge/runtime/**
+
+!tests/
+!tests/runtime/
+!tests/runtime/**
+
+# Python cache
+__pycache__/
+*.py[cod]
