@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.meridianforge.monday</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>/usr/bin/env</string>
+        <string>bash</string>
+        <string>-lc</string>
+        <string>cd ~/Documents/MeridianForge/04_Automation/Mac/MeridianForge && source venv/bin/activate && python -c "from meridianforge.cli.schedule_command import run_schedule; raise SystemExit(run_schedule())"</string>
+    </array>
+
+    <key>StartCalendarInterval</key>
+    <dict>
+        <key>Weekday</key>
+        <integer>1</integer>
+        <key>Hour</key>
+        <integer>7</integer>
+        <key>Minute</key>
+        <integer>0</integer>
+    </dict>
+
+    <key>StandardOutPath</key>
+    <string>/tmp/meridianforge-scheduler.log</string>
+
+    <key>StandardErrorPath</key>
+    <string>/tmp/meridianforge-scheduler.err</string>
+
+    <key>RunAtLoad</key>
+    <false/>
+
+    <key>WorkingDirectory</key>
+    <string>/Users/msugur200@cable.comcast.com/Documents/MeridianForge/04_Automation/Mac/MeridianForge</string>
+</dict>
+</plist>

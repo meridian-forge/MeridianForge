@@ -97,7 +97,7 @@ class MondayExecutionOrchestrator:
 
         normalized = (
             "\n".join(
-                (f"- {opportunity.city}, " f"{opportunity.state}")
+                f"- {opportunity.city}, {opportunity.state}"
                 for opportunity in operations.normalized_opportunities
             )
             if operations.normalized_opportunities
@@ -114,6 +114,6 @@ class MondayExecutionOrchestrator:
             f"{extractors}\n\n"
             f"Normalized opportunities: {normalized_count}\n"
             f"{normalized}\n\n"
-            "## Extraction audit\n\n"
+            "## Extraction Audit Dashboard\n\n"
             f"{operations.audit_report}\n"
         )

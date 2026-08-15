@@ -42,7 +42,8 @@ class ConfidenceCalibrationService:
         records = [
             record
             for record in self._repository.all()
-            if record.extractor == extractor and record.provider == provider
+            if record.extractor == extractor
+            and record.provider == provider
         ]
 
         if not records:
@@ -51,17 +52,28 @@ class ConfidenceCalibrationService:
                 provider=provider,
                 raw_confidence=raw_confidence,
                 calibrated_confidence=raw_confidence,
+                historical_accuracy=0.0,
+                sample_size=0,
             )
 
-        accepted = sum(1 for record in records if record.status.value == "accepted")
+        accepted = sum(
+            1
+            for record in records
+            if record.status.value == "accepted"
+        )
 
-        calibration_factor = accepted / len(records)
+        historical_accuracy = accepted / len(records)
 
-        calibrated = raw_confidence * 0.5 + calibration_factor * 0.5
+        calibrated = (
+            raw_confidence * 0.5
+            + historical_accuracy * 0.5
+        )
 
         return ExtractorConfidenceCalibration(
             extractor=extractor,
             provider=provider,
             raw_confidence=raw_confidence,
+            historical_accuracy=historical_accuracy,
             calibrated_confidence=calibrated,
+            sample_size=len(records),
         )

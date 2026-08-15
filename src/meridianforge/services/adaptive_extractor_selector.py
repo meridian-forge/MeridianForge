@@ -4,6 +4,7 @@ Adaptive extractor selection service.
 MF-513.5.3 / MF-440.8.2
 
 Selects the preferred extractor using:
+
 - extraction learning
 - historical performance
 - decision feedback intelligence
@@ -16,6 +17,9 @@ from __future__ import annotations
 
 from meridianforge.models.domain.extractor_selection_explanation import (
     ExtractorSelectionExplanation,
+)
+from meridianforge.repositories.extraction_audit_repository import (
+    ExtractionAuditRepository,
 )
 from meridianforge.services.confidence_calibration_service import (
     ConfidenceCalibrationService,
@@ -42,17 +46,27 @@ class AdaptiveExtractorSelector:
         learning_service: ExtractorLearningService | None = None,
         feedback_learning_service: ExtractorFeedbackLearningService | None = None,
         confidence_calibration_service: ConfidenceCalibrationService | None = None,
+        audit_repository: ExtractionAuditRepository | None = None,
     ) -> None:
-        self._performance_service = performance_service or ExtractorPerformanceService()
+        shared_repository = audit_repository
 
-        self._learning_service = learning_service or ExtractorLearningService()
+        self._performance_service = performance_service or ExtractorPerformanceService(
+            repository=shared_repository,
+        )
+
+        self._learning_service = learning_service or ExtractorLearningService(
+            repository=shared_repository,
+        )
 
         self._feedback_learning_service = (
             feedback_learning_service or ExtractorFeedbackLearningService()
         )
 
         self._confidence_calibration_service = (
-            confidence_calibration_service or ConfidenceCalibrationService()
+            confidence_calibration_service
+            or ConfidenceCalibrationService(
+                repository=shared_repository,
+            )
         )
 
     def select(
@@ -139,9 +153,13 @@ class AdaptiveExtractorSelector:
         return ExtractorSelectionExplanation(
             extractor=selected,
             provider=provider,
-            decision_accuracy=(feedback.average_accuracy if feedback else 0.0),
+            decision_accuracy=(
+                feedback.average_accuracy if feedback else 0.0
+            ),
             calibrated_confidence=calibration.calibrated_confidence,
-            historical_acceptance=(performance.acceptance_rate if performance else 0.0),
+            historical_acceptance=(
+                performance.acceptance_rate if performance else 0.0
+            ),
             sample_size=(
                 performance.total_records
                 if performance
@@ -202,7 +220,9 @@ class AdaptiveExtractorSelector:
 
             calibration = self._confidence_calibration_service.calibrate(
                 extractor=extractor,
-                raw_confidence=(learning.average_confidence if learning else 0.0),
+                raw_confidence=(
+                    learning.average_confidence if learning else 0.0
+                ),
                 provider=provider,
             )
 

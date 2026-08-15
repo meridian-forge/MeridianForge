@@ -1,11 +1,15 @@
 """
 Monday operations orchestrator.
 
-SP-430.1 / SP-430.4.1 / MF-460.1 / SP-490.2
+SP-430.1 / SP-430.4.1 / MF-460.1 / SP-490.2 / MF-513.3.2 / MF-513.6
 
 Coordinates the Monday operating workflow by connecting opportunity
 intake, adaptive routing, extraction execution, normalization, and
 evidence-based underwriting into a single execution boundary.
+
+The orchestrator also establishes a shared extraction-audit repository
+so routing intelligence, extraction auditing, and dashboard reporting
+operate against the same audit history.
 """
 
 from __future__ import annotations
@@ -25,8 +29,23 @@ from meridianforge.models.domain.investor_profile import (
 from meridianforge.reporting.extraction_audit_report import (
     ExtractionAuditReport,
 )
+from meridianforge.repositories.extraction_audit_repository import (
+    ExtractionAuditRepository,
+)
+from meridianforge.services.adaptive_extractor_selector import (
+    AdaptiveExtractorSelector,
+)
+from meridianforge.services.extraction_audit_dashboard import (
+    ExtractionAuditDashboardService,
+)
+from meridianforge.services.extraction_audit_service import (
+    ExtractionAuditService,
+)
 from meridianforge.services.extraction_pipeline_service import (
     ExtractionPipelineService,
+)
+from meridianforge.services.extractor_performance_service import (
+    ExtractorPerformanceService,
 )
 from meridianforge.services.monday_evidence_service import (
     MondayEvidenceService,
@@ -58,6 +77,9 @@ class MondayOperationsOrchestrator:
     """
     Execute the Monday intake, routing, extraction, normalization,
     and evidence-underwriting workflow.
+
+    A single extraction audit repository is shared across the
+    adaptive router, extraction pipeline, and audit dashboard.
     """
 
     IMAGE_SUFFIXES = {
@@ -75,12 +97,42 @@ class MondayOperationsOrchestrator:
         audit_report: ExtractionAuditReport | None = None,
         gmail_adapter: MondayOperationsGmailAdapter | None = None,
         evidence: MondayEvidenceService | None = None,
+        audit_repository: ExtractionAuditRepository | None = None,
     ) -> None:
+        shared_audit_repository = audit_repository or ExtractionAuditRepository()
+
+        audit_service = ExtractionAuditService(
+            repository=shared_audit_repository,
+        )
+
+        dashboard_service = ExtractionAuditDashboardService(
+            repository=shared_audit_repository,
+        )
+
+        performance_service = ExtractorPerformanceService(
+            repository=shared_audit_repository,
+        )
+
+        adaptive_selector = AdaptiveExtractorSelector(
+            performance_service=performance_service,
+        )
+
         self._intake = intake or OpportunityIntakeService()
-        self._router = router or OpportunityRouter()
-        self._pipeline = extraction_pipeline or ExtractionPipelineService()
-        self._audit_report = audit_report or ExtractionAuditReport()
+
+        self._router = router or OpportunityRouter(
+            selector=adaptive_selector,
+        )
+
+        self._pipeline = extraction_pipeline or ExtractionPipelineService(
+            audit_service=audit_service,
+        )
+
+        self._audit_report = audit_report or ExtractionAuditReport(
+            dashboard_service=dashboard_service,
+        )
+
         self._gmail_adapter = gmail_adapter or MondayOperationsGmailAdapter()
+
         self._evidence = evidence or MondayEvidenceService()
 
     def execute(
@@ -116,8 +168,13 @@ class MondayOperationsOrchestrator:
                 decision_context=decision,
             )
 
-            if isinstance(opportunity, NormalizedRentalOpportunity):
-                normalized_opportunities.append(opportunity)
+            if isinstance(
+                opportunity,
+                NormalizedRentalOpportunity,
+            ):
+                normalized_opportunities.append(
+                    opportunity,
+                )
 
             artifact_path = Path(artifact.path)
 
