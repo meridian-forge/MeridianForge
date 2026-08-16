@@ -7,16 +7,16 @@
 
     <key>ProgramArguments</key>
     <array>
-        <string>/usr/bin/env</string>
-        <string>bash</string>
-        <string>-lc</string>
-        <string>cd ~/Documents/MeridianForge/04_Automation/Mac/MeridianForge && source venv/bin/activate && python -c "from meridianforge.cli.schedule_command import run_schedule; raise SystemExit(run_schedule())"</string>
+        <string>/Users/msugur200@cable.comcast.com/Documents/MeridianForge/04_Automation/Mac/MeridianForge/venv/bin/python</string>
+        <string>-c</string>
+        <string>import sys; sys.path.insert(0, "/Users/msugur200@cable.comcast.com/Documents/MeridianForge/04_Automation/Mac/MeridianForge/src"); from meridianforge.cli.schedule_command import run_schedule; raise SystemExit(run_schedule())</string>
     </array>
+
+    <key>WorkingDirectory</key>
+    <string>/Users/msugur200@cable.comcast.com/Documents/MeridianForge/04_Automation/Mac/MeridianForge</string>
 
     <key>StartCalendarInterval</key>
     <dict>
-        <key>Weekday</key>
-        <integer>1</integer>
         <key>Hour</key>
         <integer>7</integer>
         <key>Minute</key>
@@ -31,8 +31,5 @@
 
     <key>RunAtLoad</key>
     <false/>
-
-    <key>WorkingDirectory</key>
-    <string>/Users/msugur200@cable.comcast.com/Documents/MeridianForge/04_Automation/Mac/MeridianForge</string>
 </dict>
 </plist>
