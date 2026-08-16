@@ -9,6 +9,7 @@ from meridianforge.cli.init_command import run_init
 from meridianforge.cli.investor_package import run_investor_package
 from meridianforge.cli.monday_command import run_monday
 from meridianforge.cli.parser import build_parser
+from meridianforge.cli.schedule_command import run_schedule
 
 VERSION = "1.0.0-RC1"
 
@@ -21,6 +22,9 @@ def main() -> None:
         run_monday(
             use_email=args.email,
         )
+
+    elif args.command == "schedule":
+        raise SystemExit(run_schedule())
 
     elif args.command == "acquisition":
         run_acquisition(args)

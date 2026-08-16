@@ -38,6 +38,11 @@ def build_parser() -> argparse.ArgumentParser:
         help="Use Gmail MeridianForge intake pipeline",
     )
 
+    schedule = subparsers.add_parser(
+        "schedule",
+        help="Run the scheduled MeridianForge Monday workflow if due",
+    )
+
     acquisition = subparsers.add_parser(
         "acquisition",
         help="Run acquisition intelligence workflow",
