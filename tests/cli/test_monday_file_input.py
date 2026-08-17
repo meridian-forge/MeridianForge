@@ -15,5 +15,5 @@ def test_monday_cli_runs() -> None:
     )
 
     assert result.returncode == 0
-    assert "MeridianForge Monday Operations" in result.stdout
-    assert "Success" in result.stdout
+    assert "Meridian Forge Monday Workflow" in result.stdout
+    assert "Status: COMPLETE" in result.stdout

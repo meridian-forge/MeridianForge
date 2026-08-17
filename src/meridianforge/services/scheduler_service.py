@@ -134,14 +134,18 @@ class SchedulerService:
         minute_value = config.get("minute", 0)
         catch_up_value = config.get("catch_up_until_hour", 17)
 
-        scheduled_hour = int(hour_value) if isinstance(hour_value, (int, str)) else 7
+        scheduled_hour = (
+            int(hour_value) if isinstance(hour_value, (int, str)) else 7
+        )
 
         scheduled_minute = (
             int(minute_value) if isinstance(minute_value, (int, str)) else 0
         )
 
         catch_up_until_hour = (
-            int(catch_up_value) if isinstance(catch_up_value, (int, str)) else 17
+            int(catch_up_value)
+            if isinstance(catch_up_value, (int, str))
+            else 17
         )
 
         if now.time() < time(
@@ -162,14 +166,10 @@ class SchedulerService:
                 reason="after catch-up window",
             )
 
-        state = self._load_state()
-
-        if state.get("last_successful_run") == today.isoformat():
-            return SchedulerRunResult(
-                executed=False,
-                reason="already executed today",
-            )
-
+        # The LaunchAgent may invoke this service multiple times per day.
+        # Do not block subsequent runs based on the last successful date.
+        # Existing Gmail/execution deduplication is responsible for preventing
+        # already-processed opportunities from being processed again.
         started = datetime.now()
 
         orchestrator = MondayExecutionOrchestrator(
@@ -189,7 +189,11 @@ class SchedulerService:
             }
         )
 
-        report_path = self._runtime_root / "reports" / "monday_operations_report.md"
+        report_path = (
+            self._runtime_root
+            / "reports"
+            / "monday_operations_report.md"
+        )
 
         report_path.parent.mkdir(
             parents=True,
